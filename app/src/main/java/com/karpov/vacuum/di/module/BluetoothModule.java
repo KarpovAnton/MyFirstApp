@@ -1,6 +1,8 @@
 package com.karpov.vacuum.di.module;
 
-import com.karpov.vacuum.services.BluetoothManager;
+import android.app.Application;
+
+import com.karpov.vacuum.services.BleManager;
 
 import javax.inject.Singleton;
 
@@ -11,7 +13,7 @@ import dagger.Provides;
 public class BluetoothModule {
     @Provides
     @Singleton
-    BluetoothManager provideBluetoothManager() {
-        return new BluetoothManager();
+    BleManager provideBleManager(Application application) {
+        return new BleManager(application);
     }
 }

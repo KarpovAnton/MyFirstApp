@@ -7,6 +7,7 @@ import com.karpov.vacuum.di.module.ActivityBindingModule;
 import com.karpov.vacuum.di.module.AppModule;
 import com.karpov.vacuum.di.module.BluetoothModule;
 import com.karpov.vacuum.di.module.NetModule;
+import com.karpov.vacuum.services.BleManager;
 
 import javax.inject.Singleton;
 
@@ -24,6 +25,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AndroidSupportInjectionModule.class})
 
 public interface AppComponent extends AndroidInjector<VacuumApplication> {
+    BleManager getBleManager();
     // Gives us syntactic sugar. we can then do DaggerAppComponent.builder().application(this).build().inject(this);
     // never having to instantiate any modules or say which module we are passing the application to.
     // Application will just be provided into our app graph now.

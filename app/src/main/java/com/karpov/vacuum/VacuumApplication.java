@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.multidex.MultiDex;
 
+import com.karpov.vacuum.di.component.AppComponent;
 import com.karpov.vacuum.di.component.DaggerAppComponent;
 
 import dagger.android.AndroidInjector;
@@ -15,6 +16,8 @@ import timber.log.Timber;
 
 public class VacuumApplication extends DaggerApplication implements Application.ActivityLifecycleCallbacks {
     private static VacuumApplication instance;
+
+    private static AppComponent component;
 
     Activity currentActivity;
 
@@ -28,7 +31,12 @@ public class VacuumApplication extends DaggerApplication implements Application.
 
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-        return DaggerAppComponent.builder().application(this).build();
+        component = DaggerAppComponent.builder().application(this).build();
+        return component;
+    }
+
+    public static AppComponent getComponent() {
+        return component;
     }
 
     public static VacuumApplication getInstance() {
