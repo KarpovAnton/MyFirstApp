@@ -45,7 +45,7 @@ public class BleManager {
                 bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
             }
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            bluetoothAdapter.setName("1AzIU8hT76Gy6@androidvacuum.com");
+            bluetoothAdapter.setName("1AzIU7Gy6@andrvacuum.com");
         }
     }
 

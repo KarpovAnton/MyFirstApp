@@ -35,10 +35,12 @@ import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 import timber.log.Timber;
 
+import static com.karpov.vacuum.utils.Consts.LOCATION_PERMISSION_CODE;
+
 public class MainActivity extends DaggerAppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    private static final int REQUEST_ENABLE_BT = 1;
-    private static final int LOCATION_PERMISSION_CODE = 2;
+    public static final int LOGIN_REQUEST_CODE = 1;
+    public static final int REQUEST_ENABLE_BT = 2;
 
     BleManager bleManager;
     TestAdapter testAdapter;
@@ -120,6 +122,16 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeRefres
     
     private void scan() {
         bleManager.scan(scanCallback);
+        new Handler(getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sendResults();
+            }
+        }, 10000);
+    }
+
+    private void sendResults() {
+
     }
 
     ScanCallback scanCallback = new ScanCallback() {
@@ -170,14 +182,14 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeRefres
         @Override
         public void onStartSuccess(AdvertiseSettings settingsInEffect) {
             super.onStartSuccess(settingsInEffect);
-            Toast.makeText(getApplicationContext(), "Device name share successful", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Device share successful", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onStartFailure(int errorCode) {
             Timber.e("Advertising onStartFailure: %s", errorCode);
             super.onStartFailure(errorCode);
-            Toast.makeText(getApplicationContext(), "Device name share failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Device share failed", Toast.LENGTH_SHORT).show();
         }
     };
 }

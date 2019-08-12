@@ -24,7 +24,7 @@ import static okhttp3.logging.HttpLoggingInterceptor.Level.BODY;
 @Module
 public class NetModule {
 
-    private static final String HOST = "";
+    private static final String HOST = "https://test.vacuum.live/";
 
     @Provides
     @Singleton

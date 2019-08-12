@@ -2,4 +2,10 @@
     <string name="app_name">Vacuum</string>
     <string name="bluetooth_on">Bluetooth включен</string>
     <string name="bluetooth_canceled">Включите Bluetooth</string>
+
+    <string name="title_dialog">Введите username</string>
+    <string name="msg_dialog">Введиdi</string>
+
+    <string name="registration_dialog_title">Регистрация</string>
+    <string name="waiting_dialog_msg">Пожалуйста, подождите</string>
 </resources>

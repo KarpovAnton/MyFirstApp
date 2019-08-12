@@ -11,6 +11,7 @@ import dagger.Provides;
 
 @Module
 public class BluetoothModule {
+
     @Provides
     @Singleton
     BleManager provideBleManager(Application application) {
