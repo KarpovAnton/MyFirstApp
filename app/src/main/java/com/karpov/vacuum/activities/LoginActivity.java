@@ -20,14 +20,18 @@ import com.karpov.vacuum.network.data.dto.ResponseDto;
 import com.karpov.vacuum.network.data.managers.LoginManager;
 import com.karpov.vacuum.services.BleManager;
 import com.karpov.vacuum.utils.DialogUtils;
+import com.karpov.vacuum.utils.StringPreference;
 
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import timber.log.Timber;
 
+import static com.karpov.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_DEVICE_NAME;
+import static com.karpov.vacuum.utils.Consts.BASE_DEVICE_NAME_PART;
 import static com.karpov.vacuum.utils.Consts.LOCATION_PERMISSION_CODE;
 
 public class LoginActivity extends DaggerAppCompatActivity {
@@ -37,6 +41,10 @@ public class LoginActivity extends DaggerAppCompatActivity {
 
     @Inject
     BleManager bleManager;
+
+    @Inject
+    @Named(NAMED_PREF_DEVICE_NAME)
+    StringPreference deviceNameSP;
 
     String uniqueUUID;
 
@@ -69,13 +77,14 @@ public class LoginActivity extends DaggerAppCompatActivity {
                                 String userID = responseDto.getUserId();
                                 Toast.makeText(mActivity, userID, Toast.LENGTH_SHORT).show();
                                 Timber.d("registration %s", userID);
+
+                                saveUserID(userID);
+
                                 regWaitingDialog = DialogUtils.showWaitingDialog(
                                         mActivity,
                                         R.string.registration_dialog_title,
                                         R.string.waiting_dialog_msg);
                                 registrationWithUserId(userID);
-//                                mActivity.setResult(RESULT_OK);
-//                                mActivity.finish();
                             }
 
                             @Override
@@ -85,6 +94,12 @@ public class LoginActivity extends DaggerAppCompatActivity {
                         });
                     }
                 });
+    }
+
+    private void saveUserID(String userID) {
+        String deviceName = userID + BASE_DEVICE_NAME_PART;
+        deviceNameSP.set(deviceName);
+        bleManager.setBluetoothAdapterName(deviceName);
     }
 
     private void registrationWithUserId(String userID) {

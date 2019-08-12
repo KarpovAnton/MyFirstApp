@@ -35,6 +35,7 @@ import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 import timber.log.Timber;
 
+import static com.karpov.vacuum.utils.Consts.BASE_DEVICE_NAME_PART;
 import static com.karpov.vacuum.utils.Consts.LOCATION_PERMISSION_CODE;
 
 public class MainActivity extends DaggerAppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -122,12 +123,12 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeRefres
     
     private void scan() {
         bleManager.scan(scanCallback);
-        new Handler(getMainLooper()).postDelayed(new Runnable() {
+        /*new Handler(getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 sendResults();
             }
-        }, 10000);
+        }, 10000);*/
     }
 
     private void sendResults() {
@@ -141,6 +142,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeRefres
 
             String deviceName = result.getDevice().getName();
             if (!TextUtils.isEmpty(deviceName)) {
+                if (deviceName.contains(BASE_DEVICE_NAME_PART) && !devices.contains(deviceName))
                 devices.add(result.getDevice().getName());
                 Timber.d("devices.add %s", result.getDevice().getName());
             }

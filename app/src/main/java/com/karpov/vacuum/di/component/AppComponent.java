@@ -7,6 +7,7 @@ import com.karpov.vacuum.di.module.ActivityBindingModule;
 import com.karpov.vacuum.di.module.AppModule;
 import com.karpov.vacuum.di.module.BluetoothModule;
 import com.karpov.vacuum.di.module.NetModule;
+import com.karpov.vacuum.network.data.prefs.PrefsModule;
 import com.karpov.vacuum.network.data.prefs.SessionModule;
 import com.karpov.vacuum.services.BleManager;
 
@@ -23,6 +24,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         NetModule.class,
         BluetoothModule.class,
         SessionModule.class,
+        PrefsModule.class,
         ActivityBindingModule.class,
         AndroidSupportInjectionModule.class})
 

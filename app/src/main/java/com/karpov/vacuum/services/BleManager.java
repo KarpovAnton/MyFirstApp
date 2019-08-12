@@ -45,8 +45,11 @@ public class BleManager {
                 bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
             }
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            bluetoothAdapter.setName("1AzIU7Gy6@andrvacuum.com");
         }
+    }
+
+    public void setBluetoothAdapterName(String name) {
+        bluetoothAdapter.setName(name);
     }
 
     public Context getContext() {
@@ -180,7 +183,7 @@ public class BleManager {
             }, DEFAULT_SCAN_TIME);
 
             mScanning = true;
-            bluetoothLeScanner.startScan(scanFilters, buildScanSettings(), callback);
+            bluetoothLeScanner.startScan(scanFilters, scanSettings, callback);
         } else {
             mScanning = false;
             bluetoothLeScanner.stopScan(callback);

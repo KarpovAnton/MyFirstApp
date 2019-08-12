@@ -2,7 +2,7 @@ package com.karpov.vacuum.utils;
 
 public class Consts {
     public static final String TAG = "vacuum";
-    public static final String BASE_URI = "";
+    public static final String BASE_DEVICE_NAME_PART = "@ios.vacuum";
 
     // REGEX
     public static final String PHONE_REGEX = "^\\(\\+[0-9]{1,3}\\)\\s?[0-9]{9,13}$";

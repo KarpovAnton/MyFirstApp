@@ -2,7 +2,8 @@ package com.karpov.vacuum.network.data.prefs;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import javax.inject.Singleton;
 
