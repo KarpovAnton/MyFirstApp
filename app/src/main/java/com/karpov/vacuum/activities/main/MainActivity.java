@@ -17,17 +17,24 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.karpov.vacuum.R;
 import com.karpov.vacuum.VacuumApplication;
+import com.karpov.vacuum.network.data.DtoListCallback;
+import com.karpov.vacuum.network.data.FailTypes;
+import com.karpov.vacuum.network.data.dto.ProfilePreviewDto;
+import com.karpov.vacuum.network.data.dto.ResponseDto;
+import com.karpov.vacuum.network.data.managers.ProfilesManager;
 import com.karpov.vacuum.services.BleManager;
-import com.karpov.vacuum.views.adapters.TestAdapter;
+import com.karpov.vacuum.views.adapters.ProfileAdapter;
+import com.karpov.vacuum.views.custom.SpannedGridLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,8 +50,11 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeRefres
     public static final int LOGIN_REQUEST_CODE = 1;
     public static final int REQUEST_ENABLE_BT = 2;
 
+    @Inject
+    ProfilesManager profilesManager;
+
     BleManager bleManager;
-    TestAdapter testAdapter;
+    ProfileAdapter profileAdapter;
 
     List<String> devices = new ArrayList<>();
 
@@ -60,12 +70,27 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeRefres
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        swipeRefreshLayout.setOnRefreshListener(this);
+        SpannedGridLayoutManager manager = new SpannedGridLayoutManager(
+                new SpannedGridLayoutManager.GridSpanLookup() {
+                    @Override
+                    public SpannedGridLayoutManager.SpanInfo getSpanInfo(int position) {
+                        // Conditions for 2x2 items
+                        if (position == 4) {
+                            return new SpannedGridLayoutManager.SpanInfo(2, 2);
+                        } else {
+                            return new SpannedGridLayoutManager.SpanInfo(1, 1);
+                        }
+                    }
+                },
+                3, // number of columns
+                1f // how big is default item
+        );
 
-        testAdapter = new TestAdapter();
-        recyclerView.setAdapter(testAdapter);
+        recyclerView.setLayoutManager(manager);
+        profileAdapter = new ProfileAdapter();
+        recyclerView.setAdapter(profileAdapter);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         checkPermissions();
         bleManager = VacuumApplication.getComponent().getBleManager();
@@ -74,8 +99,8 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeRefres
     @Override
     protected void onResume() {
         super.onResume();
-        checkBluetooth();
-        scan();
+        //checkBluetooth();
+        //scan();
     }
 
     private void checkBluetooth() {
@@ -146,7 +171,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeRefres
                 devices.add(result.getDevice().getName());
                 Timber.d("devices.add %s", result.getDevice().getName());
             }
-            testAdapter.onAddAll(devices);
+            //testAdapter.onAddAll(devices);
         }
 
         @Override
@@ -163,7 +188,7 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeRefres
     @Override
     public void onRefresh() {
         devices.clear();
-        testAdapter.clear();
+        profileAdapter.clear();
         onResume();
         new Handler(getMainLooper()).postDelayed(new Runnable() {
             @Override
@@ -177,7 +202,37 @@ public class MainActivity extends DaggerAppCompatActivity implements SwipeRefres
 
     @OnClick(R.id.adv)
     void onAdvClick() {
-        bleManager.startAdvertising(advertisingCallback);
+        //bleManager.startAdvertising(advertisingCallback);
+
+        ////////load users
+        String [] test = {
+                "kuiQxGn76OZ0",
+                "kpqQ7tA4zvqh",
+                "Tjq84ZY4To3k",
+                "OhMAyj8Lc7dF",
+                "7BSHDyyg5OSS",
+                "Cua5P7eYQEnh",
+                "NEXqmEx96zfG",
+                "2-h0jnE-bqxJ",
+                "u2SFrG3ccztK",
+                "6i37zP34eO3m",
+                "upOI5UZrRNfJ"};
+        profilesManager.getUserProfiles(test, new DtoListCallback<ResponseDto>() {
+                    @Override
+                    public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
+                        Timber.d("moe succ");
+                        profileAdapter.onAddList(response, true);
+                    }
+
+                    @Override
+                    public void onFailed(FailTypes fail) {
+                        Timber.d("moe fail" + fail.name());
+                    }
+                });
+
+
+                ////////load users
+
     }
 
     AdvertiseCallback advertisingCallback = new AdvertiseCallback() {

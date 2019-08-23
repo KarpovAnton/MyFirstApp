@@ -1,10 +1,13 @@
 package com.karpov.vacuum.network;
 
-import com.karpov.vacuum.network.data.dto.IdRequestDto;
 import com.karpov.vacuum.network.data.dto.LoginRequestDto;
 import com.karpov.vacuum.network.data.dto.LoginResponseDto;
+import com.karpov.vacuum.network.data.dto.ProfilePreviewDto;
+import com.karpov.vacuum.network.data.dto.ProfilesRequestDto;
 import com.karpov.vacuum.network.data.dto.RegistrationRequestDto;
 import com.karpov.vacuum.network.data.dto.RegistrationResponseDto;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -24,7 +27,7 @@ public interface VacuumApi {
     Call<LoginResponseDto> login(@Body LoginRequestDto loginRequestDto);
 
     @Headers("Content-Type: application/json")
-    @POST("/account/card/default/")
-    Call<Void> sendResult(@Header("Authorization") String token, @Body IdRequestDto dto);
+    @POST("/api/users")
+    Call<List<ProfilePreviewDto>> getProfiles(@Header("Authorization") String token, @Body ProfilesRequestDto dto);
 
 }

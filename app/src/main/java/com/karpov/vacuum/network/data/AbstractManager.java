@@ -56,7 +56,7 @@ public abstract class AbstractManager {
     }
 
     protected String getTokenString() {
-        return "Token " + authSession.getToken();
+        return "Bearer " + authSession.getToken();
     }
 
     protected void onParseErrorResponse(int status, ResponseBody body, final DtoCallback<?> callback) {

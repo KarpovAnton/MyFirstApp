@@ -1,4 +1,3 @@
-/*
 package com.karpov.vacuum.utils;
 
 import android.content.Context;
@@ -204,4 +203,3 @@ public class ImageUtils {
         return resizedBitmap;
     }
 }
-*/
