@@ -24,6 +24,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     LoaderDelegateAdapter mLoadingDelegateAdapter;
 
+    RecyclerItemClickListener mItemClickListener;
+
     List<ViewType> items;
 
     protected boolean hasNext;
@@ -35,9 +37,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     };
 
-    public ProfileAdapter() {
+    public ProfileAdapter(RecyclerItemClickListener itemClickListener) {
         super();
         mLoadingDelegateAdapter = new LoaderDelegateAdapter();
+        mItemClickListener = itemClickListener;
         items = new ArrayList<>();
         hasNext = true;
     }
@@ -67,7 +70,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         switch (itemViewType) {
             case TYPE_PROFILE:
                 ProfileViewHolder viewHolder = (ProfileViewHolder)holder;
-                viewHolder.bind((ProfilePreviewDto) items.get(position));
+                //viewHolder.bind((ProfilePreviewDto) items.get(position));
+                viewHolder.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mItemClickListener.onClick(position);
+                    }
+                });
                 Timber.d("bind profile");
                 break;
 
@@ -110,6 +119,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             updateCount++;
         }
         notifyItemRangeInserted(initPosition, updateCount);
+    }
+
+    public String getUserIdByPosition(int position) {
+        ProfilePreviewDto item = (ProfilePreviewDto)items.get(position);
+        return item.getUserId();
+    }
+
+    public ProfilePreviewDto getProfileByPosition(int position) {
+        return (ProfilePreviewDto)items.get(position);
+
     }
 
     public void clear() {

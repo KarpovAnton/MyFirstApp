@@ -46,11 +46,11 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Dependency injection
-    implementation "com.google.dagger:dagger:2.15"
-    annotationProcessor "com.google.dagger:dagger-compiler:2.14.1"
-    implementation "com.google.dagger:dagger-android:2.15"
-    implementation "com.google.dagger:dagger-android-support:2.14.1"
-    annotationProcessor "com.google.dagger:dagger-android-processor:2.14.1"
+    implementation "com.google.dagger:dagger:2.21"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.21"
+    implementation "com.google.dagger:dagger-android:2.21"
+    implementation "com.google.dagger:dagger-android-support:2.21"
+    annotationProcessor "com.google.dagger:dagger-android-processor:2.21"
 
     //views
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'

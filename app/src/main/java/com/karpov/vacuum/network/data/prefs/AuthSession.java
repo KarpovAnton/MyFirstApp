@@ -13,14 +13,14 @@ public class AuthSession {
     private static AuthSession instance;
 
     private String token;
-    private long expiredAt;
+    private long expiresIn;
 
     SharedPreferences prefs;
 
     public AuthSession(SharedPreferences prefs) {
         this.prefs = prefs;
         token  = new StringPreference(prefs, PREF_KEY_TOKEN, "").get();
-        expiredAt = Long.parseLong(
+        expiresIn = Long.parseLong(
                 new StringPreference(prefs, PREF_KEY_EXP_DATE, "1").get());
         instance = this;
     }
@@ -41,27 +41,27 @@ public class AuthSession {
 
     public boolean isValid() {
         long now = System.currentTimeMillis();
-        return token != null && token.length()>0 && now > expiredAt;
+        return token != null && token.length()>0 && now > expiresIn;
     }
 
     public String getToken() {
         return token;
     }
 
-    public void update(String token, long expiredAt) {
+    public void update(String token, long expiresIn) {
         this.token = token;
-        this.expiredAt = expiredAt;
+        this.expiresIn = expiresIn * 1000 + System.currentTimeMillis();
         new StringPreference(prefs, PREF_KEY_TOKEN, "").set(token);
-        new StringPreference(prefs, PREF_KEY_EXP_DATE, "1").set(""+expiredAt);
+        new StringPreference(prefs, PREF_KEY_EXP_DATE, "1").set(""+this.expiresIn);
     }
 
     public void invalidate() {
         token = null;
-        expiredAt = 0;
+        expiresIn = 0;
         update(null, 0);
     }
 
     public String toString() {
-        return this.token+" "+this.expiredAt;
+        return this.token+" "+this.expiresIn;
     }
 }

@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_iphone_8_plus">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeLayout"
@@ -14,14 +15,23 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:paddingTop="32dp"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <Button
         android:id="@+id/adv"
-        android:layout_width="match_parent"
+        android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:text="ble share this device"/>
+
+    <FrameLayout
+        android:id="@+id/profileContainer"
+        android:layout_width="300dp"
+        android:layout_height="430dp"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

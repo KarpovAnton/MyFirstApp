@@ -12,13 +12,21 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.widget.ImageView;
 
+import com.squareup.picasso.LruCache;
+import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
+import com.squareup.picasso.Transformation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import timber.log.Timber;
 
 public class ImageUtils {
@@ -27,6 +35,82 @@ public class ImageUtils {
 
     private static final int MAX_IMAGE_WIDTH = 1536;
     private static final double MAX_ASCPECT = 16./9.;
+
+    public class BitmapTransform implements Transformation {
+
+        int maxWidth;
+        int maxHeight;
+
+        public BitmapTransform(int maxWidth, int maxHeight) {
+            this.maxWidth = maxWidth;
+            this.maxHeight = maxHeight;
+        }
+
+        @Override
+        public Bitmap transform(Bitmap source) {
+            int targetWidth, targetHeight;
+            double aspectRatio;
+
+            if (source.getWidth() > source.getHeight()) {
+                targetWidth = maxWidth;
+                aspectRatio = (double) source.getHeight() / (double) source.getWidth();
+                targetHeight = (int) (targetWidth * aspectRatio);
+            } else {
+                targetHeight = maxHeight;
+                aspectRatio = (double) source.getWidth() / (double) source.getHeight();
+                targetWidth = (int) (targetHeight * aspectRatio);
+            }
+
+            Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
+            if (result != source) {
+                source.recycle();
+            }
+            return result;
+        }
+
+        @Override
+        public String key() {
+            return maxWidth + "x" + maxHeight;
+        }
+
+    };
+
+    public void setAuthImage(Context context, String token, ImageView target, String imageUrl,
+                             String imagePreview, int imageDefault) {
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request newRequest = chain.request().newBuilder()
+                                .addHeader("Authorization", token)
+                                .build();
+                        return chain.proceed(newRequest);
+                    }
+                })
+                .build();
+
+        Picasso picasso = new Picasso.Builder(context)
+                .downloader(new OkHttp3Downloader(client))
+                .build();
+
+        if (!TextUtils.isEmpty(imagePreview)) {
+            BitmapTask bitmapTask = new BitmapTask(target);
+            bitmapTask.execute(imagePreview);
+        }
+        if (!TextUtils.isEmpty(imageUrl)) {
+            RequestCreator requestCreator = picasso
+                    .load(imageUrl)
+                    .transform(new BitmapTransform(300, 300))
+                    .resize(300, 300)
+                    .centerCrop();
+            if (TextUtils.isEmpty(imagePreview))
+                requestCreator.placeholder(imageDefault);
+            requestCreator.into(target);
+        } else {
+            setImagePreview(target, imagePreview, imageDefault);
+        }
+    }
 
     public void setImage(ImageView target, String imageUrl, String imagePreview, int imageDefault) {
         if (!TextUtils.isEmpty(imagePreview)) {

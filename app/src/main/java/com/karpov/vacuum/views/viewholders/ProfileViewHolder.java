@@ -15,6 +15,7 @@ import com.karpov.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.karpov.vacuum.network.data.prefs.AuthSession;
 import com.karpov.vacuum.utils.ImageUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,9 +25,6 @@ import timber.log.Timber;
 public class ProfileViewHolder extends RecyclerView.ViewHolder {
 
     Context context;
-
-//    @Inject
-//    AuthSession authSession;
 
     @BindView(R.id.avatarImage)
     ImageView avatarImage;
@@ -48,7 +46,7 @@ public class ProfileViewHolder extends RecyclerView.ViewHolder {
         List<ProfileImageDto> photos = item.getImages();
         List<ProfileAccountDto> accounts = item.getAccounts();
 
-        if (photos.size() > 0) {
+        if (!photos.isEmpty()) {
             ProfileImageDto avatar = photos.get(0);
             setAvatar(avatar.getPreview(), avatar.getUrl());
         } else {
@@ -60,14 +58,20 @@ public class ProfileViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setAvatarPlaceholder() {
-        new ImageUtils().setImage(avatarImage, null, null, R.drawable.default_avatar);
+        new ImageUtils().setImage(avatarImage, null, null,
+                R.drawable.default_avatar);
     }
 
     private void setAvatar(String preview, String url) {
-        new ImageUtils().setImage(avatarImage, url, preview, R.drawable.default_avatar);
+        new ImageUtils().setAuthImage(context, getTokenString(), avatarImage, url, preview,
+                R.drawable.default_avatar);
     }
 
     private void setName(String username) {
         nameText.setText(username);
+    }
+
+    public void setOnClickListener(View.OnClickListener listener) {
+        itemView.setOnClickListener(listener);
     }
 }

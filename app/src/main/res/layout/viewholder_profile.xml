@@ -3,24 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="8dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/avatarImage"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        tools:src="@drawable/default_avatar"/>
+        android:src="@drawable/default_avatar"/>
 
     <TextView
         android:id="@+id/nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:lines="1"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:ellipsize="end"
+        android:layout_gravity="center"
+        android:padding="8dp"
+        android:singleLine="true"
+        android:textColor="#242424"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:ellipsize="marquee"
         android:text="Anton"/>
 
 </LinearLayout>
