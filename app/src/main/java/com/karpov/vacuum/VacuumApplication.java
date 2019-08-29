@@ -15,7 +15,6 @@ import dagger.android.DaggerApplication;
 import timber.log.Timber;
 
 public class VacuumApplication extends DaggerApplication implements Application.ActivityLifecycleCallbacks {
-    private static VacuumApplication instance;
 
     private static AppComponent component;
 
@@ -26,7 +25,6 @@ public class VacuumApplication extends DaggerApplication implements Application.
         super.onCreate();
         registerActivityLifecycleCallbacks(this);
         Timber.plant(new Timber.DebugTree());
-        instance = this;
     }
 
     @Override
@@ -37,10 +35,6 @@ public class VacuumApplication extends DaggerApplication implements Application.
 
     public static AppComponent getComponent() {
         return component;
-    }
-
-    public static VacuumApplication getInstance() {
-        return instance;
     }
 
     @Override

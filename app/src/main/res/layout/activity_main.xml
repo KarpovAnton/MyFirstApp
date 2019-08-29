@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_iphone_8_plus">
+    android:background="@drawable/bg_iphone_8">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeLayout"
@@ -15,8 +15,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="32dp"/>
+            android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <Button
@@ -25,12 +24,13 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="ble share this device"/>
+        android:text="ble share this device"
+        android:visibility="gone"/>
 
     <FrameLayout
         android:id="@+id/profileContainer"
         android:layout_width="300dp"
-        android:layout_height="430dp"
+        android:layout_height="385dp"
         android:layout_marginTop="100dp"
         android:layout_centerHorizontal="true"/>
 

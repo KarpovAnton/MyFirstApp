@@ -28,8 +28,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     List<ViewType> items;
 
-    protected boolean hasNext;
-
     protected ViewType loadingItem = new ViewType() {
         @Override
         public int getViewType() {
@@ -42,7 +40,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         mLoadingDelegateAdapter = new LoaderDelegateAdapter();
         mItemClickListener = itemClickListener;
         items = new ArrayList<>();
-        hasNext = true;
     }
 
     @NonNull
@@ -70,7 +67,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         switch (itemViewType) {
             case TYPE_PROFILE:
                 ProfileViewHolder viewHolder = (ProfileViewHolder)holder;
-                //viewHolder.bind((ProfilePreviewDto) items.get(position));
+                viewHolder.bind((ProfilePreviewDto) items.get(position));
                 viewHolder.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -100,25 +97,30 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return items.size();
     }
 
-    public void onAddList(List<ProfilePreviewDto> dtoList, boolean hasNext) {
+    public void onAddList(List<ProfilePreviewDto> dtoList) {
         int initPosition = 0;
-        this.hasNext = hasNext;
 
         // Remove loading indicator if exists
-        if (items.size()>0) {
+        /*if (items.size()>0) {
             initPosition = items.size() - 1;
             items.remove(initPosition);
             notifyItemRemoved(initPosition);
             Timber.d("notifyItemRemoved %d", initPosition);
-        }
+        }*/
 
         items.addAll(dtoList);
         int updateCount = dtoList.size();
-        if (hasNext) {
+/*        if (hasNext) {
             items.add(loadingItem);
             updateCount++;
-        }
+        }*/
         notifyItemRangeInserted(initPosition, updateCount);
+    }
+
+    public void onAdd(List<ProfilePreviewDto> dtoList) {
+        int position = getItemCount();
+        this.items.add(dtoList.get(0));
+        notifyItemInserted(position);
     }
 
     public String getUserIdByPosition(int position) {

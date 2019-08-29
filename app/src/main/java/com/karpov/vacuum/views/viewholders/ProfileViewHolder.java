@@ -15,12 +15,10 @@ import com.karpov.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.karpov.vacuum.network.data.prefs.AuthSession;
 import com.karpov.vacuum.utils.ImageUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class ProfileViewHolder extends RecyclerView.ViewHolder {
 
@@ -46,7 +44,7 @@ public class ProfileViewHolder extends RecyclerView.ViewHolder {
         List<ProfileImageDto> photos = item.getImages();
         List<ProfileAccountDto> accounts = item.getAccounts();
 
-        if (!photos.isEmpty()) {
+        if (photos != null && !photos.isEmpty()) {
             ProfileImageDto avatar = photos.get(0);
             setAvatar(avatar.getPreview(), avatar.getUrl());
         } else {
@@ -54,7 +52,6 @@ public class ProfileViewHolder extends RecyclerView.ViewHolder {
         }
 
         setName(item.getUsername());
-        Timber.d("moe" + getTokenString());
     }
 
     private void setAvatarPlaceholder() {

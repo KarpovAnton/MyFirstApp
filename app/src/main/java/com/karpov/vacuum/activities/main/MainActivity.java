@@ -6,7 +6,6 @@ import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
@@ -14,11 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,14 +24,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.gson.Gson;
 import com.karpov.vacuum.R;
 import com.karpov.vacuum.VacuumApplication;
 import com.karpov.vacuum.network.data.DtoListCallback;
 import com.karpov.vacuum.network.data.FailTypes;
-import com.karpov.vacuum.network.data.dto.ProfileListResponseDto;
 import com.karpov.vacuum.network.data.dto.ProfilePreviewDto;
-import com.karpov.vacuum.network.data.dto.ProfilesRequestDto;
 import com.karpov.vacuum.network.data.dto.ResponseDto;
 import com.karpov.vacuum.network.data.managers.ProfilesManager;
 import com.karpov.vacuum.services.BleManager;
@@ -45,6 +37,7 @@ import com.karpov.vacuum.views.adapters.RecyclerItemClickListener;
 import com.karpov.vacuum.views.custom.SpannedGridLayoutManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -74,7 +67,22 @@ public class MainActivity extends DaggerAppCompatActivity implements
     BleManager bleManager;
     ProfileAdapter profileAdapter;
 
-    List<String> devices = new ArrayList<>();
+
+    String [] test = {
+            "kuiQxGn76OZ0",
+            "kpqQ7tA4zvqh",
+            "Tjq84ZY4To3k",
+            "OhMAyj8Lc7dF",
+            "7BSHDyyg5OSS",
+            "Cua5P7eYQEnh",
+            "NEXqmEx96zfG",
+            "2-h0jnE-bqxJ",
+            "u2SFrG3ccztK",
+            "6i37zP34eO3m",
+            "upOI5UZrRNfJ"};
+    List<String> devices = new ArrayList<>(Arrays.asList(test));
+    List<String> devicesExt = new ArrayList<>();
+
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -121,15 +129,37 @@ public class MainActivity extends DaggerAppCompatActivity implements
         test.add(new ProfilePreviewDto());
         test.add(new ProfilePreviewDto());test.add(new ProfilePreviewDto());
         test.add(new ProfilePreviewDto());test.add(new ProfilePreviewDto());
-        profileAdapter.onAddList(test, true);
+        //profileAdapter.onAddList(test, true);
+
+
+        bleManager.startAdvertising(advertisingCallback);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //checkBluetooth();
-        //scan();
-        bleManager.startAdvertising(advertisingCallback);
+
+        checkBluetooth();
+
+        new Handler(getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                scan();
+            }
+        }, 1000);
+
+        profilesManager.getUserProfiles(test, new DtoListCallback<ResponseDto>() {
+            @Override
+            public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
+                Timber.d("moe succ");
+                profileAdapter.onAddList(response);
+            }
+
+            @Override
+            public void onFailed(FailTypes fail) {
+                Timber.d("moe fail" + fail.name());
+            }
+        });
     }
 
     private void checkBluetooth() {
@@ -177,6 +207,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
     
     private void scan() {
         bleManager.scan(scanCallback);
+        Timber.d("moe start scan");
         /*new Handler(getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -185,22 +216,38 @@ public class MainActivity extends DaggerAppCompatActivity implements
         }, 10000);*/
     }
 
-    private void sendResults() {
-
-    }
-
     ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
 
             String deviceName = result.getDevice().getName();
+
             if (!TextUtils.isEmpty(deviceName)) {
-                if (deviceName.contains(BASE_DEVICE_NAME_PART) && !devices.contains(deviceName))
-                devices.add(result.getDevice().getName());
-                Timber.d("devices.add %s", result.getDevice().getName());
+                if (deviceName.contains(BASE_DEVICE_NAME_PART) && !devicesExt.contains(deviceName)) {
+
+                    devicesExt.add(result.getDevice().getName());
+                    deviceName = deviceName.split("@")[0];
+
+                    profilesManager.getUserProfile(deviceName, new DtoListCallback<ResponseDto>() {
+                        @Override
+                        public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
+                            Timber.d("moe devices.add %s", result.getDevice().getName());
+                            profileAdapter.onAdd(response);
+                        }
+
+                        @Override
+                        public void onFailed(FailTypes fail) {
+
+                        }
+                    });
+
+
+                            //String[] devicesTest = devices.toArray(new String[0]);
+                }
+
+
             }
-            //testAdapter.onAddAll(devices);
         }
 
         @Override
@@ -216,7 +263,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void onRefresh() {
-        devices.clear();
+        devicesExt.clear();
         profileAdapter.clear();
         onResume();
         new Handler(getMainLooper()).postDelayed(new Runnable() {
@@ -224,29 +271,14 @@ public class MainActivity extends DaggerAppCompatActivity implements
             public void run() {
                 swipeRefreshLayout.setRefreshing(false);
             }
-        }, 3000);
+        }, 2000);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
 
     @OnClick(R.id.adv)
     void onAdvClick() {
-        //bleManager.startAdvertising(advertisingCallback);
-
         ////////load users
-        String [] test = {
-                "kuiQxGn76OZ0",
-                "kpqQ7tA4zvqh",
-                "Tjq84ZY4To3k",
-                "OhMAyj8Lc7dF",
-                "7BSHDyyg5OSS",
-                "Cua5P7eYQEnh",
-                "NEXqmEx96zfG",
-                "2-h0jnE-bqxJ",
-                "u2SFrG3ccztK",
-                "6i37zP34eO3m",
-                "upOI5UZrRNfJ"};
-
         /*profilesManager.getUserProfiles(test, new DtoListCallback<ResponseDto>() {
                     @Override
                     public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
@@ -258,9 +290,11 @@ public class MainActivity extends DaggerAppCompatActivity implements
                     public void onFailed(FailTypes fail) {
                         Timber.d("moe fail" + fail.name());
                     }
-                });*///TODO
+                });*/
 
-                ////////load users
+         //////////////////////////////////////////////////////////////
+
+        //scan();
     }
 
     AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
@@ -298,36 +332,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        // I only care if the event is an UP action
-        /*if ( event.getAction () == MotionEvent.ACTION_UP )
-        {
-            //and only is the ListFragment shown.
-            //if (isListFragmentShown)
-            //{
-                // create a rect for storing the fragment window rect
-                Rect r = new Rect ( 0, 0, 0, 0 );
-                // retrieve the fragment's windows rect
-                profileFragment.getView().getHitRect(r);
-                // check if the event position is inside the window rect
-                boolean intersects = r.contains ( (int) event.getX (), (int) event.getY () );
-                // if the event is not inside then we can close the fragment
-            Timber.d( "2 moe pressed outside the listFragment");
-                if ( !intersects ) {
-                    Timber.d( "moe pressed outside the listFragment");
-                    FragmentTransaction fragmentTransaction;
-                    fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.remove(currentFragment).commit();
-                    // notify that we consumed this event
-                    return true;
-                }
-            //}
-        }*/
-        //let the system handle the event
-        return super.onTouchEvent ( event );
-    }
-
-    @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (profileFragShown) {
             if (ev.getAction() == MotionEvent.ACTION_UP) {
@@ -339,7 +343,8 @@ public class MainActivity extends DaggerAppCompatActivity implements
                 // check if the event position is inside the window rect
                 boolean intersects = r.contains((int) ev.getX(), (int) ev.getY());
                 // if the event is inside then we can close the fragment
-                if (intersects) {
+                if (ev.getX() < 100 || ev.getX() > 980 || ev.getY() < 360 || ev.getY() > 1450 ) {
+                //if (intersects) {
                     Timber.d("moe pressed outside 1");
                     Timber.d( "moe ontouch profileFragShown" + profileFragShown);
                     FragmentTransaction fragmentTransaction;

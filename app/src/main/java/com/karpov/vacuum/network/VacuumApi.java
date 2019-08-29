@@ -11,9 +11,11 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 
 public interface VacuumApi {
@@ -30,4 +32,7 @@ public interface VacuumApi {
     @POST("/api/users")
     Call<List<ProfilePreviewDto>> getProfiles(@Header("Authorization") String token, @Body ProfilesRequestDto dto);
 
+    @Headers("Content-Type: application/json")
+    @GET("/api/users/{id}")
+    Call<List<ProfilePreviewDto>> getProfile(@Header("Authorization") String token, @Path("id") String id);
 }

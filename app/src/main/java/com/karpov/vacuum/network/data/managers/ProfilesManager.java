@@ -28,13 +28,38 @@ public class ProfilesManager extends AbstractManager {
         super(vacuumApi, errorUtils, application);
     }
 
-    //public void getImagesProfile()
-
     public void getUserProfiles(@NonNull String[] userId, @NonNull final DtoListCallback<?> callback) {
 
         //if (!checkNetworkAvailable(callback)) return;
 
         Call<List<ProfilePreviewDto>> call = mVacuumApi.getProfiles(getTokenString(), new ProfilesRequestDto(userId));
+        call.enqueue(new Callback<List<ProfilePreviewDto>>() {
+            @Override
+            public void onResponse(Call<List<ProfilePreviewDto>> call, Response<List<ProfilePreviewDto>> response) {
+                if (response.isSuccessful()) {
+
+                    callback.onSuccessful(response.body());
+                    Timber.d("moe manager succ");
+
+                } else {
+                    callback.onFailed(FailTypes.UNKNOWN_ERROR);
+                    Timber.d("moe manager fail");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProfilePreviewDto>> call, Throwable t) {
+                callback.onFailed(FailTypes.UNKNOWN_ERROR);
+                Timber.d("moe manager failure" + t.getLocalizedMessage());
+            }
+        });
+    }
+
+    public void getUserProfile(@NonNull String userId, @NonNull final DtoListCallback<?> callback) {
+
+        //if (!checkNetworkAvailable(callback)) return;
+
+        Call<List<ProfilePreviewDto>> call = mVacuumApi.getProfile(getTokenString(), userId);
         call.enqueue(new Callback<List<ProfilePreviewDto>>() {
             @Override
             public void onResponse(Call<List<ProfilePreviewDto>> call, Response<List<ProfilePreviewDto>> response) {

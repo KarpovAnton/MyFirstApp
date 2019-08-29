@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.widget.ImageView;
 
-import com.squareup.picasso.LruCache;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;

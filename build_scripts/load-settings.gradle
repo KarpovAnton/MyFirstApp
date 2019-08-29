@@ -1,0 +1,47 @@
+buildscript {
+    repositories {
+        maven { url "http://mvn/artifactory/public" }
+        maven { url 'http://mvn/artifactory/gradleplugins' }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+    }
+}
+import com.android.builder.signing.DefaultSigningConfig
+import com.android.ide.common.signing.KeystoreHelper
+
+ext.artifactoryUrlString = ""
+ext.artifactoryUserString = ""
+ext.artifactoryPasswordString = ""
+ext.jenkinsApiToken = ""
+ext.jenkinsApiLogin = ""
+
+ext.configStoreFile = file(KeystoreHelper.defaultDebugKeystoreLocation())
+ext.configStorePassword = DefaultSigningConfig.DEFAULT_PASSWORD
+ext.configKeyAlias = DefaultSigningConfig.DEFAULT_ALIAS
+ext.configKeyPassword = DefaultSigningConfig.DEFAULT_PASSWORD
+
+file(System.getenv('HOME') + "/.keystore/keystore.properties").with { it ->
+    if (it.exists()) {
+        def properties = new Properties()
+        properties.load(new FileInputStream(it))
+
+        ext.artifactoryUrlString = properties['artifactoryUrl']
+        ext.artifactoryUserString = properties['artifactoryUser']
+        ext.artifactoryPasswordString = properties['artifactoryPassword']
+
+        ext.jenkinsApiToken = properties['jenkinsApiToken']
+        ext.jenkinsApiLogin = properties['jenkinsApiLogin']
+
+        ext.configStoreFile = file(it.getParent() + "/" + properties['storeFile'])
+        if (!ext.configStoreFile.exists()) {
+            throw new Exception("keys not found. Path: " + it.getParent() + "/" + properties['storeFile'])
+        }
+        ext.configStorePassword = properties['storePassword']
+        ext.configKeyAlias = properties['keyAlias']
+        ext.configKeyPassword = properties['keyPassword']
+    } else {
+        throw new Exception(
+                "keystore.properties not found. Path: " + System.getenv('HOME') + "/.keystore/keystore.properties")
+    }
+}

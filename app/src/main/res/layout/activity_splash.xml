@@ -6,5 +6,5 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/friends_iphone_8_plus"/>
+        android:src="@drawable/friends_iphone_8"/>
 </RelativeLayout>

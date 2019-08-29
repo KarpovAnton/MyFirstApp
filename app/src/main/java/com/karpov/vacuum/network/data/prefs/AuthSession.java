@@ -41,7 +41,7 @@ public class AuthSession {
 
     public boolean isValid() {
         long now = System.currentTimeMillis();
-        return token != null && token.length()>0 && now > expiresIn;
+        return token != null && token.length()>0 && now < expiresIn /*&& expiresIn != 1*/;
     }
 
     public String getToken() {

@@ -33,11 +33,11 @@ public class SplashActivity extends DaggerAppCompatActivity {
     }
 
     void initNextActivity() {
-        //if (authRequired()) {
-        //    startLoginActivity();
-        //} else {
+        if (authRequired()) {
+            startLoginActivity();
+        } else {
             startMainActivity();
-        //}
+        }
     }
 
     boolean authRequired() {

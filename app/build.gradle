@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 
+apply from: "$project.rootDir/build_scripts/load-settings.gradle"
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -11,10 +13,31 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+
+    signingConfigs {
+        debug {
+            storeFile configStoreFile
+            storePassword configStorePassword
+            keyAlias configKeyAlias
+            keyPassword configKeyPassword
+        }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            storeFile configStoreFile
+            storePassword configStorePassword
+            keyAlias configKeyAlias
+            keyPassword configKeyPassword
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {

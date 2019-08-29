@@ -1,30 +1,40 @@
 package com.karpov.vacuum.activities.main;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import com.karpov.vacuum.R;
 import com.karpov.vacuum.network.data.dto.ProfilePreviewDto;
+import com.karpov.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
+import com.karpov.vacuum.views.adapters.PhotosAdapter;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnFocusChange;
 import dagger.android.support.DaggerFragment;
-import timber.log.Timber;
 
 public class ProfileFragment extends DaggerFragment {
 
     private ProfilePreviewDto profileDto;
     private SwipeRefreshLayout act;
+
+    PhotosAdapter photosAdapter;
+
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
+
+    @BindView(R.id.nameText)
+    TextView nameText;
 
     @Inject
     public ProfileFragment() {}
@@ -47,13 +57,19 @@ public class ProfileFragment extends DaggerFragment {
         return view;
     }
 
-
-
     void initViews() {
+        photosAdapter = new PhotosAdapter(getContext());
 
+        List<ProfileImageDto> photos = profileDto.getImages();
+        photosAdapter.setPhotos(photos);
+
+        viewPager.setAdapter(photosAdapter);
+
+        setName(profileDto.getUsername());
     }
 
-    public void setData() {
-
+    private void setName(String username) {
+        nameText.setText(username);
     }
+
 }
