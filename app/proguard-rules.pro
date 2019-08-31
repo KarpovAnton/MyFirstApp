@@ -54,10 +54,9 @@
  -dontwarn ru.alfabank.**
 
  #app
- -keep class ru.alfabank.alfacontacts.data.remote.**{ *; }
  -keep public class org.simpleframework.** { *; }
  -keep class org.simpleframework.xml.** { *; }
  -keep class org.simpleframework.xml.core.** { *; }
  -keep class org.simpleframework.xml.util.** { *; }
- -keep class ru.alfabank.alfacontacts.ui.**{ public *; }
- -keep class ru.alfabank.alfacontacts.util.photoutils.**{ public *; }
+ 
+-keepclassmembers class com.karpov.vacuum.network.data.dto.** { <fields>; }

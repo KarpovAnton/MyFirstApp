@@ -1,10 +1,10 @@
 buildscript {
     repositories {
-        maven { url "http://mvn/artifactory/public" }
-        maven { url 'http://mvn/artifactory/gradleplugins' }
+        google()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.4.2'
     }
 }
 import com.android.builder.signing.DefaultSigningConfig
@@ -21,7 +21,7 @@ ext.configStorePassword = DefaultSigningConfig.DEFAULT_PASSWORD
 ext.configKeyAlias = DefaultSigningConfig.DEFAULT_ALIAS
 ext.configKeyPassword = DefaultSigningConfig.DEFAULT_PASSWORD
 
-file(System.getenv('HOME') + "/.keystore/keystore.properties").with { it ->
+file("../.keystore/keystore.properties").with { it ->
     if (it.exists()) {
         def properties = new Properties()
         properties.load(new FileInputStream(it))
