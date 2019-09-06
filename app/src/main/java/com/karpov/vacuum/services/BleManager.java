@@ -14,9 +14,10 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
-import android.os.Looper;
 
 import java.util.List;
+
+import static android.os.Looper.getMainLooper;
 
 public class BleManager {
     public enum BluetoothState {ENABLE, DISABLE, NOT_SUPPORT, TURNED_ON, CANCELED}
@@ -174,19 +175,27 @@ public class BleManager {
 
         if (!mScanning) {
             // Stops scanning after a pre-defined scan period.
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+/*            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     mScanning = false;
                     bluetoothLeScanner.stopScan(callback);
                 }
-            }, DEFAULT_SCAN_TIME);
+            }, DEFAULT_SCAN_TIME);*/
 
             mScanning = true;
             bluetoothLeScanner.startScan(scanFilters, scanSettings, callback);
         } else {
             mScanning = false;
             bluetoothLeScanner.stopScan(callback);
+
+            new Handler(getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    scan(callback);//TODO
+                }
+            }, 1000);
+
         }
     }
 

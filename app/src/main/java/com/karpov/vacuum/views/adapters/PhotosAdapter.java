@@ -21,7 +21,6 @@ public class PhotosAdapter extends PagerAdapter {
     Context context;
     List<ProfileImageDto> photos;
 
-    //@BindView(R.id.photoImage)
     ImageView photoImage;
 
     public PhotosAdapter(Context context) {

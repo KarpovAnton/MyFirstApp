@@ -1,4 +1,4 @@
-package com.karpov.vacuum.activities.main;
+package com.karpov.vacuum.fragments;
 
 import com.karpov.vacuum.di.base.FragmentScoped;
 

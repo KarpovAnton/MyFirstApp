@@ -22,5 +22,12 @@
         <item name="android:imeOptions">actionNext</item>
     </style>
 
+    <style name="ButtonStyle">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorFont</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 
 </resources>

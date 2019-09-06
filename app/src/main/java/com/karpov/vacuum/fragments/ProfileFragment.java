@@ -1,4 +1,4 @@
-package com.karpov.vacuum.activities.main;
+package com.karpov.vacuum.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.karpov.vacuum.R;
@@ -26,7 +25,6 @@ import dagger.android.support.DaggerFragment;
 public class ProfileFragment extends DaggerFragment {
 
     private ProfilePreviewDto profileDto;
-    private SwipeRefreshLayout act;
 
     PhotosAdapter photosAdapter;
 
@@ -39,8 +37,7 @@ public class ProfileFragment extends DaggerFragment {
     @Inject
     public ProfileFragment() {}
 
-    public void configure(SwipeRefreshLayout activity, ProfilePreviewDto profilePreviewDto) {
-        act = activity;
+    public void configure(ProfilePreviewDto profilePreviewDto) {
         profileDto = profilePreviewDto;
     }
 

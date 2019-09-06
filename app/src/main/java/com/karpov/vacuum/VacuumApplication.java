@@ -19,11 +19,13 @@ public class VacuumApplication extends DaggerApplication implements Application.
     private static AppComponent component;
 
     Activity currentActivity;
+    public static volatile Context applicationContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
         registerActivityLifecycleCallbacks(this);
+        applicationContext = getApplicationContext();
         Timber.plant(new Timber.DebugTree());
     }
 

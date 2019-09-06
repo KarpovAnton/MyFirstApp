@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#229999</color>
-    <color name="colorPrimaryDark">#221177</color>
-    <color name="colorAccent">#449ddd</color>
+    <color name="colorPrimary">#a7c4e6</color>
+    <color name="colorPrimaryDark">#449ddd</color>
+    <color name="colorAccent">#221177</color>
 
     <color name="colorFont">#242424</color>
 
@@ -10,5 +10,8 @@
     <color name="colorWhitePressed">#BCCAF2</color>
     <color name="colorBlue">#449ddd</color>
     <color name="colorBlueLight">#a7c4e6</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorGrey">#757575</color>
+    <color name="colorGreyTranc">#55757575</color>
 
 </resources>
