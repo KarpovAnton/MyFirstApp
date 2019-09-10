@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
-    package="com.karpov.vacuum">
+    package="com.socializer.vacuum">
 
     <dist:module dist:instant="true" />
 
@@ -18,18 +18,18 @@
         android:allowBackup="true"
         android:icon="@drawable/logo_icon_180_180_x3"
         android:label="@string/app_name"
-        android:name=".VacuumApplication"
+        android:name="com.socializer.vacuum.VacuumApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activities.main.MainActivity"
+            android:name="com.socializer.vacuum.activities.main.MainActivity"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="com.socializer.vacuum.activities.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,16 +38,16 @@
         </activity>
 
         <activity
-            android:name=".activities.LoginActivity"
+            android:name="com.socializer.vacuum.activities.LoginActivity"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".activities.account.AccountActivity"
+            android:name="com.socializer.vacuum.activities.account.AccountActivity"
             android:screenOrientation="portrait"/>
 
         <activity
-            android:name=".activities.photo.PhotoActivity"
+            android:name="com.socializer.vacuum.activities.photo.PhotoActivity"
             android:screenOrientation="portrait"/>
 
         <activity
