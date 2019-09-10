@@ -4,8 +4,6 @@ import android.content.Intent;
 
 import com.karpov.vacuum.activities.photo.PhotoActivity;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 
 public class AccountRouter implements AccountContract.Router {
@@ -17,9 +15,9 @@ public class AccountRouter implements AccountContract.Router {
 
     }
 
-    public void openPhotoActivity(ArrayList<String> imageList) {
+    public void openPhotoActivity(String[] photoArray) {
         Intent intent = new Intent(activity.getApplicationContext(), PhotoActivity.class);
-        intent.putExtra("imageList", imageList);
+        intent.putExtra("imageArray", photoArray);
         activity.startActivity(intent);
     }
 }

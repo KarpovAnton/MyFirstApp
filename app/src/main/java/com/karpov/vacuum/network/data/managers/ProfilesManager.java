@@ -9,18 +9,17 @@ import com.karpov.vacuum.network.data.AbstractManager;
 import com.karpov.vacuum.network.data.DtoCallback;
 import com.karpov.vacuum.network.data.DtoListCallback;
 import com.karpov.vacuum.network.data.FailTypes;
+import com.karpov.vacuum.network.data.dto.PhotoDeleteRequestDto;
+import com.karpov.vacuum.network.data.dto.PhotoRequestDto;
+import com.karpov.vacuum.network.data.dto.PhotoResponseDto;
 import com.karpov.vacuum.network.data.dto.ProfilePreviewDto;
 import com.karpov.vacuum.network.data.dto.ProfilesRequestDto;
 import com.karpov.vacuum.utils.ErrorUtils;
 
-import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -87,22 +86,36 @@ public class ProfilesManager extends AbstractManager {
         });
     }
 
-    public void uploadPhotoImage(File coverFile, @NonNull final DtoCallback<?> callback) {
-        RequestBody requestFile =
-                RequestBody.create(MediaType.parse("multipart/form-data"), coverFile);
+    public void uploadPhotoImage(String photoString, @NonNull final DtoCallback<?> callback) {
 
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("image", coverFile.getName(), requestFile);
 
-        Call<BookImageResponseDto> call = mBookSharingApi.uploadBookImage(getTokenString(), body);
-        call.enqueue(new Callback<BookImageResponseDto>() {
+        Call<PhotoResponseDto> call = mVacuumApi.uploadPhotoImage(getTokenString(), new PhotoRequestDto(photoString));
+        call.enqueue(new Callback<PhotoResponseDto>() {
             @Override
-            public void onResponse(Call<BookImageResponseDto> call, Response<BookImageResponseDto> response) {
+            public void onResponse(Call<PhotoResponseDto> call, Response<PhotoResponseDto> response) {
                 callback.onSuccessful(response.body());
             }
 
             @Override
-            public void onFailure(Call<BookImageResponseDto> call, Throwable t) {
+            public void onFailure(Call<PhotoResponseDto> call, Throwable t) {
+                Timber.i("onFailure=%s", t);
+                callback.onFailed(FailTypes.UNKNOWN_ERROR);
+            }
+        });
+    }
+
+    public void deletePhotoImage(String url, @NonNull final DtoCallback<?> callback) {
+
+
+        Call<PhotoResponseDto> call = mVacuumApi.deletePhotoImage(getTokenString(), new PhotoDeleteRequestDto(url));
+        call.enqueue(new Callback<PhotoResponseDto>() {
+            @Override
+            public void onResponse(Call<PhotoResponseDto> call, Response<PhotoResponseDto> response) {
+                callback.onSuccessful(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<PhotoResponseDto> call, Throwable t) {
                 Timber.i("onFailure=%s", t);
                 callback.onFailed(FailTypes.UNKNOWN_ERROR);
             }

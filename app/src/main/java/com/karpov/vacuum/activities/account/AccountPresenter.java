@@ -70,8 +70,6 @@ public class AccountPresenter implements AccountContract.Presenter {
                     List<ProfileImageDto> photos = currentAccountDto.getImages();
                     if (photos.size() > 0) {
                         adapter.setPhotos(photos);
-                    } else {
-                        adapter.setPhotos(null);
                     }
 
                     view.onAccountLoaded(currentAccountDto);

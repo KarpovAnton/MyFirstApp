@@ -8,4 +8,9 @@
 
     <string name="registration_dialog_title">Регистрация</string>
     <string name="waiting_dialog_msg">Пожалуйста, подождите</string>
+
+    <string name="facebook_app_id">306525116896526</string>
+    <string name="fb_login_protocol_scheme">fb306525116896526</string>
+
+
 </resources>

@@ -11,8 +11,6 @@ import com.karpov.vacuum.R;
 import com.karpov.vacuum.models.PhotoEditItem;
 import com.karpov.vacuum.views.viewholders.PhotoEditViewHolder;
 
-import java.util.List;
-
 public class PhotoEditAdapter extends BaseAdapter<PhotoEditItem, RecyclerView.ViewHolder> {
 
     private Callback listener;
@@ -25,8 +23,8 @@ public class PhotoEditAdapter extends BaseAdapter<PhotoEditItem, RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         RecyclerView.ViewHolder result;
-        View viewCover = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.viewholder_photo_edit, viewGroup, false);
-        result = new PhotoEditViewHolder(viewCover);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.viewholder_photo_edit, viewGroup, false);
+        result = new PhotoEditViewHolder(view);
         return result;
     }
 
@@ -55,29 +53,8 @@ public class PhotoEditAdapter extends BaseAdapter<PhotoEditItem, RecyclerView.Vi
         });
     }
 
-    @Override
-    public void onAdd(PhotoEditItem item) {
-        int position = getItemCount()-1;
-        this.items.remove(position);
-        this.items.add(item);
-        this.items.add(new PhotoEditItem());
-        notifyItemInserted(position);
-    }
-
-    @Override
-    public void onAddAll(List<PhotoEditItem> items) {
-        super.onAddAll(items);
-        this.items.add(new PhotoEditItem());
-    }
-
-    public void onRemove(int pos) {
-        items.remove(pos);
-        notifyItemRemoved(pos);
-    }
-
-    @Override
-    public void onRemoveAll() {
-        super.onRemoveAll();
+    public String getUrlPhotoByPos(int pos) {
+        return items.get(pos).getUri();
     }
 
     public interface Callback {

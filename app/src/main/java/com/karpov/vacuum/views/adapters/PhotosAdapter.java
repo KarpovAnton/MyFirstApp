@@ -29,11 +29,7 @@ public class PhotosAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        if (photos != null) {
-            return photos.size();
-        } else {
-            return 0;
-        }
+        return photos != null ? photos.size() : 0;
     }
 
     @Override

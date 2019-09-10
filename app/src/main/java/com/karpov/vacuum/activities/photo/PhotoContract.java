@@ -4,7 +4,6 @@ import com.karpov.vacuum.di.base.BasePresenter;
 import com.karpov.vacuum.di.base.BaseView;
 import com.karpov.vacuum.views.adapters.PhotoEditAdapter;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public interface PhotoContract {
@@ -18,6 +17,8 @@ public interface PhotoContract {
         void setAdapter(PhotoEditAdapter adapter);
 
         void onRemoveImage(int pos);
+
+        void onPhotoUploaded();
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -30,6 +31,6 @@ public interface PhotoContract {
 
         void setPhotos(ArrayList<String> photoImages);
 
-        void sendPhotoImage(File photoFile, String uri);
+        void sendPhotoImage(String photoString, String uri);
     }
 }

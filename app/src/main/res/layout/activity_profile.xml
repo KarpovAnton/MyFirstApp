@@ -55,14 +55,19 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                tools:background="@color/colorAccent"/>
+                android:layout_height="250dp"/>
 
-            <ImageView
-                android:id="@+id/placeholderImage"
+            <TextView
+                android:id="@+id/vpPlaceholder"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:background="@color/colorFont"/>
+                android:background="@color/colorBlue"
+                android:text="Нет фото"
+                android:textStyle="bold"
+                android:textSize="22dp"
+                android:gravity="center"
+                android:visibility="gone"
+                tools:visibility="visible"/>
 
             <ImageView
                 android:id="@+id/statusImage"

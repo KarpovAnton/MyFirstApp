@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -28,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
+import timber.log.Timber;
 
 public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContract.View {
 
@@ -42,15 +44,21 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
     @Inject
     PhotoRouter router;
 
-    ArrayList<String> photoImages = new ArrayList<>();
+    ArrayList<String> photoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
         ButterKnife.bind(this);
-        photoImages = getIntent().getParcelableExtra("imageList");
+        String[] photoArray = getIntent().getStringArrayExtra("imageArray");
+        if (photoArray != null) {
+            photoList = new ArrayList<>(Arrays.asList(photoArray));
+        }
+
         initViews();
+        presenter.setPhotos(photoList);
+        Timber.d("moe okhttp on create");
     }
 
     @Override
@@ -63,8 +71,6 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
     protected void onResume() {
         super.onResume();
         presenter.takeView(this);
-        if (photoImages != null)
-            presenter.setPhotos(photoImages);
     }
 
     void initViews() {
@@ -105,7 +111,7 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
 
             String stringPhoto = Base64.encodeToString(bytes, Base64.DEFAULT);
 
-            presenter.sendPhotoImage(photoFile, imageUri.toString());
+            presenter.sendPhotoImage(stringPhoto, imageUri.toString());
         }
     }
 
@@ -116,6 +122,11 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
 
     @Override
     public void onRemoveImage(int pos) {
-        photoImages.remove(pos);
+        photoList.remove(pos);
+    }//TODO why photoList?
+
+    @Override
+    public void onPhotoUploaded() {
+
     }
 }

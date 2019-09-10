@@ -1,6 +1,7 @@
 package com.karpov.vacuum.activities.account;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +39,9 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @BindView(R.id.statusImage)
     ImageView statusImage;
 
+    @BindView(R.id.vpPlaceholder)
+    TextView vpPlaceholder;
+
     ArrayList<String> imageList;
 
     @Override
@@ -64,6 +68,11 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
         for (ProfileImageDto imageDto : accountDto.getImages()) {
             imageList.add(imageDto.getUrl());
         }
+        if (imageList.size() > 0) {
+            vpPlaceholder.setVisibility(View.GONE);
+        } else {
+            vpPlaceholder.setVisibility(View.VISIBLE);
+        }
 
         int status = accountDto.getStatus();
         if (status == 1) {
@@ -77,7 +86,8 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
 
     @OnClick(R.id.editPhotoButton)
     void onEditPhotoClick() {
-        router.openPhotoActivity(imageList);
+        String[] photoArray = imageList.toArray(new String[0]);
+        router.openPhotoActivity(photoArray);
     }
 
     @OnClick({R.id.backImage, R.id.backText})
