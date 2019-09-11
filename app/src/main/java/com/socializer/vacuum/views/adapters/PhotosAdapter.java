@@ -14,6 +14,7 @@ import com.socializer.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.ImageUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PhotosAdapter extends PagerAdapter {
@@ -73,6 +74,15 @@ public class PhotosAdapter extends PagerAdapter {
 
     public void setPhotos(List<ProfileImageDto> photos) {
         if (photos != null && !photos.isEmpty()) {
+
+            for (ProfileImageDto dto : new ArrayList<>(photos)) {
+                if (dto.getKind() == 0) {
+                    int index = photos.indexOf(dto);
+                    photos.remove(index);
+                    photos.add(0, dto);
+                }
+            }
+
             this.photos = photos;
             notifyDataSetChanged();
         }

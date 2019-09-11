@@ -59,4 +59,9 @@
  -keep class org.simpleframework.xml.core.** { *; }
  -keep class org.simpleframework.xml.util.** { *; }
  
--keepclassmembers class com.karpov.vacuum.network.data.dto.** { <fields>; }
+-keepclassmembers class com.socializer.vacuum.network.data.dto.** { <fields>; }
+
+-dontwarn javax.annotation.**
+#okhttp
+-dontwarn okio.**
+-dontwarn okhttp3.**
