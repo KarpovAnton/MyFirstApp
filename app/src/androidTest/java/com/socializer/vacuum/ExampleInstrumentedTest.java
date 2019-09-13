@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.karpov.vacuum", appContext.getPackageName());
+        assertEquals("com.socializer.vacuum", appContext.getPackageName());
     }
 }

@@ -13,4 +13,6 @@ public class Consts {
     public static final int SPLASH_DELAY = 1000;
 
     public static final int LOCATION_PERMISSION_CODE = 3;
+
+    public static final String CHAT_SERVER_URL = "http://185.59.138.191?token=";
 }

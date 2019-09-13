@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
+import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.network.VacuumApi;
 import com.socializer.vacuum.network.data.AbstractManager;
 import com.socializer.vacuum.network.data.DtoCallback;
@@ -11,6 +12,8 @@ import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ApiError;
 import com.socializer.vacuum.network.data.dto.LoginRequestDto;
 import com.socializer.vacuum.network.data.dto.LoginResponseDto;
+import com.socializer.vacuum.network.data.dto.LoginSocialRequestDto;
+import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.RegistrationRequestDto;
 import com.socializer.vacuum.network.data.dto.RegistrationResponseDto;
 import com.socializer.vacuum.network.data.dto.ResponseDto;
@@ -83,20 +86,71 @@ public class LoginManager extends AbstractManager {
                         String token = body.getAccessToken();
                         long ExpiresIn = body.getExpiresIn();
                         authSession.update(token, ExpiresIn);
+                        VacuumApplication.getInstance().initSocket();
                     }
                     callback.onSuccessful(ResponseDto.empty());
                 } else {
-                    // parse the response body …
-                    ApiError error = mErrorUtils.parseError(response);
-                    if (error.getCode() == ApiError.AUTH_EXCEPTION_NO_FOUND) {
-                        // TODO add fail types
-                        // callback.onFailedCardAdding(FailTypes.LOGIN_USER_NOT_FOUND);
-                        Timber.d("error message: %s", error.getMessage());
-                    }
+
                 }
             }
             @Override
             public void onFailure(@NonNull Call<LoginResponseDto> call, @NonNull Throwable t) {
+                callback.onFailed(FailTypes.UNKNOWN_ERROR);
+            }
+        });
+    }
+
+    public void sendVkData(@NonNull String userId,
+                           @NonNull String accessToken,
+                           @NonNull int expiresIn,
+                           @NonNull final DtoCallback<?> callback) {
+
+        if (!checkNetworkAvailable(callback)) return;
+
+        Call<ProfilePreviewDto> loginConfirm = mVacuumApi.sendVkData(new LoginSocialRequestDto(userId, accessToken));
+        loginConfirm.enqueue(new Callback<ProfilePreviewDto>() {
+            @Override
+            public void onResponse(@NonNull Call<ProfilePreviewDto> call, @NonNull Response<ProfilePreviewDto> response) {
+                if (response.isSuccessful()) {
+                    authSession.update(accessToken, expiresIn);
+                    VacuumApplication.getInstance().initSocket();
+                    if (response.body() != null)
+                        callback.onSuccessful(response.body());
+                } else {
+
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<ProfilePreviewDto> call, @NonNull Throwable t) {
+                callback.onFailed(FailTypes.UNKNOWN_ERROR);
+            }
+        });
+    }
+
+    public void sendFbData(@NonNull String userId,
+                           @NonNull String accessToken,
+                           @NonNull final DtoCallback<?> callback) {
+
+        if (!checkNetworkAvailable(callback)) return;
+
+        Call<ProfilePreviewDto> loginConfirm = mVacuumApi.sendFbData(new LoginSocialRequestDto(userId, accessToken));
+        loginConfirm.enqueue(new Callback<ProfilePreviewDto>() {
+            @Override
+            public void onResponse(@NonNull Call<ProfilePreviewDto> call, @NonNull Response<ProfilePreviewDto> response) {
+                if (response.isSuccessful()) {
+                    /*LoginResponseDto body = response.body();
+                    if (body != null) {
+                        String token = body.getAccessToken();
+                        long ExpiresIn = body.getExpiresIn();
+                        authSession.update(token, ExpiresIn);
+                    }*/
+                    callback.onSuccessful(ResponseDto.empty());
+                } else {
+
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<ProfilePreviewDto> call, @NonNull Throwable t) {
                 callback.onFailed(FailTypes.UNKNOWN_ERROR);
             }
         });

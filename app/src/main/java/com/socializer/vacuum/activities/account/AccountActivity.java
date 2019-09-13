@@ -14,6 +14,7 @@ import com.socializer.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.socializer.vacuum.utils.ImageUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -65,8 +66,11 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @Override
     public void onAccountLoaded(ProfilePreviewDto accountDto) {
         imageList = new ArrayList<>();
-        for (ProfileImageDto imageDto : accountDto.getImages()) {
-            imageList.add(imageDto.getUrl());
+        List<ProfileImageDto> imageDtoList = accountDto.getImages();
+        if (imageDtoList != null) {
+            for (ProfileImageDto imageDto : imageDtoList) {
+                imageList.add(imageDto.getUrl());
+            }
         }
         if (imageList.size() > 0) {
             vpPlaceholder.setVisibility(View.GONE);

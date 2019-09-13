@@ -45,15 +45,6 @@
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"/>
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
-        android:visibility="gone"/>
-
     <Button
         android:id="@+id/vkButton"
         android:layout_width="match_parent"
@@ -61,6 +52,17 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/button_grey"
         android:text="Войти через VK"
+        android:textSize="14sp"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"/>
+
+    <Button
+        android:id="@+id/instButton"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_purple"
+        android:text="Войти через Instagram"
         android:textSize="14sp"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"/>

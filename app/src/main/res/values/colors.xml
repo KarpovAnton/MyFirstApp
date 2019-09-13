@@ -11,6 +11,7 @@
     <color name="colorBlue">#449ddd</color>
     <color name="colorBlueLight">#a7c4e6</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorBlackTranc">#55000000</color>
     <color name="colorGrey">#757575</color>
     <color name="colorGreyTranc">#55757575</color>
 

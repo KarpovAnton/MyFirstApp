@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.activities.account.AccountActivity;
-import com.socializer.vacuum.fragments.ProfileFragment;
+import com.socializer.vacuum.fragments.Profile.ProfileFragment;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 
 import javax.inject.Inject;

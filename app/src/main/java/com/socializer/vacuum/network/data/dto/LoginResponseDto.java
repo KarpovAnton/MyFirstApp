@@ -3,7 +3,7 @@ package com.socializer.vacuum.network.data.dto;
 
 import com.google.gson.annotations.SerializedName;
 
-public class LoginResponseDto {
+public class LoginResponseDto extends ResponseDto {
 
     @SerializedName("access_token")
     private String accessToken;

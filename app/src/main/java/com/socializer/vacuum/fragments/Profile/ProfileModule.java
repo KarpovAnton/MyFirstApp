@@ -1,4 +1,4 @@
-package com.socializer.vacuum.fragments;
+package com.socializer.vacuum.fragments.Profile;
 
 import com.socializer.vacuum.di.base.FragmentScoped;
 

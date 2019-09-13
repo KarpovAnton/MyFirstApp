@@ -4,13 +4,18 @@
     <string name="bluetooth_canceled">Включите Bluetooth</string>
 
     <string name="title_dialog">Введите username</string>
-    <string name="msg_dialog">Введиdi</string>
+    <string name="error_field_required">Представьтесь, пожалуйста</string>
 
     <string name="registration_dialog_title">Регистрация</string>
     <string name="waiting_dialog_msg">Пожалуйста, подождите</string>
 
-    <string name="facebook_app_id">471118110406939</string>
-    <string name="fb_login_protocol_scheme">fb471118110406939</string>
+    <string name="facebook_app_id">306525116896526</string>
+    <string name="fb_login_protocol_scheme">fb306525116896526</string>
 
+    <integer name="com_vk_sdk_AppId">7034619</integer>
+
+    <string name="inst_client_id">98a09362d4524108a81995e097756c36</string>
+    <string name="inst_redirect_url">https://test.vacuum.live/api/oauth/instagram/callback</string>
+    <string name="inst_base_url">https://api.instagram.com/</string>
 
 </resources>

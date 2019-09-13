@@ -1,5 +1,6 @@
-package com.socializer.vacuum.fragments;
+package com.socializer.vacuum.fragments.Profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 import com.socializer.vacuum.R;
+import com.socializer.vacuum.activities.ChatActivity;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.socializer.vacuum.views.adapters.PhotosAdapter;
@@ -20,6 +22,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.android.support.DaggerFragment;
 
 public class ProfileFragment extends DaggerFragment {
@@ -67,6 +70,15 @@ public class ProfileFragment extends DaggerFragment {
 
     private void setName(String username) {
         nameText.setText(username);
+    }
+
+    @OnClick(R.id.chatBtn)
+    void onChatBtnClick() {
+        Intent intent = new Intent(getContext(), ChatActivity.class);
+        String deviceName = profileDto.getUserId();
+        deviceName = deviceName.split("@")[0];
+        intent.putExtra("receiverId", deviceName);
+        getActivity().startActivity(intent);
     }
 
 }

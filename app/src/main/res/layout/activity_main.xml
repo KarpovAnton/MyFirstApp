@@ -44,6 +44,14 @@
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <View
+        android:id="@+id/fragmentBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:background="@color/colorBlackTranc"
+        android:visibility="gone"/>
+
     <FrameLayout
         android:id="@+id/profileContainer"
         android:layout_width="300dp"

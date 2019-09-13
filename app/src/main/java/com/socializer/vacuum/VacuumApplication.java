@@ -1,5 +1,6 @@
 package com.socializer.vacuum;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -9,17 +10,38 @@ import androidx.multidex.MultiDex;
 
 import com.socializer.vacuum.di.component.AppComponent;
 import com.socializer.vacuum.di.component.DaggerAppComponent;
+import com.socializer.vacuum.network.data.prefs.AuthSession;
+import com.socializer.vacuum.utils.Consts;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKAccessTokenTracker;
+import com.vk.sdk.VKSdk;
+
+import java.net.URISyntaxException;
 
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
+import io.socket.client.IO;
+import io.socket.client.Socket;
 import timber.log.Timber;
 
 public class VacuumApplication extends DaggerApplication implements Application.ActivityLifecycleCallbacks {
 
+    @SuppressLint("StaticFieldLeak")
+    private static volatile VacuumApplication instance;
     private static AppComponent component;
 
     Activity currentActivity;
     public static volatile Context applicationContext;
+    Socket mSocket;
+
+    VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
+        @Override
+        public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
+            if (newToken == null) {//TODO ADD
+                // VKAccessToken is invalid
+            }
+        }
+    };
 
     @Override
     public void onCreate() {
@@ -27,6 +49,20 @@ public class VacuumApplication extends DaggerApplication implements Application.
         registerActivityLifecycleCallbacks(this);
         applicationContext = getApplicationContext();
         Timber.plant(new Timber.DebugTree());
+        vkAccessTokenTracker.startTracking();
+        VKSdk.initialize(applicationContext);
+        initSocket();
+    }
+
+    public void initSocket() {
+        try {
+            AuthSession as = AuthSession.getInstance();
+            if (as == null)
+                return;
+            mSocket = IO.socket(Consts.CHAT_SERVER_URL.concat(as.getToken()));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -35,8 +71,25 @@ public class VacuumApplication extends DaggerApplication implements Application.
         return component;
     }
 
+    public static VacuumApplication getInstance() {
+        VacuumApplication localInstance = instance;
+        if (localInstance == null) {
+            synchronized (VacuumApplication.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new VacuumApplication();
+                }
+            }
+        }
+        return localInstance;
+    }
+
     public static AppComponent getComponent() {
         return component;
+    }
+
+    public Socket getSocket() {
+        return mSocket;
     }
 
     @Override

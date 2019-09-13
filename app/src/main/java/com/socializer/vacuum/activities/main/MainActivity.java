@@ -6,10 +6,9 @@ import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.socializer.vacuum.R;
-import com.socializer.vacuum.fragments.ProfileFragment;
+import com.socializer.vacuum.fragments.Profile.ProfileFragment;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.managers.ProfilesManager;
 import com.socializer.vacuum.views.custom.SpannedGridLayoutManager;
@@ -59,8 +58,9 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @BindView(R.id.swipeLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    private boolean profileFragShown = false;
-    private boolean recyclerClickAvailable = true;
+    @BindView(R.id.fragmentBg)
+    View fragmentBg;
+
     private boolean blueOn;
 
     @Override
@@ -133,57 +133,8 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void onProfileSelected(ProfilePreviewDto previewDto) {
-        if (!profileFragShown) {
-            Timber.d("moe profile click");
-            router.openProfile(previewDto);
-            profileFragShown = true;
-            recyclerClickAvailable = false;
-        } else {
-            if (recyclerClickAvailable) {
-                profileFragShown = false;
-            }
-        }
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (profileFragShown && (ev.getAction() == MotionEvent.ACTION_UP)) {
-            // create a rect for storing the fragment window rect
-            Rect r = new Rect(50, 100, 500, 600);
-            Timber.d("bb0 "+ ev.getX() +" " + ev.getY());
-            // retrieve the fragment's windows rect
-            //profileFragment.getView().getHitRect(r);
-            // check if the event position is inside the window rect
-            boolean intersects = r.contains((int) ev.getX(), (int) ev.getY());
-            // if the event is inside then we can close the fragment
-            if (ev.getX() < 100 || ev.getX() > 980 || ev.getY() < 360 || ev.getY() > 1450 ) {
-                //if (intersects) {
-                Timber.d("moe pressed outside 1");
-                Timber.d( "moe ontouch profileFragShown " + profileFragShown);
-
-                router.removeFragment();
-                recyclerClickAvailable = true;
-            } else {
-                Timber.d("moe pressed inside");
-            }
-        }
-        /*View v = getCurrentFocus();
-        if (v instanceof EditText) {
-            View w = getCurrentFocus();
-            int scrcoords[] = new int[2];
-            w.getLocationOnScreen(scrcoords);
-            float x = event.getRawX() + w.getLeft() - scrcoords[0];
-            float y = event.getRawY() + w.getTop() - scrcoords[1];
-            if (event.getAction() == MotionEvent.ACTION_UP
-                    && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w
-                    .getBottom())) {
-
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getWindow().getCurrentFocus()
-                        .getWindowToken(), 0);
-            }
-        }*/
-        return super.dispatchTouchEvent(ev);
+        router.openProfile(previewDto);
+        fragmentBg.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.profileButton)
@@ -192,6 +143,15 @@ public class MainActivity extends DaggerAppCompatActivity implements
     }
 
     private void initViews() {
+        fragmentBg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                router.removeFragment();
+                fragmentBg.setVisibility(View.GONE);
+            }
+        });
+
+        fragmentBg.setVisibility(View.GONE);
         SpannedGridLayoutManager manager = new SpannedGridLayoutManager(
                 new SpannedGridLayoutManager.GridSpanLookup() {
                     @Override

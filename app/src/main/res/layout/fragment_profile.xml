@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="4dp"
+    android:background="@color/colorWhite"
     android:orientation="vertical">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        tools:background="@color/colorAccent"/>
+        android:layout_height="250dp" />
 
     <TextView
         android:id="@+id/nameText"
@@ -44,6 +44,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/chatBtn"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:textAllCaps="false"

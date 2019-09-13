@@ -129,4 +129,9 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
     public void onPhotoUploaded() {
 
     }
+
+    @OnClick({R.id.backImage, R.id.backText})
+    void onBackClick() {
+        onBackPressed();
+    }
 }

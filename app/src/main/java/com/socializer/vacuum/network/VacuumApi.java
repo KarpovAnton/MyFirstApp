@@ -2,6 +2,7 @@ package com.socializer.vacuum.network;
 
 import com.socializer.vacuum.network.data.dto.LoginRequestDto;
 import com.socializer.vacuum.network.data.dto.LoginResponseDto;
+import com.socializer.vacuum.network.data.dto.LoginSocialRequestDto;
 import com.socializer.vacuum.network.data.dto.PhotoDeleteRequestDto;
 import com.socializer.vacuum.network.data.dto.PhotoRequestDto;
 import com.socializer.vacuum.network.data.dto.PhotoResponseDto;
@@ -31,6 +32,14 @@ public interface VacuumApi {
     @Headers("Content-Type: application/json")
     @POST("/api/oauth/token")
     Call<LoginResponseDto> login(@Body LoginRequestDto loginRequestDto);
+
+    @Headers("Content-Type: application/json")
+    @POST("/api/oauth/vkontakte/token")
+    Call<ProfilePreviewDto> sendVkData(@Body LoginSocialRequestDto loginSocialRequestDto);
+
+    @Headers("Content-Type: application/json")
+    @POST("/api/oauth/facebook/token")
+    Call<ProfilePreviewDto> sendFbData(@Body LoginSocialRequestDto loginSocialRequestDto);
 
     @Headers("Content-Type: application/json")
     @POST("/api/users")
