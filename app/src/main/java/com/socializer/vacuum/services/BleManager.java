@@ -17,6 +17,8 @@ import android.os.Handler;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 import static android.os.Looper.getMainLooper;
 
 public class BleManager {
@@ -48,9 +50,10 @@ public class BleManager {
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         }
     }
-
+    //TODO если онСканФейлит попробовать вкл и выкл авиа
     public void setBluetoothAdapterName(String name) {
         bluetoothAdapter.setName(name);
+        Timber.d("moe bladapter set name "+name);
     }
 
     public Context getContext() {

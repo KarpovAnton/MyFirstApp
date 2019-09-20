@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 
 import com.socializer.vacuum.utils.StringPreference;
 
+import timber.log.Timber;
+
 public class AuthSession {
     private static final String PREF_KEY_TOKEN = "PREF_KEY_TOKEN";
     private static final String PREF_KEY_EXP_DATE = "PREF_KEY_EXP_DATE";
@@ -30,6 +32,7 @@ public class AuthSession {
                 localInstance = instance;
                 if (localInstance == null) {
                     //instance = localInstance = new AuthSession();
+                    Timber.d("moe AuthSession null");//TODO
                 }
             }
         }

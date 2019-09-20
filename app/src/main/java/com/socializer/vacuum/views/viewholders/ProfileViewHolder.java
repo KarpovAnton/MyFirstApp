@@ -27,6 +27,9 @@ public class ProfileViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.avatarImage)
     ImageView avatarImage;
 
+    @BindView(R.id.statusImage)
+    ImageView statusImage;
+
     @BindView(R.id.nameText)
     TextView nameText;
 
@@ -51,6 +54,7 @@ public class ProfileViewHolder extends RecyclerView.ViewHolder {
             setAvatarPlaceholder();
         }
 
+        setStatus(item.getStatus());
         setName(item.getUsername());
     }
 
@@ -62,6 +66,14 @@ public class ProfileViewHolder extends RecyclerView.ViewHolder {
     private void setAvatar(String preview, String url) {
         new ImageUtils().setAuthImage(context, getTokenString(), avatarImage, url, preview,
                 R.drawable.default_avatar);
+    }
+
+    private void setStatus(int status) {
+        if (status == 1) {
+            new ImageUtils().setImage(statusImage, null, null, R.drawable.online);
+        } else {
+            new ImageUtils().setImage(statusImage, null, null, R.drawable.offline);
+        }
     }
 
     private void setName(String username) {

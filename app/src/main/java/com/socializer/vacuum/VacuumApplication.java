@@ -51,15 +51,17 @@ public class VacuumApplication extends DaggerApplication implements Application.
         Timber.plant(new Timber.DebugTree());
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(applicationContext);
-        initSocket();
     }
 
     public void initSocket() {
+        if (mSocket != null) return;
         try {
             AuthSession as = AuthSession.getInstance();
-            if (as == null)
-                return;
-            mSocket = IO.socket(Consts.CHAT_SERVER_URL.concat(as.getToken()));
+            if (as == null) return;
+
+            IO.Options options = new IO.Options();
+            options.query = "token=" + as.getToken();
+            mSocket = IO.socket(Consts.CHAT_SERVER_URL, options);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

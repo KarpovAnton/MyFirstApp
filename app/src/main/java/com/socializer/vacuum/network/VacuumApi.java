@@ -1,5 +1,6 @@
 package com.socializer.vacuum.network;
 
+import com.socializer.vacuum.network.data.dto.BindSocialDto;
 import com.socializer.vacuum.network.data.dto.LoginRequestDto;
 import com.socializer.vacuum.network.data.dto.LoginResponseDto;
 import com.socializer.vacuum.network.data.dto.LoginSocialRequestDto;
@@ -56,4 +57,8 @@ public interface VacuumApi {
     @Headers("Content-Type: application/json")
     @PUT("/api/users")
     Call<PhotoResponseDto> deletePhotoImage(@Header("Authorization") String token, @Body PhotoDeleteRequestDto dto);
+
+    @Headers("Content-Type: application/json")
+    @PUT("/api/users")
+    Call<PhotoResponseDto> bindSocial(@Header("Authorization") String token, @Body BindSocialDto dto);
 }

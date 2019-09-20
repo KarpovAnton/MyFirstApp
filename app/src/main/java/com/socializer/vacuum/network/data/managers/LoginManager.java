@@ -4,7 +4,6 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 
-import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.network.VacuumApi;
 import com.socializer.vacuum.network.data.AbstractManager;
 import com.socializer.vacuum.network.data.DtoCallback;
@@ -86,7 +85,6 @@ public class LoginManager extends AbstractManager {
                         String token = body.getAccessToken();
                         long ExpiresIn = body.getExpiresIn();
                         authSession.update(token, ExpiresIn);
-                        VacuumApplication.getInstance().initSocket();
                     }
                     callback.onSuccessful(ResponseDto.empty());
                 } else {
@@ -113,7 +111,6 @@ public class LoginManager extends AbstractManager {
             public void onResponse(@NonNull Call<ProfilePreviewDto> call, @NonNull Response<ProfilePreviewDto> response) {
                 if (response.isSuccessful()) {
                     authSession.update(accessToken, expiresIn);
-                    VacuumApplication.getInstance().initSocket();
                     if (response.body() != null)
                         callback.onSuccessful(response.body());
                 } else {
@@ -129,6 +126,7 @@ public class LoginManager extends AbstractManager {
 
     public void sendFbData(@NonNull String userId,
                            @NonNull String accessToken,
+                           @NonNull long expiresIn,
                            @NonNull final DtoCallback<?> callback) {
 
         if (!checkNetworkAvailable(callback)) return;
@@ -144,7 +142,9 @@ public class LoginManager extends AbstractManager {
                         long ExpiresIn = body.getExpiresIn();
                         authSession.update(token, ExpiresIn);
                     }*/
-                    callback.onSuccessful(ResponseDto.empty());
+                    authSession.update(accessToken, expiresIn);
+                    if (response.body() != null)
+                        callback.onSuccessful(response.body());
                 } else {
 
                 }

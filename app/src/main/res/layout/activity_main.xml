@@ -11,7 +11,7 @@
         android:id="@+id/barLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorBlueLight"
         android:orientation="horizontal">
 
         <ImageView
@@ -20,7 +20,8 @@
             android:layout_height="24dp"
             android:layout_marginTop="13dp"
             android:layout_marginLeft="13dp"
-            android:src="@drawable/ic_chat"/>
+            android:src="@drawable/ic_chat"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/profileButton"
@@ -29,7 +30,8 @@
             android:layout_marginTop="13dp"
             android:layout_marginRight="13dp"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_profile"/>
+            android:src="@drawable/ic_profile"
+            android:tint="@color/colorBlue"/>
     </RelativeLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -41,7 +43,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingTop="16dp"
+            android:clipToPadding="false"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <View

@@ -1,6 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
 
+    <RelativeLayout
+        android:id="@+id/barLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@color/colorBlueLight">
+
+        <ImageView
+            android:id="@+id/backImage"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="-6dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_left"
+            android:tint="@color/colorBlue"/>
+
+        <TextView
+            android:id="@+id/backText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/backImage"
+            android:layout_marginLeft="-6dp"
+            android:layout_centerInParent="true"
+            android:text="Назад"
+            android:textColor="@color/colorBlue"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nameReceiverText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/colorBlue"
+                android:textSize="16sp"
+                tools:text="Имя" />
+
+            <TextView
+                android:id="@+id/typingNotifyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlue"
+                android:textSize="12sp"
+                android:text="@string/typingNotifyMsg"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <com.stfalcon.chatkit.messages.MessagesList
+        android:id="@+id/messagesList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:incomingBubblePaddingBottom="8dp"
+        app:incomingBubblePaddingTop="8dp"
+        app:incomingBubblePaddingRight="8dp"
+        app:incomingBubblePaddingLeft="8dp"
+        app:outcomingBubblePaddingBottom="8dp"
+        app:outcomingBubblePaddingTop="8dp"
+        app:outcomingBubblePaddingRight="8dp"
+        app:outcomingBubblePaddingLeft="8dp"
+        app:dateHeaderTextSize="12dp"
+
+        app:outcomingDefaultBubbleColor="@color/colorBlue"/>
+
+    <com.stfalcon.chatkit.messages.MessageInput
+        android:id="@+id/input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:inputButtonIcon="@android:drawable/ic_menu_send"
+        app:inputButtonBackground="@drawable/chat_message_out_background"
+        app:inputHint="@string/hint_enter_a_message"/>
+
+    <!--<LinearLayout
+        android:id="@+id/inputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:id="@+id/message_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Сообщение"
+            android:imeActionId="@+id/send"
+            android:imeActionLabel="send"
+            android:imeOptions="actionSend"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:background="@android:color/transparent"/>
+
+        <TextView
+            android:id="@+id/send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send"
+            android:textSize="18dp"/>
+
+    </LinearLayout>-->
 </LinearLayout>

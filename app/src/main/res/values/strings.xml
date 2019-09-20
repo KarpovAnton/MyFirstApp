@@ -3,7 +3,6 @@
     <string name="bluetooth_on">Bluetooth включен</string>
     <string name="bluetooth_canceled">Включите Bluetooth</string>
 
-    <string name="title_dialog">Введите username</string>
     <string name="error_field_required">Представьтесь, пожалуйста</string>
 
     <string name="registration_dialog_title">Регистрация</string>
@@ -17,5 +16,9 @@
     <string name="inst_client_id">98a09362d4524108a81995e097756c36</string>
     <string name="inst_redirect_url">https://test.vacuum.live/api/oauth/instagram/callback</string>
     <string name="inst_base_url">https://api.instagram.com/</string>
+
+
+    <string name="hint_enter_a_message">Сообщение…</string>
+    <string name="typingNotifyMsg">набирает сообщение…</string>
 
 </resources>

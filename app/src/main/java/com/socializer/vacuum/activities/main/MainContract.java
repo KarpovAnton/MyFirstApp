@@ -42,5 +42,7 @@ public interface MainContract {
         void loadTestProfiles();
 
         void clearAdapter();
+
+        void setBtName();
     }
 }

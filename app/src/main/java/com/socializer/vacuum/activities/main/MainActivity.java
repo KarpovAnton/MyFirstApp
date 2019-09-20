@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.socializer.vacuum.R;
+import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.fragments.Profile.ProfileFragment;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.managers.ProfilesManager;
@@ -69,8 +70,10 @@ public class MainActivity extends DaggerAppCompatActivity implements
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        VacuumApplication.getInstance().initSocket();
         initViews();
         checkPermissions();
+        presenter.setBtName();
         presenter.startAdvertising(advertisingCallback);
     }
 
@@ -78,7 +81,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         @Override
         public void onStartSuccess(AdvertiseSettings settingsInEffect) {
             super.onStartSuccess(settingsInEffect);
-            Toast.makeText(getApplicationContext(), "Device share successful", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Device share successful", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -157,7 +160,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
                     @Override
                     public SpannedGridLayoutManager.SpanInfo getSpanInfo(int position) {
                         // Conditions for 2x2 items
-                        if (position == 4) {
+                        if (position == 3 || position == 7) {
                             return new SpannedGridLayoutManager.SpanInfo(2, 2);
                         } else {
                             return new SpannedGridLayoutManager.SpanInfo(1, 1);

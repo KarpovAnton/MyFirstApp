@@ -60,6 +60,7 @@ public class ProfileFragment extends DaggerFragment {
     void initViews() {
         photosAdapter = new PhotosAdapter(getContext());
 
+        if (profileDto == null) return;
         List<ProfileImageDto> photos = profileDto.getImages();
         photosAdapter.setPhotos(photos);
 
@@ -76,8 +77,9 @@ public class ProfileFragment extends DaggerFragment {
     void onChatBtnClick() {
         Intent intent = new Intent(getContext(), ChatActivity.class);
         String deviceName = profileDto.getUserId();
-        deviceName = deviceName.split("@")[0];
+        String username = profileDto.getUsername();
         intent.putExtra("receiverId", deviceName);
+        intent.putExtra("username", username);
         getActivity().startActivity(intent);
     }
 

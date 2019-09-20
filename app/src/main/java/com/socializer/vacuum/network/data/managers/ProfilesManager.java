@@ -43,18 +43,15 @@ public class ProfilesManager extends AbstractManager {
                 if (response.isSuccessful()) {
 
                     callback.onSuccessful(response.body());
-                    Timber.d("moe manager succ");
 
                 } else {
                     callback.onFailed(FailTypes.UNKNOWN_ERROR);
-                    Timber.d("moe manager fail");
                 }
             }
 
             @Override
             public void onFailure(Call<List<ProfilePreviewDto>> call, Throwable t) {
                 callback.onFailed(FailTypes.UNKNOWN_ERROR);
-                Timber.d("moe manager failure" + t.getLocalizedMessage());
             }
         });
     }
@@ -70,18 +67,15 @@ public class ProfilesManager extends AbstractManager {
                 if (response.isSuccessful()) {
 
                     callback.onSuccessful(response.body());
-                    Timber.d("moe manager succ");
 
                 } else {
                     callback.onFailed(FailTypes.UNKNOWN_ERROR);
-                    Timber.d("moe manager fail");
                 }
             }
 
             @Override
             public void onFailure(Call<List<ProfilePreviewDto>> call, Throwable t) {
                 callback.onFailed(FailTypes.UNKNOWN_ERROR);
-                Timber.d("moe manager failure" + t.getLocalizedMessage());
             }
         });
     }
@@ -98,7 +92,6 @@ public class ProfilesManager extends AbstractManager {
 
             @Override
             public void onFailure(Call<PhotoResponseDto> call, Throwable t) {
-                Timber.i("onFailure=%s", t);
                 callback.onFailed(FailTypes.UNKNOWN_ERROR);
             }
         });
@@ -116,7 +109,6 @@ public class ProfilesManager extends AbstractManager {
 
             @Override
             public void onFailure(Call<PhotoResponseDto> call, Throwable t) {
-                Timber.i("onFailure=%s", t);
                 callback.onFailed(FailTypes.UNKNOWN_ERROR);
             }
         });

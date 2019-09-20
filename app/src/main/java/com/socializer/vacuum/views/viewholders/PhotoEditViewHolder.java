@@ -45,7 +45,7 @@ public class PhotoEditViewHolder extends RecyclerView.ViewHolder {
 
     public void setCoverImage(String url) {
         new ImageUtils().setAuthImage(context, getTokenString(), photoImage, url, null,
-                R.drawable.default_avatar);
+                R.color.transparent);
     }
 
     private String getTokenString() {

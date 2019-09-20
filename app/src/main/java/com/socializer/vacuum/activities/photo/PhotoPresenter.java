@@ -1,11 +1,8 @@
 package com.socializer.vacuum.activities.photo;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.di.base.ActivityScoped;
 import com.socializer.vacuum.models.PhotoEditItem;
 import com.socializer.vacuum.network.data.DtoCallback;
@@ -94,7 +91,7 @@ public class PhotoPresenter implements PhotoContract.Presenter, PhotoEditAdapter
         profilesManager.deletePhotoImage(deletePhotoUrl, new DtoCallback<ResponseDto>() {
             @Override
             public void onSuccessful(@NonNull ResponseDto response) {
-                Toast.makeText(VacuumApplication.applicationContext, "URA DELETE", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override

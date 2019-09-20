@@ -29,7 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
-import timber.log.Timber;
 
 public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContract.View {
 
@@ -58,7 +57,6 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
 
         initViews();
         presenter.setPhotos(photoList);
-        Timber.d("moe okhttp on create");
     }
 
     @Override
@@ -76,7 +74,6 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
     void initViews() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        //presenter.setUpAdapter();
     }
 
     @OnClick({R.id.addPhotoButton})

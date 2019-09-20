@@ -17,6 +17,7 @@ import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.ResponseDto;
 import com.socializer.vacuum.network.data.managers.ProfilesManager;
 import com.socializer.vacuum.services.BleManager;
+import com.socializer.vacuum.utils.StringPreference;
 import com.socializer.vacuum.views.adapters.ProfileAdapter;
 import com.socializer.vacuum.views.adapters.RecyclerItemClickListener;
 
@@ -24,10 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import timber.log.Timber;
 
 import static android.os.Looper.getMainLooper;
+import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_DEVICE_NAME;
 import static com.socializer.vacuum.utils.Consts.BASE_DEVICE_NAME_PART;
 
 @ActivityScoped
@@ -43,6 +46,10 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
 
     @Inject
     ProfilesManager profilesManager;
+
+    @Inject
+    @Named(NAMED_PREF_DEVICE_NAME)
+    StringPreference deviceNameSP;
 
     ProfileAdapter adapter;
     BleManager bleManager;
@@ -99,7 +106,9 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
 
             @Override
             public void onScanFailed(int errorCode) {
+                Timber.d("moe onScanFailed %s", errorCode);
                 super.onScanFailed(errorCode);
+                //bleManager.scan(scanCallback);//TODO настроить перезапуск при фейле
             }
         };
     }
@@ -116,13 +125,16 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
 
     @Override
     public void startScan() {
-        new Handler(getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                bleManager.scan(scanCallback);
-                Timber.d("moe start scan");
-            }
-        }, 1000);
+        new Handler(getMainLooper()).post(new Runnable() {
+              @Override
+              public void run() {
+                  bleManager.scan(scanCallback);
+                  Timber.d("moe start scan");
+              }
+          }
+        );
+        /*bleManager.scan(scanCallback);
+        Timber.d("moe start scan");*/
     }
 
     @Override
@@ -173,5 +185,13 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
     @Override
     public void clearAdapter() {
         adapter.clear();
+    }
+
+    @Override
+    public void setBtName() {
+        String userID = "";
+        if (deviceNameSP != null)
+            userID = deviceNameSP.get();
+        bleManager.setBluetoothAdapterName(userID);
     }
 }
