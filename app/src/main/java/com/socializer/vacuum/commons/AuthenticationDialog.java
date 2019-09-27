@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import com.socializer.vacuum.R;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class AuthenticationDialog extends Dialog {
 
@@ -26,19 +28,22 @@ public class AuthenticationDialog extends Dialog {
         super(context);
         this.listener = listener;
         this.redirect_url = context.getResources().getString(R.string.inst_redirect_url);
-        this.request_url = context.getResources().getString(R.string.inst_base_url) +
-                "oauth/authorize/?client_id=" +
-                context.getResources().getString(R.string.inst_client_id) +
+        this.request_url = context.getResources().getString(R.string.inst_base_url)
+                + context.getResources().getString(R.string.inst_client_id) +
                 "&redirect_uri=" + redirect_url +
-                "&response_type=token&display=touch&scope=public_content";
+                "&response_type=token";
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.auth_dialog);
+        ButterKnife.bind(this);
 
-        webView.getSettings().setJavaScriptEnabled(true);
+        WebSettings settings = webView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        //settings.setUseWideViewPort(true);
+
         webView.loadUrl(request_url);
         webView.setWebViewClient(webViewClient);
     }
@@ -57,6 +62,7 @@ public class AuthenticationDialog extends Dialog {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
+            webView.scrollTo(50, 350);
             if (url.contains("access_token=")) {
                 Uri uri = Uri.EMPTY.parse(url);
                 String access_token = uri.getEncodedFragment();

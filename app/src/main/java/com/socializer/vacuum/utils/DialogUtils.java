@@ -4,8 +4,10 @@ import android.content.Context;
 
 import androidx.annotation.StringRes;
 
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
+import com.socializer.vacuum.R;
 
 public class DialogUtils {
 
@@ -91,6 +93,26 @@ public class DialogUtils {
                 .content(messageRes)
                 .negativeText(android.R.string.no)
                 .positiveText(android.R.string.yes)
+                .onPositive(positiveCallback)
+                .onNegative(negativeCallback)
+                .cancelable(false).build();
+        dialog.show();
+
+        return dialog;
+    }
+
+    public static MaterialDialog showChooseActionDialog(
+            Context context, @StringRes int titleRes, @StringRes int messageRes,
+            MaterialDialog.SingleButtonCallback positiveCallback,
+            MaterialDialog.SingleButtonCallback negativeCallback
+    ) {
+        MaterialDialog dialog = new MaterialDialog.Builder(context)
+                .theme(Theme.LIGHT)
+                .title(titleRes)
+                .content(messageRes)
+                .negativeText(R.string.dialog_unbind)
+                .positiveText(R.string.dialog_show_social_account)
+                .buttonsGravity(GravityEnum.CENTER)
                 .onPositive(positiveCallback)
                 .onNegative(negativeCallback)
                 .cancelable(false).build();

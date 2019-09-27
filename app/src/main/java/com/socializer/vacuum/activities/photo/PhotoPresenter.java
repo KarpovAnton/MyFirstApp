@@ -70,9 +70,10 @@ public class PhotoPresenter implements PhotoContract.Presenter, PhotoEditAdapter
             @Override
             public void onSuccessful(@NonNull ResponseDto response) {
                 item.setLoading(false);
-                PhotoResponseDto currentDto = (PhotoResponseDto)response;
-                item.setUri(currentDto.getImages().get(0).getUrl());//URL перезаписываем URI для возможности удаления, не уходя с активити
                 adapter.notifyItemChanged(adapter.getItemCount() - 1);
+                PhotoResponseDto currentDto = (PhotoResponseDto)response;
+                //TODO proverit
+                //item.setUri(currentDto.getImages().get(adapter.getItemCount() - 1).getUrl());//URL перезаписываем URI для возможности удаления, не уходя с активити
 
                 if (view != null)
                     view.onPhotoUploaded(/*((PhotoResponseDto)response).getImages().*/);//TODO delete

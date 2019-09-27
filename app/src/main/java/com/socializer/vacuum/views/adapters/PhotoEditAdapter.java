@@ -11,6 +11,8 @@ import com.socializer.vacuum.R;
 import com.socializer.vacuum.models.PhotoEditItem;
 import com.socializer.vacuum.views.viewholders.PhotoEditViewHolder;
 
+import timber.log.Timber;
+
 public class PhotoEditAdapter extends BaseAdapter<PhotoEditItem, RecyclerView.ViewHolder> {
 
     private Callback listener;
@@ -22,6 +24,7 @@ public class PhotoEditAdapter extends BaseAdapter<PhotoEditItem, RecyclerView.Vi
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        Timber.d("moe oncreateholder");
         RecyclerView.ViewHolder result;
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.viewholder_photo_edit, viewGroup, false);
         result = new PhotoEditViewHolder(view);
@@ -30,6 +33,7 @@ public class PhotoEditAdapter extends BaseAdapter<PhotoEditItem, RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int i) {
+        Timber.d("moe onbind " + i);
         PhotoEditViewHolder photoEditViewHolder = (PhotoEditViewHolder) viewHolder;
         photoEditViewHolder.bind(items.get(i));
         photoEditViewHolder.setDeleteClickListener(new View.OnClickListener() {

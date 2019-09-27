@@ -60,13 +60,33 @@ public class ProfilePreviewDto extends ResponseDto implements ViewType {
 
     public class ProfileAccountDto {
 
-        //private String url;
+        private String timestamp;
 
-        //private String oid;
+        private String _id;
+
+        private String oid;
+
+        private String url;
 
         private int kind;
 
-        private int getKind() {
+        public String getTimestamp() {
+            return timestamp;
+        }
+
+        public String get_id() {
+            return _id;
+        }
+
+        public String getOid() {
+            return oid;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public int getKind() {
             return kind;
         }
     }

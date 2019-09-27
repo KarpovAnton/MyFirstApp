@@ -48,6 +48,11 @@ public class AuthSession {
         return token;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+        new StringPreference(prefs, PREF_KEY_TOKEN, "").set(token);
+    }
+
     public void update(String token, long expiresIn) {
         this.token = token;
         this.expiresIn = expiresIn * 1000 + System.currentTimeMillis();

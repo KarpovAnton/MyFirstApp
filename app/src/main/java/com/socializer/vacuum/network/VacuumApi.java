@@ -1,6 +1,6 @@
 package com.socializer.vacuum.network;
 
-import com.socializer.vacuum.network.data.dto.BindSocialDto;
+import com.socializer.vacuum.network.data.dto.BindSocialRequestDto;
 import com.socializer.vacuum.network.data.dto.LoginRequestDto;
 import com.socializer.vacuum.network.data.dto.LoginResponseDto;
 import com.socializer.vacuum.network.data.dto.LoginSocialRequestDto;
@@ -11,6 +11,9 @@ import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.ProfilesRequestDto;
 import com.socializer.vacuum.network.data.dto.RegistrationRequestDto;
 import com.socializer.vacuum.network.data.dto.RegistrationResponseDto;
+import com.socializer.vacuum.network.data.dto.UnBindSocialRequestDto;
+import com.socializer.vacuum.network.data.dto.socket.DialogsResponseDto;
+import com.socializer.vacuum.network.data.dto.socket.LastMessagesResponseDto;
 
 import java.util.List;
 
@@ -60,5 +63,18 @@ public interface VacuumApi {
 
     @Headers("Content-Type: application/json")
     @PUT("/api/users")
-    Call<PhotoResponseDto> bindSocial(@Header("Authorization") String token, @Body BindSocialDto dto);
+    Call<ProfilePreviewDto> bindSocial(@Header("Authorization") String token, @Body BindSocialRequestDto dto);
+
+    @Headers("Content-Type: application/json")
+    @PUT("/api/users")
+    Call<ProfilePreviewDto> unBindSocial(@Header("Authorization") String token, @Body UnBindSocialRequestDto dto);
+
+
+    @Headers("Content-Type: application/json")
+    @GET("/chat/{id}")
+    Call<List<LastMessagesResponseDto>> getLastMsgs(@Header("Authorization") String token, @Path("id") String id);
+
+    @Headers("Content-Type: application/json")
+    @GET("/chat/list")
+    Call<List<DialogsResponseDto>> getChatList(@Header("Authorization") String token);
 }

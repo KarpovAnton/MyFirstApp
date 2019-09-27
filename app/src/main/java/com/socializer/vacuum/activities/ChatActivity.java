@@ -5,7 +5,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
@@ -14,8 +16,13 @@ import com.socializer.vacuum.R;
 import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.models.chat.Message;
 import com.socializer.vacuum.models.chat.MessageAuthor;
+import com.socializer.vacuum.network.data.FailTypes;
+import com.socializer.vacuum.network.data.dto.ResponseDto;
+import com.socializer.vacuum.network.data.dto.socket.ChatCallback;
 import com.socializer.vacuum.network.data.dto.socket.ChatMessageInDto;
 import com.socializer.vacuum.network.data.dto.socket.ChatMessageOutDto;
+import com.socializer.vacuum.network.data.dto.socket.LastMessagesResponseDto;
+import com.socializer.vacuum.network.data.managers.ChatManager;
 import com.socializer.vacuum.utils.StringPreference;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -24,6 +31,8 @@ import com.stfalcon.chatkit.messages.MessagesListAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -42,16 +51,19 @@ import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_DE
 public class ChatActivity extends DaggerAppCompatActivity {
 
     private Socket mSocket;
-    private String chatId;
     private String ownId;
+    private String receiverId;
     MessagesListAdapter<Message> mAdapter;
-    private boolean mTyping = false;
-    private Handler mTypingHandler = new Handler();
     private Gson gson = new Gson();
+
+    private Boolean isConnected = true;
 
     @Inject
     @Named(NAMED_PREF_DEVICE_NAME)
     StringPreference deviceNameSP;
+
+    @Inject
+    ChatManager chatManager;
 
     @BindView(R.id.nameReceiverText)
     TextView nameReceiverText;
@@ -72,23 +84,47 @@ public class ChatActivity extends DaggerAppCompatActivity {
         ButterKnife.bind(this);
 
         if (deviceNameSP != null)
-            chatId = deviceNameSP.get();
-        ownId = getIntent().getStringExtra("receiverId");
+            ownId = deviceNameSP.get().split("@")[0];
+        receiverId = getIntent().getStringExtra("receiverId");
         mSocket = VacuumApplication.getInstance().getSocket();
         initViews();
+        loadLastMsgs();
 
-
-
+        mSocket.on(Socket.EVENT_CONNECT, onConnect);
         mSocket.on("notifyTyping", onNotifyTyping);
         mSocket.on("notifyStopTyping", onNotifyStopTyping);
         mSocket.on("notifyChatMessage", onNotifyChatMessage);
         mSocket.connect();
     }
 
+    private void loadLastMsgs() {
+        chatManager.getLastMsgs(receiverId, new ChatCallback<ResponseDto>() {
+            @Override
+            public void onSuccessful(@NonNull List<LastMessagesResponseDto> response) {
+                ArrayList<Message> lastMessages = new ArrayList<>();
+                for (int i = 0; i < response.size(); i++) {
+                    LastMessagesResponseDto dto = response.get(i);
+                    String textToSend = dto.getMessage().getText();
+                    String sender = dto.getSender();
+
+                    MessageAuthor author = new MessageAuthor(sender, "", null, true);
+                    Message chatMsg = new Message("0", author, textToSend);
+                    lastMessages.add(chatMsg);
+                }
+                mAdapter.addToEnd(lastMessages, false);
+            }
+
+            @Override
+            public void onFailed(FailTypes fail) {
+
+            }
+        });
+    }
+
     private void initViews() {
         nameReceiverText.setText(getIntent().getStringExtra("username"));
 
-        mAdapter = new MessagesListAdapter<>(chatId, null);
+        mAdapter = new MessagesListAdapter<>(ownId, null);
         messagesList.setAdapter(mAdapter);
 
         inputView.setInputListener(new MessageInput.InputListener() {
@@ -115,7 +151,7 @@ public class ChatActivity extends DaggerAppCompatActivity {
     private void emitTypeEvent(String event) {
         JSONObject json = new JSONObject();
         try {
-            json.put("receiver", ownId);
+            json.put("receiver", receiverId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -127,7 +163,7 @@ public class ChatActivity extends DaggerAppCompatActivity {
         if (!mSocket.connected()) return;
 
         String textToSend = inputView.getInputEditText().getText().toString();
-        ChatMessageOutDto messageDto = new ChatMessageOutDto("0", ownId, textToSend, "");
+        ChatMessageOutDto messageDto = new ChatMessageOutDto("0", receiverId, textToSend, "");
         try {
             String messageDtoStr = gson.toJson(messageDto);
             JSONObject json = new JSONObject(messageDtoStr);
@@ -136,10 +172,26 @@ public class ChatActivity extends DaggerAppCompatActivity {
             e.printStackTrace();
         }
 
-        MessageAuthor author = new MessageAuthor(chatId, "USERNAME ME", null, true);
+        MessageAuthor author = new MessageAuthor(ownId, "", null, true);
         Message chatMsg = new Message("0", author, textToSend);
         mAdapter.addToStart(chatMsg, true);
     }
+
+    private Emitter.Listener onConnect = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!isConnected) {
+                        Toast.makeText(getApplicationContext(),
+                                "ehffewf", Toast.LENGTH_LONG).show();//TODO добавить на беке
+                        isConnected = true;
+                    }
+                }
+            });
+        }
+    };
 
     private Emitter.Listener onNotifyTyping = new Emitter.Listener() {
         @Override
@@ -188,7 +240,7 @@ public class ChatActivity extends DaggerAppCompatActivity {
                     ChatMessageInDto dto = gson.fromJson(element, ChatMessageInDto.class);
                     if (!isValidChat(dto.getSender())) return;
 
-                    MessageAuthor author = new MessageAuthor(ownId, "USERNAME RECEIVER", null, true);
+                    MessageAuthor author = new MessageAuthor(receiverId, "", null, true);
                     Message chatMsg = new Message("0", author, dto.getMessage().getText());
                     mAdapter.addToStart(chatMsg, true);
                 }
@@ -211,11 +263,11 @@ public class ChatActivity extends DaggerAppCompatActivity {
         } else {
             result = sender;
         }
-        return Objects.equals(result, ownId);
+        return Objects.equals(result, receiverId);
     }
 
     private boolean isValidChat(String chatId) {
-        return ownId.equals(chatId);
+        return receiverId.equals(chatId);
     }
 
     @Override

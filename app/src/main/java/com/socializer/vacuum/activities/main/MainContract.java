@@ -16,6 +16,8 @@ public interface MainContract {
         void removeFragment();
 
         void openAccountActivity();
+
+        void openChatListActivity();
     }
 
     interface View extends BaseView<Presenter> {

@@ -99,6 +99,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         checkBluetooth();
         if (blueOn) {
             presenter.loadTestProfiles();
+            presenter.loadTestProfiles();
             presenter.startScan();
         }
     }
@@ -145,6 +146,11 @@ public class MainActivity extends DaggerAppCompatActivity implements
         router.openAccountActivity();
     }
 
+    @OnClick(R.id.chatListBtn)
+    void onChatListBtnClick() {
+        router.openChatListActivity();
+    }
+
     private void initViews() {
         fragmentBg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,6 +178,9 @@ public class MainActivity extends DaggerAppCompatActivity implements
         );
 
         recyclerView.setLayoutManager(manager);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
     

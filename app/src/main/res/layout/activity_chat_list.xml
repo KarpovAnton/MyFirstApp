@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Мой профиль"
+                android:text="Чаты"
                 android:textColor="@color/colorBlue"
                 android:textSize="16sp"/>
         </RelativeLayout>

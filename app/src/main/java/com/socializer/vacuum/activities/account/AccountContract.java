@@ -11,6 +11,8 @@ public interface AccountContract {
     interface Router {
 
         void openPhotoActivity(String[] photoArray);
+
+        void openVKProfile(String profileId);
     }
 
     interface View extends BaseView<Presenter> {
@@ -18,6 +20,10 @@ public interface AccountContract {
         void setAdapter(PagerAdapter adapter);
 
         void onAccountLoaded(ProfilePreviewDto currentAccountDto);
+
+        void setIdFromSP();
+
+        void onVkUnBind();
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -25,5 +31,13 @@ public interface AccountContract {
         void takeView(AccountContract.View view);
 
         void dropView();
+
+        void loadAccount(String profileId);
+
+        void bindVK(String socialUserId, String accessToken);
+
+        void unBindVK();
+
+        void openVKProfile();
     }
 }
