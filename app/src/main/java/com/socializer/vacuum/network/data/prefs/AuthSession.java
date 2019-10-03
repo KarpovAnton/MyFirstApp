@@ -40,6 +40,8 @@ public class AuthSession {
     }
 
     public boolean isValid() {
+        if (token != null && expiresIn == 0)
+            return true;
         long now = System.currentTimeMillis();
         return token != null && token.length()>0 && now < expiresIn /*&& expiresIn != 1*/;
     }
@@ -55,7 +57,11 @@ public class AuthSession {
 
     public void update(String token, long expiresIn) {
         this.token = token;
-        this.expiresIn = expiresIn * 1000 + System.currentTimeMillis();
+        if (expiresIn != 0) {
+            this.expiresIn = expiresIn * 1000 + System.currentTimeMillis();
+        } else {
+            this.expiresIn = 0;
+        }
         new StringPreference(prefs, PREF_KEY_TOKEN, "").set(token);
         new StringPreference(prefs, PREF_KEY_EXP_DATE, "1").set(""+this.expiresIn);
     }

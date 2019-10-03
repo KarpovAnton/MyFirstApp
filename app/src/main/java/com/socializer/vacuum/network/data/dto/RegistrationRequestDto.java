@@ -12,9 +12,9 @@ public class RegistrationRequestDto {
 
     private String password;
 
-    private String client_id = "982C1C03-0F2E-49B4-8B4C-4BEE374545D3";
+    private String client_id = "4521b6cc-f11c-4ecd-97a0-b2df068efa45";
 
-    private String client_secret = ")2{/oHTXSQxF@V^&I2-&25rW*G0QBH";
+    private String client_secret = "!A%C*F-JaNdRgUkXp2s5v8y/B?E(G+Kb";
 
 
 }

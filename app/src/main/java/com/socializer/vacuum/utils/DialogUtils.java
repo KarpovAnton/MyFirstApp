@@ -21,21 +21,23 @@ public class DialogUtils {
                 .show();
     }
 
-    public static void showInfoDialogMessage(
-            Context context, @StringRes int titleRes, @StringRes int messageRes,
-            MaterialDialog.SingleButtonCallback callback ){
-        showErrorMessage(context, titleRes, messageRes, callback);
-    }
-
     public static void showErrorMessage(
-            Context context, @StringRes int titleRes, @StringRes int messageRes,
-            MaterialDialog.SingleButtonCallback callback) {
+            Context context, @StringRes int messageRes) {
         new MaterialDialog.Builder(context)
                 .theme(Theme.LIGHT)
-                .title(titleRes)
+                .title(R.string.dialog_title_error)
                 .content(messageRes)
                 .positiveText(android.R.string.ok)
-                .onPositive(callback)
+                .cancelable(false)
+                .show();
+    }
+
+    public static void showNetworkErrorMessage(Context context) {
+        new MaterialDialog.Builder(context)
+                .theme(Theme.LIGHT)
+                .title(R.string.dialog_title_error)
+                .content(R.string.dialog_msg_network_error)
+                .positiveText(android.R.string.ok)
                 .cancelable(false)
                 .show();
     }

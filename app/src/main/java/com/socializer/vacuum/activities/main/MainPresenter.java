@@ -23,6 +23,7 @@ import com.socializer.vacuum.views.adapters.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -75,27 +76,35 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
             public void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
 
-                String deviceName = result.getDevice().getName();
+                String mainDeviceName = result.getDevice().getName();
+                String advertDataDeviceName = Objects.requireNonNull(result.getScanRecord()).getDeviceName();
 
-                if (!TextUtils.isEmpty(deviceName)) {
-                    if (deviceName.contains(BASE_DEVICE_NAME_PART) && !devices.contains(deviceName)) {
+                if (!TextUtils.isEmpty(mainDeviceName))
+                    tryAddToDeviceList(mainDeviceName, result);
 
-                        devices.add(result.getDevice().getName());
-                        deviceName = deviceName.split("@")[0];
+                if (!TextUtils.isEmpty(advertDataDeviceName))
+                    tryAddToDeviceList(advertDataDeviceName, result);
+            }
 
-                        profilesManager.getProfile(deviceName, new DtoListCallback<ResponseDto>() {
-                            @Override
-                            public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
-                                Timber.d("moe devices.add %s", result.getDevice().getName());
-                                adapter.onAdd(response);
-                            }
+            private void tryAddToDeviceList(String deviceName, ScanResult result) {
+                if (deviceName.contains(BASE_DEVICE_NAME_PART) && !devices.contains(deviceName)) {
 
-                            @Override
-                            public void onFailed(FailTypes fail) {
+                    devices.add(result.getDevice().getName());
+                    deviceName = deviceName.split("@")[0];
 
-                            }
-                        });
-                    }
+                    profilesManager.getProfile(deviceName, new DtoListCallback<ResponseDto>() {
+                        @Override
+                        public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
+                            Timber.d("moe devices.add %s", result.getDevice().getName());
+                            adapter.onAdd(response);
+                        }
+
+                        @Override
+                        public void onFailed(FailTypes fail) {
+                            if (FailTypes.CONNECTION_ERROR == fail && view != null)
+                                view.showErrorNetworkDialog();
+                        }
+                    });
                 }
             }
 
@@ -161,7 +170,8 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
 
             @Override
             public void onFailed(FailTypes fail) {
-                Timber.d("moe fail" + fail.name());
+                if (FailTypes.CONNECTION_ERROR == fail && view != null)
+                    view.showErrorNetworkDialog();
             }
         });
     }

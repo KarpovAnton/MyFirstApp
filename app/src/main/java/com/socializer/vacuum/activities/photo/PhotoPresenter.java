@@ -76,12 +76,13 @@ public class PhotoPresenter implements PhotoContract.Presenter, PhotoEditAdapter
                 //item.setUri(currentDto.getImages().get(adapter.getItemCount() - 1).getUrl());//URL перезаписываем URI для возможности удаления, не уходя с активити
 
                 if (view != null)
-                    view.onPhotoUploaded(/*((PhotoResponseDto)response).getImages().*/);//TODO delete
+                    view.onPhotoUploaded();
             }
 
             @Override
             public void onFailed(FailTypes fail) {
-
+                if (FailTypes.CONNECTION_ERROR == fail && view != null)
+                    view.showErrorNetworkDialog();
             }
         });
     }
@@ -97,7 +98,8 @@ public class PhotoPresenter implements PhotoContract.Presenter, PhotoEditAdapter
 
             @Override
             public void onFailed(FailTypes fail) {
-
+                if (FailTypes.CONNECTION_ERROR == fail && view != null)
+                    view.showErrorNetworkDialog();
             }
         });
 

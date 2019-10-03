@@ -1,5 +1,6 @@
 package com.socializer.vacuum.activities;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,6 +24,7 @@ import com.socializer.vacuum.network.data.dto.socket.ChatMessageInDto;
 import com.socializer.vacuum.network.data.dto.socket.ChatMessageOutDto;
 import com.socializer.vacuum.network.data.dto.socket.LastMessagesResponseDto;
 import com.socializer.vacuum.network.data.managers.ChatManager;
+import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.StringPreference;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -56,6 +58,7 @@ public class ChatActivity extends DaggerAppCompatActivity {
     MessagesListAdapter<Message> mAdapter;
     private Gson gson = new Gson();
 
+    Activity mActivity;
     private Boolean isConnected = true;
 
     @Inject
@@ -82,6 +85,7 @@ public class ChatActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
+        mActivity = this;
 
         if (deviceNameSP != null)
             ownId = deviceNameSP.get().split("@")[0];
@@ -116,7 +120,8 @@ public class ChatActivity extends DaggerAppCompatActivity {
 
             @Override
             public void onFailed(FailTypes fail) {
-
+                if (FailTypes.CONNECTION_ERROR == fail)
+                    DialogUtils.showNetworkErrorMessage(mActivity);
             }
         });
     }

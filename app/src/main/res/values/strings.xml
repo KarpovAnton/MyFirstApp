@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Vacuum</string>
     <string name="bluetooth_on">Bluetooth включен</string>
-    <string name="bluetooth_canceled">Включите Bluetooth</string>
+    <string name="bluetooth_canceled">Для работы приложения необходимо включить Bluetooth</string>
 
     <string name="error_field_required">Представьтесь, пожалуйста</string>
 
@@ -13,9 +13,9 @@
 
     <integer name="com_vk_sdk_AppId">7034619</integer>
 
-    <string name="inst_client_id">98a09362d4524108a81995e097756c36</string>
+    <string name="inst_client_id">c8a6eaec35b746cb998bf0f234b17a7d</string>
     <string name="inst_redirect_url">https://test.vacuum.live/api/oauth/instagram/callback</string>
-    <string name="inst_base_url">https://api.instagram.com/oauth/authorize/</string>
+    <string name="inst_base_url">https://api.instagram.com/oauth/authorize/?client_id=</string>
 
     <string name="hint_enter_a_message">Сообщение…</string>
     <string name="typingNotifyMsg">набирает сообщение…</string>
@@ -24,5 +24,9 @@
     <string name="empty_string" />
     <string name="dialog_show_social_account">Открыть профиль</string>
     <string name="dialog_unbind">Отвязать</string>
+
+    <string name="dialog_title_error">Ошибка</string>
+    <string name="dialog_msg_network_error">Проверьте подключение к интернету и повторите попытку</string>
+    <string name="dialog_msg_social_error">Необходимо привязать соцсеть</string>
 
 </resources>

@@ -22,9 +22,12 @@ import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.fragments.Profile.ProfileFragment;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.managers.ProfilesManager;
+import com.socializer.vacuum.utils.DialogUtils;
+import com.socializer.vacuum.utils.StringPreference;
 import com.socializer.vacuum.views.custom.SpannedGridLayoutManager;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +35,7 @@ import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 import timber.log.Timber;
 
+import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
 import static com.socializer.vacuum.utils.Consts.LOCATION_PERMISSION_CODE;
 
 public class MainActivity extends DaggerAppCompatActivity implements
@@ -53,6 +57,10 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Inject
     MainRouter router;
 
+    @Inject
+    @Named(NAMED_PREF_SOCIAL)
+    StringPreference socialSP;
+
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -62,7 +70,9 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @BindView(R.id.fragmentBg)
     View fragmentBg;
 
-    private boolean blueOn;
+    private boolean isBluetoothOn;
+    private boolean isAdvertising;
+    private boolean testIsLoaded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,45 +84,50 @@ public class MainActivity extends DaggerAppCompatActivity implements
         initViews();
         checkPermissions();
         presenter.setBtName();
-        presenter.startAdvertising(advertisingCallback);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Timber.d("moe resume");
+        presenter.takeView(this);
+        attemptStartScanAndAdvertising();
+        if (isBluetoothOn && !testIsLoaded) {
+            presenter.loadTestProfiles();
+            //presenter.loadTestProfiles();
+        }
+    }
+
+    private void attemptStartScanAndAdvertising() {
+        if (presenter.isBlueEnable()) {
+            isBluetoothOn = true;
+            presenter.startScan();
+            if (!isAdvertising) {
+                presenter.startAdvertising(advertisingCallback);
+            }
+        } else {
+            Toast.makeText(this, R.string.bluetooth_canceled, Toast.LENGTH_SHORT).show();
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
     }
 
     AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
         @Override
         public void onStartSuccess(AdvertiseSettings settingsInEffect) {
             super.onStartSuccess(settingsInEffect);
-            //Toast.makeText(getApplicationContext(), "Device share successful", Toast.LENGTH_SHORT).show();
+            isAdvertising = true;
+            Toast.makeText(getApplicationContext(), "Device share successful", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onStartFailure(int errorCode) {
             Timber.e("Advertising onStartFailure: %s", errorCode);
             super.onStartFailure(errorCode);
-            Toast.makeText(getApplicationContext(), "Device share failed", Toast.LENGTH_SHORT).show();
+            isAdvertising = false;
+            Toast.makeText(getApplicationContext(), "Устройству не удалось раздать Bluetooth", Toast.LENGTH_SHORT).show();
         }
     };
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        presenter.takeView(this);
-        checkBluetooth();
-        if (blueOn) {
-            presenter.loadTestProfiles();
-            presenter.loadTestProfiles();
-            presenter.startScan();
-        }
-    }
-
-    private void checkBluetooth() {
-        if (!presenter.isBlueEnable()) {
-            blueOn = false;
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        } else {
-            blueOn = true;
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -120,12 +135,11 @@ public class MainActivity extends DaggerAppCompatActivity implements
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, R.string.bluetooth_on, Toast.LENGTH_SHORT).show();
-                blueOn = true;
-                onResume();
+                isBluetoothOn = true;
                 //notifyListeners(BluetoothState.TURNED_ON);
             } else {
                 Toast.makeText(this, R.string.bluetooth_canceled, Toast.LENGTH_SHORT).show();
-                //notifyListeners(BluetoothState.CANCELED);
+                finish();
             }
         }
     }
@@ -148,7 +162,11 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @OnClick(R.id.chatListBtn)
     void onChatListBtnClick() {
-        router.openChatListActivity();
+        if (socialSP.get().equals("true")) {
+            router.openChatListActivity();
+        } else {
+            DialogUtils.showErrorMessage(this, R.string.dialog_msg_social_error);
+        }
     }
 
     private void initViews() {
@@ -180,7 +198,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         recyclerView.setLayoutManager(manager);
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
-        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        //recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
     
@@ -211,6 +229,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void refreshed() {
+        testIsLoaded = true;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -221,9 +240,20 @@ public class MainActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
+    public void showErrorNetworkDialog() {
+        DialogUtils.showNetworkErrorMessage(this);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         presenter.dropView();
         presenter.clearAdapter();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        fragmentBg.setVisibility(View.GONE);
     }
 }

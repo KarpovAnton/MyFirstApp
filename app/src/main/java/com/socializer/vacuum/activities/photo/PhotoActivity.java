@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.socializer.vacuum.R;
+import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
 import com.socializer.vacuum.views.adapters.PhotoEditAdapter;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -125,6 +126,11 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
     @Override
     public void onPhotoUploaded() {
 
+    }
+
+    @Override
+    public void showErrorNetworkDialog() {
+        DialogUtils.showNetworkErrorMessage(this);
     }
 
     @OnClick({R.id.backImage, R.id.backText})

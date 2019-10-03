@@ -15,11 +15,5 @@ public class SessionModule {
     AuthSession provideAuthSession(SharedPreferences prefs) {
         return new AuthSession(prefs);
     }
-
-    @Provides
-    @Singleton
-    Credentials provideCredentials(SharedPreferences prefs) {
-        return new Credentials(prefs);
-    }
 }
 

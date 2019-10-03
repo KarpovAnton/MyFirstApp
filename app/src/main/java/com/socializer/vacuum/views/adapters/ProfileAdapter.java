@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.socializer.vacuum.R;
-import com.socializer.vacuum.commons.adapter.ViewType;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.views.viewholders.ProfileViewHolder;
 
@@ -19,25 +18,12 @@ import timber.log.Timber;
 
 public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final int TYPE_PROFILE = 1;
-    public static final int TYPE_LOADER = 2;
-
-    LoaderDelegateAdapter mLoadingDelegateAdapter;
-
     RecyclerItemClickListener mItemClickListener;
 
-    List<ViewType> items;
-
-    protected ViewType loadingItem = new ViewType() {
-        @Override
-        public int getViewType() {
-            return TYPE_LOADER;
-        }
-    };
+    List<ProfilePreviewDto> items;
 
     public ProfileAdapter(RecyclerItemClickListener itemClickListener) {
         super();
-        mLoadingDelegateAdapter = new LoaderDelegateAdapter();
         mItemClickListener = itemClickListener;
         items = new ArrayList<>();
     }
@@ -45,50 +31,34 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        RecyclerView.ViewHolder result;
-        switch (viewType) {
-            case TYPE_PROFILE:
-                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.viewholder_profile, viewGroup, false);
-                result = new ProfileViewHolder(view);
-                break;
-
-            case TYPE_LOADER:
-                result = mLoadingDelegateAdapter.onCreateViewHolder(viewGroup);
-                break;
-            default:
-                throw new IllegalStateException("unknown type");
-        }
-        return result;
+        ProfileViewHolder holder;
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.viewholder_profile, viewGroup, false);
+        holder = new ProfileViewHolder(view);
+        holder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    mItemClickListener.onClick(adapterPosition);
+                }
+            }
+        });
+        Timber.d("moe create ");
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
-        int itemViewType = getItemViewType(position);
-        switch (itemViewType) {
-            case TYPE_PROFILE:
-                ProfileViewHolder viewHolder = (ProfileViewHolder)holder;
-                viewHolder.bind((ProfilePreviewDto) items.get(position));
-                viewHolder.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mItemClickListener.onClick(position);
-                    }
-                });
-                Timber.d("bind profile");
-                break;
+        ProfileViewHolder viewHolder = (ProfileViewHolder)holder;
+        viewHolder.bind(items.get(position));
+        /*viewHolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemClickListener.onClick(position);
+            }
+        });*/
 
-            case TYPE_LOADER:
-                mLoadingDelegateAdapter.onBindViewHolder(holder, items.get(position));
-                Timber.d("bind loader");
-                break;
-            default:
-                throw new IllegalStateException("unknown type");
-        }
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return items.get(position).getViewType();
+        Timber.d("moe bind profile " + position);
     }
 
     @Override
@@ -124,12 +94,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public String getUserIdByPosition(int position) {
-        ProfilePreviewDto item = (ProfilePreviewDto)items.get(position);
+        ProfilePreviewDto item = items.get(position);
         return item.getUserId();
     }
 
     public ProfilePreviewDto getProfileByPosition(int position) {
-        return (ProfilePreviewDto)items.get(position);
+        return items.get(position);
 
     }
 

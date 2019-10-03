@@ -14,17 +14,30 @@ import com.socializer.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.socializer.vacuum.network.data.dto.ResponseDto;
 import com.socializer.vacuum.network.data.managers.LoginManager;
 import com.socializer.vacuum.network.data.managers.ProfilesManager;
-import com.socializer.vacuum.network.data.prefs.AuthSession;
+import com.socializer.vacuum.services.BleManager;
 import com.socializer.vacuum.utils.StringPreference;
 import com.socializer.vacuum.views.adapters.PhotosAdapter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static com.socializer.vacuum.activities.account.AccountActivity.FB;
+import static com.socializer.vacuum.activities.account.AccountActivity.INST;
 import static com.socializer.vacuum.activities.account.AccountActivity.VK;
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_DEVICE_NAME;
+import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
 import static com.socializer.vacuum.utils.Consts.BASE_DEVICE_NAME_PART;
 
 @ActivityScoped
@@ -32,11 +45,16 @@ public class AccountPresenter implements AccountContract.Presenter {
 
     public static final String VK_BASE_URL = "https://www.vk.com/profile.php?id=";
     public static final String FB_BASE_URL = "https://www.facebook.com/profile.php?id=";
+    public static final String FB_HOST_URL = "https://www.facebook.com/";
     public static final String INST_BASE_URL = "https://www.instagram.com/";
 
     @Inject
     @Named(NAMED_PREF_DEVICE_NAME)
     StringPreference deviceNameSP;
+
+    @Inject
+    @Named(NAMED_PREF_SOCIAL)
+    StringPreference socialSP;
 
     PhotosAdapter adapter;
     ProfilePreviewDto currentAccountDto;
@@ -49,6 +67,9 @@ public class AccountPresenter implements AccountContract.Presenter {
 
     @Inject
     LoginManager loginManager;
+
+    @Inject
+    BleManager bleManager;
 
     @Inject
     public AccountPresenter() {
@@ -75,7 +96,7 @@ public class AccountPresenter implements AccountContract.Presenter {
             @Override
             public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
                 if (!response.isEmpty()) {
-                    currentAccountDto = (ProfilePreviewDto) response.get(0);
+                    currentAccountDto = response.get(0);
 
                     List<ProfileImageDto> photos = currentAccountDto.getImages();
                     if (photos != null) {
@@ -88,53 +109,132 @@ public class AccountPresenter implements AccountContract.Presenter {
 
             @Override
             public void onFailed(FailTypes fail) {
-
+                if (FailTypes.CONNECTION_ERROR == fail && view != null)
+                    view.showErrorNetworkDialog();
             }
         });
     }
 
     @Override
-    public void bindVK(String socialUserId, String accessToken) {
+    public void bindSocial(int kind, String socialUserId, String accessToken) {
+        String baseUrl;
+        switch (kind) {
+            case VK:
+                baseUrl = VK_BASE_URL;
+                break;
+            case FB:
+                baseUrl = FB_BASE_URL;
+                break;
+            case INST:
+                baseUrl = INST_BASE_URL;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + kind);
+        }
+
         loginManager.bindSocial(
-                1,
-                VK_BASE_URL.concat(socialUserId),
+                kind,
+                baseUrl.concat(socialUserId),
                 socialUserId,
                 accessToken,
                 new DtoCallback<ResponseDto>() {
                     @Override
                     public void onSuccessful(@NonNull ResponseDto response) {
-                        AuthSession.getInstance().setToken(accessToken);
+                        //AuthSession.getInstance().setToken(accessToken);
                         ProfilePreviewDto result = (ProfilePreviewDto) response;
                         String newId = result.getUserId();
                         String deviceName = newId + BASE_DEVICE_NAME_PART;
                         deviceNameSP.set(deviceName);
-                        loadAccount(newId);
+                        //bleManager.setBluetoothAdapterName(deviceName);
+                        socialSP.set("true");
                         if (view != null)
-                            view.setIdFromSP();
+                            view.onSocialBinded();
                     }
 
                     @Override
                     public void onFailed(FailTypes fail) {
-
+                        if (FailTypes.CONNECTION_ERROR == fail && view != null)
+                            view.showErrorNetworkDialog();
                     }
                 });
     }
 
     @Override
-    public void unBindVK() {
-        loginManager.unBindSocial(1, new DtoCallback<ResponseDto>() {
+    public void getInstSocialUserIdAndBind(String auth_token) {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://api.instagram.com/v1/users/self/?access_token=" + auth_token)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        JSONObject jsonData = jsonObject.getJSONObject("data");
+                        String socialUserId = jsonData.getString("username");
+
+                        bindSocial(INST, socialUserId, auth_token);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    throw new IOException("Unexpected code " + response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    public void unBindSocial(int kind) {
+        loginManager.unBindSocial(kind, new DtoCallback<ResponseDto>() {
             @Override
             public void onSuccessful(@NonNull ResponseDto response) {
+                checkIfAnySocialBinded();
                 if (view != null)
-                    view.onVkUnBind();
+                    view.onSocUnBind(kind);
             }
 
             @Override
             public void onFailed(FailTypes fail) {
-
+                if (FailTypes.CONNECTION_ERROR == fail && view != null)
+                    view.showErrorNetworkDialog();
             }
         });
+    }
 
+    private void checkIfAnySocialBinded() {
+        String profileId = deviceNameSP.get();
+        if (profileId != null) {
+            profilesManager.getProfile(profileId, new DtoListCallback<ResponseDto>() {
+                @Override
+                public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
+                    if (!response.isEmpty()) {
+                        currentAccountDto = response.get(0);
+                        List<ProfileAccountDto> accounts = currentAccountDto.getAccounts();
+                        for (int i = 0; i < accounts.size(); i++) {
+                            ProfileAccountDto acc = accounts.get(i);
+                            if (acc.getKind() == VK || acc.getKind() == FB || acc.getKind() == INST) {
+                                socialSP.set("true");
+                            } else {
+                                socialSP.set("false");
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailed(FailTypes fail) {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -146,6 +246,34 @@ public class AccountPresenter implements AccountContract.Presenter {
                 String url = acc.getUrl();
                 String profileId = url.split("=")[1];
                 router.openVKProfile(profileId);
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void openFBProfile() {
+        List<ProfileAccountDto> accounts = currentAccountDto.getAccounts();
+        for (int i = 0; i < accounts.size(); i++) {
+            ProfileAccountDto acc = accounts.get(i);
+            if (acc.getKind() == FB) {
+                String url = acc.getUrl();
+                String profileId = url.split("=")[1];
+                router.openFBProfile(profileId);
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void openInstProfile() {
+        List<ProfileAccountDto> accounts = currentAccountDto.getAccounts();
+        for (int i = 0; i < accounts.size(); i++) {
+            ProfileAccountDto acc = accounts.get(i);
+            if (acc.getKind() == INST) {
+                String url = acc.getUrl();
+                String profileId = url.split("com/")[1];
+                router.openINSTProfile(profileId);
                 return;
             }
         }

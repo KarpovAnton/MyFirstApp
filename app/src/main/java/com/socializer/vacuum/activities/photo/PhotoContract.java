@@ -19,6 +19,8 @@ public interface PhotoContract {
         void onRemoveImage(int pos);
 
         void onPhotoUploaded();
+
+        void showErrorNetworkDialog();
     }
 
     interface Presenter extends BasePresenter<View> {

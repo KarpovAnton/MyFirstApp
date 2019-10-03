@@ -1,17 +1,10 @@
 package com.socializer.vacuum.network.data.dto;
 
 import com.google.gson.annotations.SerializedName;
-import com.socializer.vacuum.commons.adapter.ViewType;
-import com.socializer.vacuum.views.adapters.ProfileAdapter;
 
 import java.util.List;
 
-public class ProfilePreviewDto extends ResponseDto implements ViewType {
-
-    @Override
-    public int getViewType() {
-        return ProfileAdapter.TYPE_PROFILE;
-    }
+public class ProfilePreviewDto extends ResponseDto {
 
     @SerializedName("user_id")
     private String userId;
@@ -19,6 +12,8 @@ public class ProfilePreviewDto extends ResponseDto implements ViewType {
     private int statusCode;
 
     private String error;
+
+    private boolean isauth;
 
     private String username;
 
@@ -101,6 +96,10 @@ public class ProfilePreviewDto extends ResponseDto implements ViewType {
 
     public String getError() {
         return error;
+    }
+
+    public boolean isIsauth() {
+        return isauth;
     }
 
     public String getUsername() {

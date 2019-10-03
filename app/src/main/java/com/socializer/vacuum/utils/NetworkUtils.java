@@ -22,18 +22,4 @@ public class NetworkUtils {
             return true;
         }
     }
-
-    public static String getWiFiName(@NonNull Context context) {
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if (cm != null) {
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()
-                    && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                return activeNetwork.getExtraInfo();
-            }
-        }
-        return null;
-    }
 }

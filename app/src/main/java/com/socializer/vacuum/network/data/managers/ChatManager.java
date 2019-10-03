@@ -35,7 +35,7 @@ public class ChatManager extends AbstractManager {
 
     public void getLastMsgs(@NonNull String chatId, @NonNull final ChatCallback<?> callback) {
 
-        //if (!checkNetworkAvailable(callback)) return;
+        if (!checkNetworkAvailable(callback)) return;
 
         Call<List<LastMessagesResponseDto>> call = mVacuumApi.getLastMsgs(getTokenString(), chatId);
         call.enqueue(new Callback<List<LastMessagesResponseDto>>() {
@@ -57,7 +57,7 @@ public class ChatManager extends AbstractManager {
 
     public void getChatList(@NonNull final ChatListCallback<?> callback) {
 
-        //if (!checkNetworkAvailable(callback)) return;
+        if (!checkNetworkAvailable(callback)) return;
 
         Call<List<DialogsResponseDto>> call = mVacuumApi.getChatList(getTokenString());
         call.enqueue(new Callback<List<DialogsResponseDto>>() {

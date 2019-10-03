@@ -46,6 +46,10 @@ public interface VacuumApi {
     Call<ProfilePreviewDto> sendFbData(@Body LoginSocialRequestDto loginSocialRequestDto);
 
     @Headers("Content-Type: application/json")
+    @POST("/api/oauth/facebook/token")
+    Call<ProfilePreviewDto> sendInstData(@Body LoginSocialRequestDto loginSocialRequestDto);
+
+    @Headers("Content-Type: application/json")
     @POST("/api/users")
     Call<List<ProfilePreviewDto>> getProfiles(@Header("Authorization") String token, @Body ProfilesRequestDto dto);
 

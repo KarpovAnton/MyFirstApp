@@ -42,7 +42,6 @@ public class AuthenticationDialog extends Dialog {
 
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
-        //settings.setUseWideViewPort(true);
 
         webView.loadUrl(request_url);
         webView.setWebViewClient(webViewClient);
@@ -62,7 +61,7 @@ public class AuthenticationDialog extends Dialog {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            webView.scrollTo(50, 350);
+            webView.scrollTo(0, 350);
             if (url.contains("access_token=")) {
                 Uri uri = Uri.EMPTY.parse(url);
                 String access_token = uri.getEncodedFragment();

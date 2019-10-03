@@ -6,6 +6,8 @@ import android.content.Context;
 import androidx.annotation.Nullable;
 
 import com.socializer.vacuum.network.VacuumApi;
+import com.socializer.vacuum.network.data.dto.socket.ChatCallback;
+import com.socializer.vacuum.network.data.managers.ChatManager;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.ErrorUtils;
 import com.socializer.vacuum.utils.NetworkUtils;
@@ -44,6 +46,30 @@ public abstract class AbstractManager {
     }
 
     protected boolean checkNetworkAvailable(DtoCallback<?> callback) {
+        if (!NetworkUtils.isConnected(mContext)) {
+            callback.onFailed(FailTypes.CONNECTION_ERROR);
+            return false;
+        }
+        return true;
+    }
+
+    protected boolean checkNetworkAvailable(DtoListCallback<?> callback) {
+        if (!NetworkUtils.isConnected(mContext)) {
+            callback.onFailed(FailTypes.CONNECTION_ERROR);
+            return false;
+        }
+        return true;
+    }
+
+    protected boolean checkNetworkAvailable(ChatCallback<?> callback) {
+        if (!NetworkUtils.isConnected(mContext)) {
+            callback.onFailed(FailTypes.CONNECTION_ERROR);
+            return false;
+        }
+        return true;
+    }
+
+    protected boolean checkNetworkAvailable(ChatManager.ChatListCallback<?> callback) {
         if (!NetworkUtils.isConnected(mContext)) {
             callback.onFailed(FailTypes.CONNECTION_ERROR);
             return false;

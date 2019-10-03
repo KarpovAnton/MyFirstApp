@@ -13,7 +13,13 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.socializer.vacuum.R;
+import com.socializer.vacuum.commons.AuthenticationDialog;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.socializer.vacuum.utils.DialogUtils;
@@ -25,6 +31,7 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,7 +44,7 @@ import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_DEVICE_NAME;
 
-public class AccountActivity extends DaggerAppCompatActivity implements AccountContract.View {
+public class AccountActivity extends DaggerAppCompatActivity implements AccountContract.View, AuthenticationDialog.AuthInstListener {
 
     public static final int FB = 0;
     public static final int VK = 1;
@@ -76,6 +83,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @BindView(R.id.instButton)
     ImageView instButton;
 
+    CallbackManager callbackManager;
     String profileId;
     ArrayList<String> imageList;
     boolean isVkBind;
@@ -90,10 +98,16 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
         vkButton.setImageAlpha(100);
         fbButton.setImageAlpha(100);
         instButton.setImageAlpha(100);
-
-        setIdFromSP();
-        presenter.takeView(this);
+        setAccountIdFromSP();
+        callbackManager = CallbackManager.Factory.create();
+        fbCallbackRegistration();
         presenter.loadAccount(profileId);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.takeView(this);
     }
 
     @Override
@@ -146,7 +160,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
             MaterialDialog.SingleButtonCallback negativeCallback = new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    unBindVK();
+                    presenter.unBindSocial(VK);
                 }
             };
             DialogUtils.showChooseActionDialog(this, R.string.dialog_social_action_title, R.string.empty_string, positiveCallback, negativeCallback);
@@ -155,17 +169,73 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
         }
     }
 
+    @OnClick(R.id.fbButton)
+    void onFbClick() {
+        if (isFbBind) {
+            MaterialDialog.SingleButtonCallback positiveCallback = new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    presenter.openFBProfile();
+                }
+            };
+
+            MaterialDialog.SingleButtonCallback negativeCallback = new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    presenter.unBindSocial(FB);
+                }
+            };
+            DialogUtils.showChooseActionDialog(this, R.string.dialog_social_action_title, R.string.empty_string, positiveCallback, negativeCallback);
+        } else {
+            bindFB();
+        }
+    }
+
+    @OnClick(R.id.instButton)
+    void onInstClick() {
+        if (isInstBind) {
+            MaterialDialog.SingleButtonCallback positiveCallback = new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    presenter.openInstProfile();
+                }
+            };
+
+            MaterialDialog.SingleButtonCallback negativeCallback = new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    presenter.unBindSocial(INST);
+                }
+            };
+            DialogUtils.showChooseActionDialog(this, R.string.dialog_social_action_title, R.string.empty_string, positiveCallback, negativeCallback);
+        } else {
+            bindINST();
+        }
+    }
+
     private void bindVK() {
         VKSdk.login(this);
     }
 
-    private void unBindVK() {
-        presenter.unBindVK();
+    private void bindFB() {
+        com.facebook.login.LoginManager.getInstance().logIn(this, Arrays.asList("public_profile"));
+    }
+
+    private void bindINST() {
+        AuthenticationDialog dialog = new AuthenticationDialog(this, this);
+        dialog.setCancelable(true);
+        dialog.show();
     }
 
     @Override
-    public void onVkUnBind() {
-        setIconState(VK, false);
+    public void onSocialBinded() {
+        setAccountIdFromSP();
+        presenter.loadAccount(profileId);
+    }
+
+    @Override
+    public void onSocUnBind(int kind) {
+        setIconState(kind, false);
     }
 
     @Override
@@ -175,7 +245,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
             public void onResult(VKAccessToken res) {
                 String socialUserId = res.userId;
                 String accessToken = res.accessToken;
-                presenter.bindVK(socialUserId, accessToken);
+                presenter.bindSocial(VK, socialUserId, accessToken);
             }
             @Override
             public void onError(VKError error) {
@@ -183,13 +253,41 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
             }})) {
 
             //if not vk, then...
-            //callbackManager.onActivityResult(requestCode, resultCode, data);
+            callbackManager.onActivityResult(requestCode, resultCode, data);
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
+    private void fbCallbackRegistration() {
+        com.facebook.login.LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                AccessToken accessToken = loginResult.getAccessToken();
+                String socialUserId = accessToken.getUserId();
+                String token = accessToken.getToken();
+                presenter.bindSocial(FB, socialUserId, token);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+
+            }
+        });
+    }
+
     @Override
-    public void setIdFromSP() {
+    public void onInstTokenReceived(String auth_token) {
+        if (auth_token == null) return;
+        presenter.getInstSocialUserIdAndBind(auth_token);
+    }
+
+    @Override
+    public void setAccountIdFromSP() {
         String userID = "";
         if (deviceNameSP != null)
             userID = deviceNameSP.get();
@@ -236,6 +334,11 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     void onEditPhotoClick() {
         String[] photoArray = imageList.toArray(new String[0]);
         router.openPhotoActivity(photoArray);
+    }
+
+    @Override
+    public void showErrorNetworkDialog() {
+        DialogUtils.showNetworkErrorMessage(this);
     }
 
     @OnClick({R.id.backImage, R.id.backText})

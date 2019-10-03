@@ -158,12 +158,45 @@ public class LoginManager extends AbstractManager {
         });
     }
 
+    /*public void sendInstData(@NonNull String userId,
+                           @NonNull String accessToken,
+                           @NonNull long expiresIn,
+                           @NonNull final DtoCallback<?> callback) {
+
+        if (!checkNetworkAvailable(callback)) return;
+
+        Call<ProfilePreviewDto> loginConfirm = mVacuumApi.sendInstData(new LoginSocialRequestDto(userId, accessToken));
+        loginConfirm.enqueue(new Callback<ProfilePreviewDto>() {
+            @Override
+            public void onResponse(@NonNull Call<ProfilePreviewDto> call, @NonNull Response<ProfilePreviewDto> response) {
+                if (response.isSuccessful()) {
+                    *//*LoginResponseDto body = response.body();
+                    if (body != null) {
+                        String token = body.getAccessToken();
+                        long ExpiresIn = body.getExpiresIn();
+                        authSession.update(token, ExpiresIn);
+                    }*//*
+                    authSession.update(accessToken, expiresIn);
+                    if (response.body() != null)
+                        callback.onSuccessful(response.body());
+                } else {
+
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<ProfilePreviewDto> call, @NonNull Throwable t) {
+                callback.onFailed(FailTypes.UNKNOWN_ERROR);
+            }
+        });
+    }*/
 
     public void bindSocial(@NonNull int kind,
                            @NonNull String url,
                            @NonNull String oid,
                            @NonNull String access_token,
                            @NonNull final DtoCallback<?> callback) {
+
+        if (!checkNetworkAvailable(callback)) return;
 
         Call<ProfilePreviewDto> loginConfirm = mVacuumApi.bindSocial(getTokenString(), new BindSocialRequestDto(kind, url, oid, access_token));
         loginConfirm.enqueue(new Callback<ProfilePreviewDto>() {
@@ -178,7 +211,7 @@ public class LoginManager extends AbstractManager {
             }
             @Override
             public void onFailure(@NonNull Call<ProfilePreviewDto> call, @NonNull Throwable t) {
-
+                callback.onFailed(FailTypes.UNKNOWN_ERROR);
             }
         });
 
@@ -186,6 +219,9 @@ public class LoginManager extends AbstractManager {
 
     public void unBindSocial(@NonNull int kind,
                              @NonNull final DtoCallback<?> callback) {
+
+        if (!checkNetworkAvailable(callback)) return;
+
         Call<ProfilePreviewDto> loginConfirm = mVacuumApi.unBindSocial(getTokenString(), new UnBindSocialRequestDto(kind));
         loginConfirm.enqueue(new Callback<ProfilePreviewDto>() {
             @Override
@@ -199,7 +235,7 @@ public class LoginManager extends AbstractManager {
             }
             @Override
             public void onFailure(@NonNull Call<ProfilePreviewDto> call, @NonNull Throwable t) {
-
+                callback.onFailed(FailTypes.UNKNOWN_ERROR);
             }
         });
     }

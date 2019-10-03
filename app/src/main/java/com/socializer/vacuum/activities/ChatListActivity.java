@@ -1,5 +1,6 @@
 package com.socializer.vacuum.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,6 +16,7 @@ import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ResponseDto;
 import com.socializer.vacuum.network.data.dto.socket.DialogsResponseDto;
 import com.socializer.vacuum.network.data.managers.ChatManager;
+import com.socializer.vacuum.utils.DialogUtils;
 import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 
@@ -36,6 +38,7 @@ public class ChatListActivity extends DaggerAppCompatActivity {
     @BindView(R.id.dialogsList)
     DialogsList dialogsList;
 
+    Activity mActivity;
     DialogsListAdapter<Dialog> dialogsListAdapter;
 
     @Override
@@ -43,6 +46,7 @@ public class ChatListActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
         ButterKnife.bind(this);
+        mActivity = this;
 
         initViews();
         loadChatList();
@@ -90,7 +94,8 @@ public class ChatListActivity extends DaggerAppCompatActivity {
 
             @Override
             public void onFailed(FailTypes fail) {
-
+                if (FailTypes.CONNECTION_ERROR == fail)
+                    DialogUtils.showNetworkErrorMessage(mActivity);
             }
         });
     }

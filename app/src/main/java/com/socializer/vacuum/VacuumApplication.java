@@ -88,10 +88,9 @@ public class VacuumApplication extends DaggerApplication implements Application.
                 .build();
 
         Picasso picasso = new Picasso.Builder(applicationContext)
-                .indicatorsEnabled(true)
                 .downloader(new OkHttp3Downloader(client))
+                .indicatorsEnabled(true)
                 .build();
-        //Picasso.setSingletonInstance(picasso);
         return picasso;
     }
 
@@ -137,32 +136,32 @@ public class VacuumApplication extends DaggerApplication implements Application.
     @Override
     public void onActivityCreated(Activity activity, Bundle bundle) {
         currentActivity = activity;
-        Timber.d( "lfc onCreate %s", activity.getClass().getSimpleName());
+        Timber.d( "moe lfc onCreate %s", activity.getClass().getSimpleName());
     }
     @Override
     public void onActivityStarted(Activity activity) {
         currentActivity = activity;
-        Timber.d( "lfc onStarted %s", activity.getClass().getSimpleName());
+        Timber.d( "moe lfc onStarted %s", activity.getClass().getSimpleName());
     }
     @Override
     public void onActivityResumed(Activity activity) {
         currentActivity = activity;
-        Timber.d( "lfc Resumed %s", activity.getClass().getSimpleName());
+        Timber.d( "moe lfc Resumed %s", activity.getClass().getSimpleName());
     }
     @Override
     public void onActivityPaused(Activity activity) {
-        Timber.d( "lfc onPause %s", activity.getClass().getSimpleName());
+        Timber.d( "moe lfc onPause %s", activity.getClass().getSimpleName());
     }
     @Override
     public void onActivityStopped(Activity activity) {
-        Timber.d( "lfc onStop %s", activity.getClass().getSimpleName());
+        Timber.d( "moe lfc onStop %s", activity.getClass().getSimpleName());
     }
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
-        Timber.d( "lfc onSaveInstanceState %s", activity.getClass().getSimpleName());
+        Timber.d( "moe lfc onSaveInstanceState %s", activity.getClass().getSimpleName());
     }
     @Override
     public void onActivityDestroyed(Activity activity) {
-        Timber.d( "lfc onStop %s", activity.getClass().getSimpleName());
+        Timber.d( "moe lfc onStop %s", activity.getClass().getSimpleName());
     }
 }

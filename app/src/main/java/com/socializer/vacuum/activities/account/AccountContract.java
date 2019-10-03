@@ -13,6 +13,10 @@ public interface AccountContract {
         void openPhotoActivity(String[] photoArray);
 
         void openVKProfile(String profileId);
+
+        void openFBProfile(String profileId);
+
+        void openINSTProfile(String profileId);
     }
 
     interface View extends BaseView<Presenter> {
@@ -21,9 +25,13 @@ public interface AccountContract {
 
         void onAccountLoaded(ProfilePreviewDto currentAccountDto);
 
-        void setIdFromSP();
+        void setAccountIdFromSP();
 
-        void onVkUnBind();
+        void onSocUnBind(int kind);
+
+        void showErrorNetworkDialog();
+
+        void onSocialBinded();
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -34,10 +42,16 @@ public interface AccountContract {
 
         void loadAccount(String profileId);
 
-        void bindVK(String socialUserId, String accessToken);
+        void bindSocial(int kind, String socialUserId, String accessToken);
 
-        void unBindVK();
+        void unBindSocial(int kind);
 
         void openVKProfile();
+
+        void openFBProfile();
+
+        void openInstProfile();
+
+        void getInstSocialUserIdAndBind(String auth_token);
     }
 }

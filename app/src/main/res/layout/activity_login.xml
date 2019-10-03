@@ -65,5 +65,6 @@
         android:text="Войти через Instagram"
         android:textSize="14sp"
         android:textAllCaps="false"
-        android:textColor="@color/colorWhite"/>
+        android:textColor="@color/colorWhite"
+        android:visibility="gone"/>
 </LinearLayout>

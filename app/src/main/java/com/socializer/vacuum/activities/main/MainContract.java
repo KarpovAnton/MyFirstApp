@@ -26,6 +26,8 @@ public interface MainContract {
         void onProfileSelected(ProfilePreviewDto previewDto);
 
         void refreshed();
+
+        void showErrorNetworkDialog();
     }
 
     interface Presenter extends BasePresenter<View> {

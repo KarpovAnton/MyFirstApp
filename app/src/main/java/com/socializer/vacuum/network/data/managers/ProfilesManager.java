@@ -33,7 +33,7 @@ public class ProfilesManager extends AbstractManager {
 
     public void getUserProfiles(@NonNull String[] userId, @NonNull final DtoListCallback<?> callback) {
 
-        //if (!checkNetworkAvailable(callback)) return;
+        if (!checkNetworkAvailable(callback)) return;
 
         Call<List<ProfilePreviewDto>> call = mVacuumApi.getProfiles(getTokenString(), new ProfilesRequestDto(userId));
         call.enqueue(new Callback<List<ProfilePreviewDto>>() {
@@ -57,7 +57,7 @@ public class ProfilesManager extends AbstractManager {
 
     public void getProfile(@NonNull String userId, @NonNull final DtoListCallback<?> callback) {
 
-        //if (!checkNetworkAvailable(callback)) return;
+        if (!checkNetworkAvailable(callback)) return;
 
         Call<List<ProfilePreviewDto>> call = mVacuumApi.getProfile(getTokenString(), userId);
         call.enqueue(new Callback<List<ProfilePreviewDto>>() {
@@ -81,6 +81,7 @@ public class ProfilesManager extends AbstractManager {
 
     public void uploadPhotoImage(String photoString, @NonNull final DtoCallback<?> callback) {
 
+        if (!checkNetworkAvailable(callback)) return;
 
         Call<PhotoResponseDto> call = mVacuumApi.uploadPhotoImage(getTokenString(), new PhotoRequestDto(photoString));
         call.enqueue(new Callback<PhotoResponseDto>() {
@@ -98,6 +99,7 @@ public class ProfilesManager extends AbstractManager {
 
     public void deletePhotoImage(String url, @NonNull final DtoCallback<?> callback) {
 
+        if (!checkNetworkAvailable(callback)) return;
 
         Call<PhotoResponseDto> call = mVacuumApi.deletePhotoImage(getTokenString(), new PhotoDeleteRequestDto(url));
         call.enqueue(new Callback<PhotoResponseDto>() {
