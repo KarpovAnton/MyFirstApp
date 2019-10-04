@@ -94,14 +94,14 @@ public class MainActivity extends DaggerAppCompatActivity implements
         attemptStartScanAndAdvertising();
         if (isBluetoothOn && !testIsLoaded) {
             presenter.loadTestProfiles();
-            //presenter.loadTestProfiles();
+            presenter.loadTestProfiles();
         }
     }
 
     private void attemptStartScanAndAdvertising() {
         if (presenter.isBlueEnable()) {
             isBluetoothOn = true;
-            presenter.startScan();
+            //presenter.startScan();
             if (!isAdvertising) {
                 presenter.startAdvertising(advertisingCallback);
             }
@@ -184,7 +184,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
                     @Override
                     public SpannedGridLayoutManager.SpanInfo getSpanInfo(int position) {
                         // Conditions for 2x2 items
-                        if (position == 3 || position == 7) {
+                        if (position % 10 == 3 || position % 10 == 7) {
                             return new SpannedGridLayoutManager.SpanInfo(2, 2);
                         } else {
                             return new SpannedGridLayoutManager.SpanInfo(1, 1);
@@ -199,6 +199,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
         //recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
+        //recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
     

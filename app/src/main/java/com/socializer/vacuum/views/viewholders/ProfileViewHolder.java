@@ -64,7 +64,7 @@ public class ProfileViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setAvatar(String preview, String url) {
-        new ImageUtils().setAuthImage(context, getTokenString(), avatarImage, url, preview,
+        new ImageUtils().setAuthCircleImage(context, avatarImage, url, preview,
                 R.drawable.default_avatar);
     }
 

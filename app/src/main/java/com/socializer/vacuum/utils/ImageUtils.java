@@ -12,10 +12,10 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.widget.ImageView;
 
-import com.socializer.vacuum.VacuumApplication;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
-import com.squareup.picasso.Transformation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -30,80 +30,43 @@ public class ImageUtils {
     private static final int MAX_IMAGE_WIDTH = 1536;
     private static final double MAX_ASCPECT = 16./9.;
 
-    public class BitmapTransform implements Transformation {
-
-        int maxWidth;
-        int maxHeight;
-
-        public BitmapTransform(int maxWidth, int maxHeight) {
-            this.maxWidth = maxWidth;
-            this.maxHeight = maxHeight;
-        }
-
-        @Override
-        public Bitmap transform(Bitmap source) {
-            int targetWidth, targetHeight;
-            double aspectRatio;
-
-            if (source.getWidth() > source.getHeight()) {
-                targetWidth = maxWidth;
-                aspectRatio = (double) source.getHeight() / (double) source.getWidth();
-                targetHeight = (int) (targetWidth * aspectRatio);
-            } else {
-                targetHeight = maxHeight;
-                aspectRatio = (double) source.getWidth() / (double) source.getHeight();
-                targetWidth = (int) (targetHeight * aspectRatio);
-            }
-
-            Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false);
-            if (result != source) {
-                source.recycle();
-            }
-            return result;
-        }
-
-        @Override
-        public String key() {
-            return maxWidth + "x" + maxHeight;
-        }
-
-    };
-
-    public void setAuthImage(Context context, String token, ImageView target, String imageUrl,
-                             String imagePreview, int imageDefault) {
-
-        /*OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Request newRequest = chain.request().newBuilder()
-                                .addHeader("Authorization", token)
-                                .build();
-                        return chain.proceed(newRequest);
-                    }
-                })
-                .build();
-
-        Picasso picasso = new Picasso.Builder(context)
-                .indicatorsEnabled(true)
-                .downloader(new OkHttp3Downloader(client))
-                .build();
-        Picasso.setSingletonInstance(picasso);*/
-
-        Picasso picasso = VacuumApplication.getInstance().getPicasso(token);
+    public void setAuthCircleImage(Context context, ImageView target, String imageUrl,
+                                   String imagePreview, int imageDefault) {
 
         if (!TextUtils.isEmpty(imagePreview)) {
             BitmapTask bitmapTask = new BitmapTask(target);
             bitmapTask.execute(imagePreview);
         }
         if (!TextUtils.isEmpty(imageUrl)) {
-            RequestCreator requestCreator = picasso
-                    .load(imageUrl)
-                    .fit()
-                    .centerCrop();
+            RequestOptions options = new RequestOptions();
+            options.circleCrop();
             if (TextUtils.isEmpty(imagePreview))
-                requestCreator.placeholder(imageDefault);
-            requestCreator.into(target);
+                options.placeholder(imageDefault);
+            Glide.with(context)
+                    .load(imageUrl)
+                    .apply(options)
+                    .into(target);
+        } else {
+            setImagePreview(target, imagePreview, imageDefault);
+        }
+    }
+
+    public void setAuthImage(Context context, ImageView target, String imageUrl,
+                             String imagePreview, int imageDefault) {
+
+        if (!TextUtils.isEmpty(imagePreview)) {
+            BitmapTask bitmapTask = new BitmapTask(target);
+            bitmapTask.execute(imagePreview);
+        }
+        if (!TextUtils.isEmpty(imageUrl)) {
+            RequestOptions options = new RequestOptions();
+            options.centerCrop();
+            if (TextUtils.isEmpty(imagePreview))
+                options.placeholder(imageDefault);
+            Glide.with(context)
+                    .load(imageUrl)
+                    .apply(options)
+                    .into(target);
         } else {
             setImagePreview(target, imagePreview, imageDefault);
         }
