@@ -89,11 +89,9 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        Timber.d("moe resume");
         presenter.takeView(this);
         attemptStartScanAndAdvertising();
         if (isBluetoothOn && !testIsLoaded) {
-            presenter.loadTestProfiles();
             presenter.loadTestProfiles();
         }
     }
@@ -101,7 +99,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
     private void attemptStartScanAndAdvertising() {
         if (presenter.isBlueEnable()) {
             isBluetoothOn = true;
-            //presenter.startScan();
+            presenter.startScan();
             if (!isAdvertising) {
                 presenter.startAdvertising(advertisingCallback);
             }
@@ -122,7 +120,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
         @Override
         public void onStartFailure(int errorCode) {
-            Timber.e("Advertising onStartFailure: %s", errorCode);
+            Timber.e("moe Advertising onStartFailure: %s", errorCode);
             super.onStartFailure(errorCode);
             isAdvertising = false;
             Toast.makeText(getApplicationContext(), "Устройству не удалось раздать Bluetooth", Toast.LENGTH_SHORT).show();
@@ -136,8 +134,8 @@ public class MainActivity extends DaggerAppCompatActivity implements
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, R.string.bluetooth_on, Toast.LENGTH_SHORT).show();
                 isBluetoothOn = true;
-                //notifyListeners(BluetoothState.TURNED_ON);
             } else {
+                isBluetoothOn = false;
                 Toast.makeText(this, R.string.bluetooth_canceled, Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -173,8 +171,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         fragmentBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                router.removeFragment();
-                fragmentBg.setVisibility(View.GONE);
+                onBackPressed();
             }
         });
 
@@ -217,8 +214,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getApplicationContext(), "permission granted", Toast.LENGTH_SHORT).show();
-                onResume();
+                //onResume();
             }
         }
     }
@@ -243,6 +239,13 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Override
     public void showErrorNetworkDialog() {
         DialogUtils.showNetworkErrorMessage(this);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (swipeRefreshLayout != null)
+                    swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -250,6 +253,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         super.onStop();
         presenter.dropView();
         presenter.clearAdapter();
+        testIsLoaded = false;
     }
 
     @Override

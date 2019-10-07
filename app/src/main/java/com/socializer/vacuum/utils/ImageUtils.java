@@ -3,7 +3,13 @@ package com.socializer.vacuum.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -34,8 +40,8 @@ public class ImageUtils {
                                    String imagePreview, int imageDefault) {
 
         if (!TextUtils.isEmpty(imagePreview)) {
-            BitmapTask bitmapTask = new BitmapTask(target);
-            bitmapTask.execute(imagePreview);
+            BitmapCircleTask bitmapCircleTask = new BitmapCircleTask(target);
+            bitmapCircleTask.execute(imagePreview);
         }
         if (!TextUtils.isEmpty(imageUrl)) {
             RequestOptions options = new RequestOptions();
@@ -116,8 +122,8 @@ public class ImageUtils {
         resizedBitmap.recycle();
         return new String(res);
     }
-
-    public class BitmapTask extends AsyncTask<String, Void, Drawable> {
+    
+    private class BitmapTask extends AsyncTask<String, Void, Drawable> {
         ImageView imageView;
 
         public BitmapTask(ImageView imageView) {
@@ -140,6 +146,79 @@ public class ImageUtils {
             if (imageView.getDrawable() == null)
                 imageView.setImageDrawable(image);
         }
+    }
+
+    private class BitmapCircleTask extends AsyncTask<String, Void, Drawable> {
+        ImageView imageView;
+
+        public BitmapCircleTask(ImageView imageView) {
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Drawable doInBackground(String... params) {
+            try {
+                byte[] data = Base64.decode(params[0], Base64.DEFAULT);
+                Drawable result = new BitmapDrawable(BitmapFactory.decodeByteArray(data, 0, data.length));
+                Bitmap resultBitmap = drawableToBitmap(result);
+                resultBitmap = getRoundedCroppedBitmap(resultBitmap);
+                return new BitmapDrawable(resultBitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Drawable image) {
+            if (imageView.getDrawable() == null)
+                imageView.setImageDrawable(image);
+        }
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+
+
+    private Bitmap getRoundedCroppedBitmap(Bitmap bitmap) {
+        int widthLight = bitmap.getWidth();
+        int heightLight = bitmap.getHeight();
+
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+        Paint paintColor = new Paint();
+        paintColor.setFlags(Paint.ANTI_ALIAS_FLAG);
+
+        RectF rectF = new RectF(new Rect(0, 0, widthLight, heightLight));
+
+        canvas.drawRoundRect(rectF, widthLight / 2 ,heightLight / 2,paintColor);
+
+        Paint paintImage = new Paint();
+        paintImage.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        canvas.drawBitmap(bitmap, 0, 0, paintImage);
+
+        return output;
     }
 
     public static String getRealPathFromURIAndResize(Context context, Uri imageUri) {

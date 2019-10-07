@@ -145,7 +145,7 @@ public class AccountPresenter implements AccountContract.Presenter {
                         String newId = result.getUserId();
                         String deviceName = newId + BASE_DEVICE_NAME_PART;
                         deviceNameSP.set(deviceName);
-                        //bleManager.setBluetoothAdapterName(deviceName);
+                        bleManager.setBluetoothAdapterName(deviceName);
                         socialSP.set("true");
                         if (view != null)
                             view.onSocialBinded();

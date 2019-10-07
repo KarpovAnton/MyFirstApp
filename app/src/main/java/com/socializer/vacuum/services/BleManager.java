@@ -245,4 +245,9 @@ public class BleManager {
 
         advertiser.startAdvertising(settings, data, callback);
     }
+
+    public void stopAdvertising(AdvertiseCallback callback) {
+        BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
+        advertiser.stopAdvertising(callback);
+    }
 }

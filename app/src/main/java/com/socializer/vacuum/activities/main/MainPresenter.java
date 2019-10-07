@@ -180,7 +180,6 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
     public void onClick(int position) {
         if (view != null) {
             ProfilePreviewDto profileDto = adapter.getProfileByPosition(position);
-            Timber.d("moe pos click " + position);
             view.onProfileSelected(profileDto);
         }
     }

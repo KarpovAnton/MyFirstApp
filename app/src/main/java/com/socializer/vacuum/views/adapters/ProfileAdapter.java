@@ -43,7 +43,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             }
         });
-        Timber.d("moe create ");
         return holder;
     }
 
@@ -51,14 +50,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         ProfileViewHolder viewHolder = (ProfileViewHolder)holder;
         viewHolder.bind(items.get(position));
-        /*viewHolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mItemClickListener.onClick(position);
-            }
-        });*/
-
-        Timber.d("moe bind profile " + position);
     }
 
     @Override
