@@ -3,8 +3,6 @@ package com.socializer.vacuum.network.data;
 import android.app.Application;
 import android.content.Context;
 
-import androidx.annotation.Nullable;
-
 import com.socializer.vacuum.network.VacuumApi;
 import com.socializer.vacuum.network.data.dto.socket.ChatCallback;
 import com.socializer.vacuum.network.data.managers.ChatManager;
@@ -30,19 +28,6 @@ public abstract class AbstractManager {
         mVacuumApi = vacuumApi;
         mErrorUtils = errorUtils;
         mContext = application.getApplicationContext();
-    }
-
-    public boolean checkAuth(@Nullable DtoCallback<?> callback) {
-        if (!authSession.isValid()) {
-            if (callback!=null)
-                callback.onFailed(FailTypes.AUTH_REQUIRED);
-            return false;
-        }
-        return true;
-    }
-
-    protected boolean checkNetworkAndAuthAvailable(DtoCallback<?> callback) {
-        return checkNetworkAvailable(callback) && checkAuth(callback);
     }
 
     protected boolean checkNetworkAvailable(DtoCallback<?> callback) {

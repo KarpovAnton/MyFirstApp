@@ -2,12 +2,16 @@ package com.socializer.vacuum;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.multidex.MultiDex;
 
+import com.socializer.vacuum.activities.SplashActivity;
 import com.socializer.vacuum.di.component.AppComponent;
 import com.socializer.vacuum.di.component.DaggerAppComponent;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
@@ -119,6 +123,16 @@ public class VacuumApplication extends DaggerApplication implements Application.
 
     public Socket getSocket() {
         return mSocket;
+    }
+
+    public static void restartApp() {
+        Intent mStartActivity = new Intent(applicationContext, SplashActivity.class);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(applicationContext,
+                mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager)applicationContext.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 50, mPendingIntent);
+        System.exit(0);
     }
 
     @Override

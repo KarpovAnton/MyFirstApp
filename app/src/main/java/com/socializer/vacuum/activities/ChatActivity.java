@@ -25,6 +25,7 @@ import com.socializer.vacuum.network.data.dto.socket.ChatMessageOutDto;
 import com.socializer.vacuum.network.data.dto.socket.LastMessagesResponseDto;
 import com.socializer.vacuum.network.data.managers.ChatManager;
 import com.socializer.vacuum.utils.DialogUtils;
+import com.socializer.vacuum.utils.NetworkUtils;
 import com.socializer.vacuum.utils.StringPreference;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -120,8 +121,14 @@ public class ChatActivity extends DaggerAppCompatActivity {
 
             @Override
             public void onFailed(FailTypes fail) {
-                if (FailTypes.CONNECTION_ERROR == fail)
-                    DialogUtils.showNetworkErrorMessage(mActivity);
+                switch (fail) {
+                    case UNKNOWN_ERROR:
+                        new NetworkUtils().logoutError(getApplicationContext());
+                        break;
+                    case CONNECTION_ERROR:
+                        DialogUtils.showNetworkErrorMessage(mActivity);
+                        break;
+                }
             }
         });
     }

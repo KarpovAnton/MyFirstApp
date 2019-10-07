@@ -2,6 +2,7 @@ package com.socializer.vacuum.activities.photo;
 
 import com.socializer.vacuum.di.base.BasePresenter;
 import com.socializer.vacuum.di.base.BaseView;
+import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.views.adapters.PhotoEditAdapter;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public interface PhotoContract {
 
         void onPhotoUploaded();
 
-        void showErrorNetworkDialog();
+        void showErrorNetworkDialog(FailTypes fail);
     }
 
     interface Presenter extends BasePresenter<View> {

@@ -19,10 +19,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.VacuumApplication;
-import com.socializer.vacuum.fragments.Profile.ProfileFragment;
+import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.managers.ProfilesManager;
 import com.socializer.vacuum.utils.DialogUtils;
+import com.socializer.vacuum.utils.NetworkUtils;
 import com.socializer.vacuum.utils.StringPreference;
 import com.socializer.vacuum.views.custom.SpannedGridLayoutManager;
 
@@ -47,9 +48,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Inject
     ProfilesManager profilesManager;
-
-    @Inject
-    ProfileFragment profileFragment;
 
     @Inject
     MainPresenter presenter;
@@ -89,19 +87,18 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        Timber.d("moe resume");
         presenter.takeView(this);
         attemptStartScanAndAdvertising();
         if (isBluetoothOn && !testIsLoaded) {
             presenter.loadTestProfiles();
-            presenter.loadTestProfiles();
+            //presenter.loadTestProfiles();
         }
     }
 
     private void attemptStartScanAndAdvertising() {
         if (presenter.isBlueEnable()) {
             isBluetoothOn = true;
-            //presenter.startScan();
+            presenter.startScan();
             if (!isAdvertising) {
                 presenter.startAdvertising(advertisingCallback);
             }
@@ -173,7 +170,8 @@ public class MainActivity extends DaggerAppCompatActivity implements
         fragmentBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                router.removeFragment();
+                //router.removeFragment();
+                onBackPressed();
                 fragmentBg.setVisibility(View.GONE);
             }
         });
@@ -241,8 +239,15 @@ public class MainActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void showErrorNetworkDialog() {
-        DialogUtils.showNetworkErrorMessage(this);
+    public void showErrorNetworkDialog(FailTypes fail) {
+        switch (fail) {
+            case UNKNOWN_ERROR:
+                new NetworkUtils().logoutError(this);
+                break;
+            case CONNECTION_ERROR:
+                DialogUtils.showNetworkErrorMessage(this);
+                break;
+        }
     }
 
     @Override
@@ -250,6 +255,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         super.onStop();
         presenter.dropView();
         presenter.clearAdapter();
+        testIsLoaded = false;
     }
 
     @Override

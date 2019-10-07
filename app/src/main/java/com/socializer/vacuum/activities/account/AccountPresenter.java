@@ -109,8 +109,8 @@ public class AccountPresenter implements AccountContract.Presenter {
 
             @Override
             public void onFailed(FailTypes fail) {
-                if (FailTypes.CONNECTION_ERROR == fail && view != null)
-                    view.showErrorNetworkDialog();
+                if (view != null)
+                    view.showErrorNetworkDialog(fail);
             }
         });
     }
@@ -153,8 +153,8 @@ public class AccountPresenter implements AccountContract.Presenter {
 
                     @Override
                     public void onFailed(FailTypes fail) {
-                        if (FailTypes.CONNECTION_ERROR == fail && view != null)
-                            view.showErrorNetworkDialog();
+                        if (view != null)
+                            view.showErrorNetworkDialog(fail);
                     }
                 });
     }
@@ -203,8 +203,8 @@ public class AccountPresenter implements AccountContract.Presenter {
 
             @Override
             public void onFailed(FailTypes fail) {
-                if (FailTypes.CONNECTION_ERROR == fail && view != null)
-                    view.showErrorNetworkDialog();
+                if (view != null)
+                    view.showErrorNetworkDialog(fail);
             }
         });
     }
@@ -231,7 +231,8 @@ public class AccountPresenter implements AccountContract.Presenter {
 
                 @Override
                 public void onFailed(FailTypes fail) {
-
+                    if (view != null)
+                        view.showErrorNetworkDialog(fail);
                 }
             });
         }

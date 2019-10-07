@@ -26,7 +26,10 @@
     <string name="dialog_unbind">Отвязать</string>
 
     <string name="dialog_title_error">Ошибка</string>
+    <string name="dialog_title_auth_error">Что-то пошло не так</string>
     <string name="dialog_msg_network_error">Проверьте подключение к интернету и повторите попытку</string>
     <string name="dialog_msg_social_error">Необходимо привязать соцсеть</string>
+    <string name="dialog_msg_auth_error">Необходимо перезапустить приложение</string>
+    <string name="dialog_restart_app_button">Перезапустить</string>
 
 </resources>

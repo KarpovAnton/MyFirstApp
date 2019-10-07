@@ -28,6 +28,13 @@ public class MainRouter implements MainContract.Router {
         replaceFragment(fragment);
     }
 
+    void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.profileContainer, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
     @Override
     public void removeFragment() {
         for (Fragment fragment : activity.getSupportFragmentManager().getFragments()) {
@@ -46,12 +53,5 @@ public class MainRouter implements MainContract.Router {
     public void openChatListActivity() {
         Intent mainIntent = new Intent(activity.getApplicationContext(), ChatListActivity.class);
         activity.startActivity(mainIntent);
-    }
-
-    void replaceFragment(Fragment fragment) {
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.profileContainer, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
     }
 }

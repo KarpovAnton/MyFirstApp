@@ -43,7 +43,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             }
         });
-        Timber.d("moe create ");
         return holder;
     }
 
@@ -57,8 +56,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 mItemClickListener.onClick(position);
             }
         });*/
-
-        Timber.d("moe bind profile " + position);
     }
 
     @Override

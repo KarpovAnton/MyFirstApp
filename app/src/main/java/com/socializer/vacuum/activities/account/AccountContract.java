@@ -4,6 +4,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.socializer.vacuum.di.base.BasePresenter;
 import com.socializer.vacuum.di.base.BaseView;
+import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 
 public interface AccountContract {
@@ -29,7 +30,7 @@ public interface AccountContract {
 
         void onSocUnBind(int kind);
 
-        void showErrorNetworkDialog();
+        void showErrorNetworkDialog(FailTypes fail);
 
         void onSocialBinded();
     }

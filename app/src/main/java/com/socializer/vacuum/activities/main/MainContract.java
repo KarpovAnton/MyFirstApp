@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.socializer.vacuum.di.base.BasePresenter;
 import com.socializer.vacuum.di.base.BaseView;
+import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 
 public interface MainContract {
@@ -27,7 +28,7 @@ public interface MainContract {
 
         void refreshed();
 
-        void showErrorNetworkDialog();
+        void showErrorNetworkDialog(FailTypes fail);
     }
 
     interface Presenter extends BasePresenter<View> {
