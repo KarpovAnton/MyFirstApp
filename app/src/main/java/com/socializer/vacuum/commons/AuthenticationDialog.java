@@ -31,7 +31,7 @@ public class AuthenticationDialog extends Dialog {
         this.request_url = context.getResources().getString(R.string.inst_base_url)
                 + context.getResources().getString(R.string.inst_client_id) +
                 "&redirect_uri=" + redirect_url +
-                "&response_type=token";
+                "&response_type=token&display=touch";
     }
 
     @Override

@@ -64,7 +64,7 @@ public class DialogUtils {
                 .theme(Theme.LIGHT)
                 .title(titleRes)
                 .content(messageRes)
-                .positiveText(R.string.dialog_restart_app_button)
+                .positiveText("OK")
                 .onPositive(callback)
                 .cancelable(false)
                 .show();

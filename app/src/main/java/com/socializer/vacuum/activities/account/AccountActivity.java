@@ -2,6 +2,7 @@ package com.socializer.vacuum.activities.account;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -232,7 +233,12 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @Override
     public void onSocialBinded() {
         setAccountIdFromSP();
-        presenter.loadAccount(profileId);
+        new Handler(getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                presenter.loadAccount(profileId);
+            }
+        }, 500);
     }
 
     @Override

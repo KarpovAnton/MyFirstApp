@@ -56,6 +56,7 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
     BleManager bleManager;
     ScanCallback scanCallback;
     List<String> devices = new ArrayList<>();
+    List<String> addedUsersId = new ArrayList<>();
 
     @Override
     public void takeView(MainContract.View view) {
@@ -82,21 +83,26 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
                 if (!TextUtils.isEmpty(mainDeviceName))
                     tryAddToDeviceList(mainDeviceName, result);
 
-                if (!TextUtils.isEmpty(advertDataDeviceName))
+                if (!TextUtils.isEmpty(advertDataDeviceName) && !advertDataDeviceName.equals(mainDeviceName))
                     tryAddToDeviceList(advertDataDeviceName, result);
             }
 
             private void tryAddToDeviceList(String deviceName, ScanResult result) {
                 if (deviceName.contains(BASE_DEVICE_NAME_PART) && !devices.contains(deviceName)) {
-
                     devices.add(result.getDevice().getName());
+
                     deviceName = deviceName.split("@")[0];
 
                     profilesManager.getProfile(deviceName, new DtoListCallback<ResponseDto>() {
                         @Override
                         public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
-                            Timber.d("moe devices.add %s", result.getDevice().getName());
-                            adapter.onAdd(response);
+                            ProfilePreviewDto profileDto = response.get(0);
+                            String userId = profileDto.getUserId();
+                            if (!addedUsersId.contains(userId)) {
+                                Timber.d("moe users.add %s", userId);
+                                addedUsersId.add(userId);
+                                adapter.onAdd(response);
+                            }
                         }
 
                         @Override
@@ -186,7 +192,9 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
 
     @Override
     public void refresh() {
+
         devices.clear();
+        addedUsersId.clear();
         clearAdapter();
         loadTestProfiles();
     }

@@ -113,12 +113,12 @@ public class MainActivity extends DaggerAppCompatActivity implements
         public void onStartSuccess(AdvertiseSettings settingsInEffect) {
             super.onStartSuccess(settingsInEffect);
             isAdvertising = true;
-            Toast.makeText(getApplicationContext(), "Device share successful", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Device share successful", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onStartFailure(int errorCode) {
-            Timber.e("moe Advertising onStartFailure: %s", errorCode);
+            Timber.e("Advertising onStartFailure: %s", errorCode);
             super.onStartFailure(errorCode);
             isAdvertising = false;
             Toast.makeText(getApplicationContext(), "Устройству не удалось раздать Bluetooth", Toast.LENGTH_SHORT).show();
@@ -133,7 +133,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
                 Toast.makeText(this, R.string.bluetooth_on, Toast.LENGTH_SHORT).show();
                 isBluetoothOn = true;
             } else {
-                isBluetoothOn = false;
                 Toast.makeText(this, R.string.bluetooth_canceled, Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -169,7 +168,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         fragmentBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                router.removeFragment();
+                onBackPressed();
                 fragmentBg.setVisibility(View.GONE);
             }
         });
@@ -198,7 +197,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         //recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
-    
+
     void checkPermissions() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -212,8 +211,8 @@ public class MainActivity extends DaggerAppCompatActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //onResume();
+            if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                finish();
             }
         }
     }
@@ -236,8 +235,22 @@ public class MainActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void showErrorNetworkDialog() {
-        DialogUtils.showNetworkErrorMessage(this);
+    public void showErrorNetworkDialog(FailTypes fail) {
+        switch (fail) {
+            case UNKNOWN_ERROR:
+                new NetworkUtils().logoutError(this);
+                break;
+            case CONNECTION_ERROR:
+                DialogUtils.showNetworkErrorMessage(this);
+                break;
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (swipeRefreshLayout != null)
+                    swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override

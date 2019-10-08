@@ -37,13 +37,13 @@ public class NetworkUtils {
         DialogUtils.showErrorDialogMessage(
                 context,
                 R.string.dialog_title_auth_error,
-                R.string.dialog_msg_auth_error,
+                R.string.dialog_title_auth_error,
                 new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        VacuumApplication.restartApp();
+                        //VacuumApplication.restartApp();
                     }
                 });
-        AuthSession.getInstance().invalidate();
+        //AuthSession.getInstance().invalidate();
     }
 }
