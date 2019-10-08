@@ -56,20 +56,18 @@ public class DialogUtils {
                 .show();
     }
 
-    public static MaterialDialog getErrorDialogMessage(
+    public static void showErrorDialogMessage(
             Context context, @StringRes int titleRes, @StringRes int messageRes,
             MaterialDialog.SingleButtonCallback callback) {
 
-        MaterialDialog dialog = new MaterialDialog.Builder(context)
+        new MaterialDialog.Builder(context)
                 .theme(Theme.LIGHT)
                 .title(titleRes)
                 .content(messageRes)
-                .positiveText(android.R.string.ok)
+                .positiveText(R.string.dialog_restart_app_button)
                 .onPositive(callback)
                 .cancelable(false)
                 .show();
-
-        return dialog;
     }
 
     public static MaterialDialog showWaitingDialog(

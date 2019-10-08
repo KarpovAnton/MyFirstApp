@@ -81,8 +81,8 @@ public class PhotoPresenter implements PhotoContract.Presenter, PhotoEditAdapter
 
             @Override
             public void onFailed(FailTypes fail) {
-                if (FailTypes.CONNECTION_ERROR == fail && view != null)
-                    view.showErrorNetworkDialog();
+                if (view != null)
+                    view.showErrorNetworkDialog(fail);
             }
         });
     }
@@ -98,8 +98,8 @@ public class PhotoPresenter implements PhotoContract.Presenter, PhotoEditAdapter
 
             @Override
             public void onFailed(FailTypes fail) {
-                if (FailTypes.CONNECTION_ERROR == fail && view != null)
-                    view.showErrorNetworkDialog();
+                if (view != null)
+                    view.showErrorNetworkDialog(fail);
             }
         });
 

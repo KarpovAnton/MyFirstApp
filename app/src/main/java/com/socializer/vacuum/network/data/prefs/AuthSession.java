@@ -19,7 +19,7 @@ public class AuthSession {
 
     public AuthSession(SharedPreferences prefs) {
         this.prefs = prefs;
-        token  = new StringPreference(prefs, PREF_KEY_TOKEN, "").get();
+        token  = new StringPreference(prefs, PREF_KEY_TOKEN, null).get();
         expiresIn = Long.parseLong(
                 new StringPreference(prefs, PREF_KEY_EXP_DATE, "1").get());
         instance = this;
@@ -62,7 +62,7 @@ public class AuthSession {
         } else {
             this.expiresIn = 0;
         }
-        new StringPreference(prefs, PREF_KEY_TOKEN, "").set(token);
+        new StringPreference(prefs, PREF_KEY_TOKEN, null).set(token);
         new StringPreference(prefs, PREF_KEY_EXP_DATE, "1").set(""+this.expiresIn);
     }
 

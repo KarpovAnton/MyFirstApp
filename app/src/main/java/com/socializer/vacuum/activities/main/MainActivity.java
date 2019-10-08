@@ -19,10 +19,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.VacuumApplication;
-import com.socializer.vacuum.fragments.Profile.ProfileFragment;
+import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.managers.ProfilesManager;
 import com.socializer.vacuum.utils.DialogUtils;
+import com.socializer.vacuum.utils.NetworkUtils;
 import com.socializer.vacuum.utils.StringPreference;
 import com.socializer.vacuum.views.custom.SpannedGridLayoutManager;
 
@@ -47,9 +48,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Inject
     ProfilesManager profilesManager;
-
-    @Inject
-    ProfileFragment profileFragment;
 
     @Inject
     MainPresenter presenter;
@@ -171,7 +169,8 @@ public class MainActivity extends DaggerAppCompatActivity implements
         fragmentBg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                router.removeFragment();
+                fragmentBg.setVisibility(View.GONE);
             }
         });
 
@@ -239,13 +238,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Override
     public void showErrorNetworkDialog() {
         DialogUtils.showNetworkErrorMessage(this);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (swipeRefreshLayout != null)
-                    swipeRefreshLayout.setRefreshing(false);
-            }
-        });
     }
 
     @Override

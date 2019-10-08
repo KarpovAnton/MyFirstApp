@@ -20,10 +20,12 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.commons.AuthenticationDialog;
+import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
+import com.socializer.vacuum.utils.NetworkUtils;
 import com.socializer.vacuum.utils.StringPreference;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -101,13 +103,13 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
         setAccountIdFromSP();
         callbackManager = CallbackManager.Factory.create();
         fbCallbackRegistration();
-        presenter.loadAccount(profileId);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         presenter.takeView(this);
+        presenter.loadAccount(profileId);
     }
 
     @Override
@@ -337,8 +339,15 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     }
 
     @Override
-    public void showErrorNetworkDialog() {
-        DialogUtils.showNetworkErrorMessage(this);
+    public void showErrorNetworkDialog(FailTypes fail) {
+        switch (fail) {
+            case UNKNOWN_ERROR:
+                new NetworkUtils().logoutError(getApplicationContext());
+                break;
+            case CONNECTION_ERROR:
+                DialogUtils.showNetworkErrorMessage(this);
+                break;
+        }
     }
 
     @OnClick({R.id.backImage, R.id.backText})
