@@ -59,7 +59,6 @@ public class ChatActivity extends DaggerAppCompatActivity {
     MessagesListAdapter<Message> mAdapter;
     private Gson gson = new Gson();
 
-    Activity mActivity;
     private Boolean isConnected = true;
 
     @Inject
@@ -86,7 +85,6 @@ public class ChatActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
-        mActivity = this;
 
         if (deviceNameSP != null)
             ownId = deviceNameSP.get().split("@")[0];
@@ -123,10 +121,10 @@ public class ChatActivity extends DaggerAppCompatActivity {
             public void onFailed(FailTypes fail) {
                 switch (fail) {
                     case UNKNOWN_ERROR:
-                        new NetworkUtils().logoutError(getApplicationContext());
+                        //new NetworkUtils().logoutError(ChatActivity.this);
                         break;
                     case CONNECTION_ERROR:
-                        DialogUtils.showNetworkErrorMessage(mActivity);
+                        DialogUtils.showNetworkErrorMessage(ChatActivity.this);
                         break;
                 }
             }

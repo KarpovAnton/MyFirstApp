@@ -36,7 +36,7 @@ public class MainRouter implements MainContract.Router {
     }
 
     @Override
-    public void removeFragment() {
+    public void removeFragments() {
         for (Fragment fragment : activity.getSupportFragmentManager().getFragments()) {
             if (fragment != null)
                 activity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();

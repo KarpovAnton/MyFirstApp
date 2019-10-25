@@ -4,24 +4,33 @@ import com.socializer.vacuum.network.data.dto.ResponseDto;
 
 public class DialogsResponseDto extends ResponseDto {
 
-    DialogsResponseInnerDto _id;
+    String uid;
 
-    public class DialogsResponseInnerDto {
+    int ts;
 
-        String u1;
+    String message;
 
-        long ts;
+    String preview;
 
-        public String getU1() {
-            return u1;
-        }
+    String username;
 
-        public long getTs() {
-            return ts;
-        }
+    public String getUid() {
+        return uid;
     }
 
-    public DialogsResponseInnerDto get_id() {
-        return _id;
+    public int getTs() {
+        return ts;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getPreview() {
+        return preview;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

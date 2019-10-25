@@ -14,7 +14,7 @@ public interface MainContract {
     interface Router {
         void openProfile(ProfilePreviewDto profileDto);
 
-        void removeFragment();
+        void removeFragments();
 
         void openAccountActivity();
 

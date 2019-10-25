@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
 
 apply from: "$project.rootDir/build_scripts/load-settings.gradle"
 
@@ -9,8 +11,8 @@ android {
         applicationId "com.socializer.vacuum"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 5
-        versionName "1.05"
+        versionCode 7
+        versionName "1.07"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -98,4 +100,8 @@ dependencies {
     implementation ('io.socket:socket.io-client:0.8.3') {
         exclude group: 'org.json', module: 'json'
     }
+
+    //firebase
+    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 }

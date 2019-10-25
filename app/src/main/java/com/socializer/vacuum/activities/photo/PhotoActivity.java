@@ -134,7 +134,7 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
     public void showErrorNetworkDialog(FailTypes fail) {
         switch (fail) {
             case UNKNOWN_ERROR:
-                new NetworkUtils().logoutError(getApplicationContext());
+                //new NetworkUtils().logoutError(getApplicationContext());
                 break;
             case CONNECTION_ERROR:
                 DialogUtils.showNetworkErrorMessage(this);

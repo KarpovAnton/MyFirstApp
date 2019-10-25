@@ -32,11 +32,11 @@ public class AccountRouter implements AccountContract.Router {
 
     @Override
     public void openVKProfile(String profileId) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vkontakte://profile/".concat(profileId)));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vkontakte://profile/" + profileId));
         if (intent.resolveActivity(activity.getPackageManager()) != null) {
             activity.startActivity(intent);
         } else {
-            Intent webViewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(VK_BASE_URL.concat(profileId)));
+            Intent webViewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(VK_BASE_URL + profileId));
             activity.startActivity(webViewIntent);
         }
     }
@@ -47,7 +47,7 @@ public class AccountRouter implements AccountContract.Router {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + profileId));
             activity.startActivity(intent);
         } catch (Exception e) {
-            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FB_BASE_URL.concat(profileId))));
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FB_BASE_URL + profileId)));
         }
     }
 
@@ -60,7 +60,7 @@ public class AccountRouter implements AccountContract.Router {
         if (isIntentAvailable(inst)){
             activity.startActivity(inst);
         } else{
-            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(INST_BASE_URL.concat(profileId))));
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(INST_BASE_URL + profileId)));
         }
     }
 

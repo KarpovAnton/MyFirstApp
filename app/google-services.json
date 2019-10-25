@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "977371762654",
+    "firebase_url": "https://vacuum-sandbox1.firebaseio.com",
+    "project_id": "vacuum-sandbox1",
+    "storage_bucket": "vacuum-sandbox1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977371762654:android:fd45a0c26b1890c6fb574f",
+        "android_client_info": {
+          "package_name": "com.socializer.vacuum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "977371762654-m8duclck9noufa7hrpndradu77vg2qpp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByyN8B7xq7MkopmsWSchvb8oF_EfYhiMY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "977371762654-m8duclck9noufa7hrpndradu77vg2qpp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "977371762654-ull63fjlmil6th9umtsqts72jil0tp9v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vacuumlaiv.socializer"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

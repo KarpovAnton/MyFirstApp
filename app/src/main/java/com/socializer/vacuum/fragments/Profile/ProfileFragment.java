@@ -131,7 +131,7 @@ public class ProfileFragment extends DaggerFragment {
                                     getActivity().startActivity(intent);
                                 }
                             } catch (Exception e) {
-                                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FB_BASE_URL.concat(fbProfileId))));
+                                getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FB_BASE_URL + fbProfileId)));
                             }*/
 
                             if (socialIsBinded) {
@@ -139,7 +139,7 @@ public class ProfileFragment extends DaggerFragment {
                                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + fbProfileId));
                                     getActivity().startActivity(intent);
                                 } catch (Exception e) {
-                                    getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FB_BASE_URL.concat(fbProfileId))));
+                                    getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FB_BASE_URL + fbProfileId)));
                                 }
                             } else {
                                 DialogUtils.showErrorMessage(getContext(), R.string.dialog_msg_social_error);
@@ -155,11 +155,11 @@ public class ProfileFragment extends DaggerFragment {
                         @Override
                         public void onClick(View view) {
                             if (socialIsBinded) {
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vkontakte://profile/".concat(vkProfileId)));
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vkontakte://profile/" + vkProfileId));
                                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                                     getActivity().startActivity(intent);
                                 } else {
-                                    Intent webViewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(VK_BASE_URL.concat(vkProfileId)));
+                                    Intent webViewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(VK_BASE_URL + vkProfileId));
                                     getActivity().startActivity(webViewIntent);
                                 }
                             } else {
@@ -185,7 +185,7 @@ public class ProfileFragment extends DaggerFragment {
                                 if (isIntentAvailable(inst)) {
                                     getActivity().startActivity(inst);
                                 } else {
-                                    getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(INST_BASE_URL.concat(instProfileId))));
+                                    getActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(INST_BASE_URL + instProfileId)));
                                 }
                             } else {
                                 DialogUtils.showErrorMessage(getContext(), R.string.dialog_msg_social_error);

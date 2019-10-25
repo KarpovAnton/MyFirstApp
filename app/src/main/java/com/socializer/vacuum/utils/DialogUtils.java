@@ -76,7 +76,8 @@ public class DialogUtils {
                 .theme(Theme.LIGHT)
                 .title(titleRes)
                 .content(messageRes)
-                .cancelable(false).build();
+                .cancelable(false)
+                .build();
         dialog.show();
 
         return dialog;

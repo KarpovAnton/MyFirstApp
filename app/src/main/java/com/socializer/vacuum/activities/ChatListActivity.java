@@ -79,13 +79,17 @@ public class ChatListActivity extends DaggerAppCompatActivity {
                 ArrayList<Dialog> dialogs = new ArrayList<>();
                 for (int i = 0; i < response.size(); i++) {
                     DialogsResponseDto dto = response.get(i);
-                    String chatId = dto.get_id().getU1();
-
+                    String chatId = dto.getUid();
+                    String username = dto.getUsername();
+                    String lastMsg = dto.getMessage();
 
                     ArrayList<MessageAuthor> msgAutors = new ArrayList<>();
                     msgAutors.add(new MessageAuthor(chatId, "", null, true));
-                    Dialog dialog = new Dialog(chatId, "","", msgAutors,
-                            new Message("0", new MessageAuthor(chatId, "", null, true), ""),
+                    Dialog dialog = new Dialog(chatId,
+                            username,
+                            "",
+                            msgAutors,
+                            new Message("0", new MessageAuthor(chatId, "", null, true), lastMsg),
                             0);
 
                     dialogs.add(dialog);
@@ -97,10 +101,10 @@ public class ChatListActivity extends DaggerAppCompatActivity {
             public void onFailed(FailTypes fail) {
                 switch (fail) {
                     case UNKNOWN_ERROR:
-                        new NetworkUtils().logoutError(getApplicationContext());
+                        //new NetworkUtils().logoutError(ChatListActivity.this);
                         break;
                     case CONNECTION_ERROR:
-                        DialogUtils.showNetworkErrorMessage(mActivity);
+                        DialogUtils.showNetworkErrorMessage(ChatListActivity.this);
                         break;
                 }
             }

@@ -134,7 +134,7 @@ public class AccountPresenter implements AccountContract.Presenter {
 
         loginManager.bindSocial(
                 kind,
-                baseUrl.concat(socialUserId),
+                baseUrl + socialUserId,
                 socialUserId,
                 accessToken,
                 new DtoCallback<ResponseDto>() {
