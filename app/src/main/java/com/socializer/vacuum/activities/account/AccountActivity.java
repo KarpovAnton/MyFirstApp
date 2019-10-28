@@ -253,7 +253,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
             public void onResult(VKAccessToken res) {
                 String socialUserId = res.userId;
                 String accessToken = res.accessToken;
-                presenter.bindSocial(VK, socialUserId, accessToken);
+                presenter.bindSocial(VK, socialUserId, accessToken, null);
             }
             @Override
             public void onError(VKError error) {
@@ -273,7 +273,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
                 AccessToken accessToken = loginResult.getAccessToken();
                 String socialUserId = accessToken.getUserId();
                 String token = accessToken.getToken();
-                presenter.bindSocial(FB, socialUserId, token);
+                presenter.bindSocial(FB, socialUserId, token, null);
             }
 
             @Override
@@ -289,9 +289,10 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     }
 
     @Override
-    public void onInstTokenReceived(String auth_token) {
+    public void onInstTokenReceived(String username, String userId, String auth_token) {
         if (auth_token == null) return;
-        presenter.getInstSocialUserIdAndBind(auth_token);
+        //presenter.getInstSocialUserIdAndBind(auth_token);
+        presenter.bindSocial(INST, userId, auth_token, username);
     }
 
     @Override
@@ -340,7 +341,10 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
 
     @OnClick(R.id.editPhotoButton)
     void onEditPhotoClick() {
-        String[] photoArray = imageList.toArray(new String[0]);
+        String[] photoArray = new String[0];
+        if (imageList != null)
+            photoArray = imageList.toArray(new String[0]);
+
         router.openPhotoActivity(photoArray);
     }
 

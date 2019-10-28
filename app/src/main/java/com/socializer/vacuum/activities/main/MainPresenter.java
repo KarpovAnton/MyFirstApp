@@ -192,7 +192,6 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
 
     @Override
     public void refresh() {
-
         devices.clear();
         addedUsersId.clear();
         clearAdapter();

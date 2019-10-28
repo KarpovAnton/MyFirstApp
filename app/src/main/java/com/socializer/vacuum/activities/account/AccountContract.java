@@ -1,5 +1,6 @@
 package com.socializer.vacuum.activities.account;
 
+import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.socializer.vacuum.di.base.BasePresenter;
@@ -43,7 +44,7 @@ public interface AccountContract {
 
         void loadAccount(String profileId);
 
-        void bindSocial(int kind, String socialUserId, String accessToken);
+        void bindSocial(int kind, String socialUserId, String accessToken, @Nullable String username);
 
         void unBindSocial(int kind);
 
@@ -52,7 +53,5 @@ public interface AccountContract {
         void openFBProfile();
 
         void openInstProfile();
-
-        void getInstSocialUserIdAndBind(String auth_token);
     }
 }

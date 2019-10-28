@@ -13,9 +13,9 @@
 
     <integer name="com_vk_sdk_AppId">7034619</integer>
 
-    <string name="inst_client_id">c8a6eaec35b746cb998bf0f234b17a7d</string>
-    <string name="inst_redirect_url">https://test.vacuum.live/api/oauth/instagram/callback</string>
-    <string name="inst_base_url">https://api.instagram.com/oauth/authorize/?client_id=</string>
+    <string name="inst_client_id">402002080492420</string>
+    <string name="inst_redirect_url">https://api.vacuum.live/api/oauth/instagram/callback</string>
+    <string name="inst_base_url">https://api.instagram.com/oauth/authorize?app_id=</string>
 
     <string name="hint_enter_a_message">Сообщение…</string>
     <string name="typingNotifyMsg">набирает сообщение…</string>

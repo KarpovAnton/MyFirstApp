@@ -50,6 +50,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         ProfileViewHolder viewHolder = (ProfileViewHolder)holder;
         viewHolder.bind(items.get(position));
+        Timber.d("moe bind " + position);
     }
 
     @Override

@@ -116,7 +116,7 @@ public class AccountPresenter implements AccountContract.Presenter {
     }
 
     @Override
-    public void bindSocial(int kind, String socialUserId, String accessToken) {
+    public void bindSocial(int kind, String socialUserId, String accessToken, @Nullable String username) {
         String baseUrl;
         switch (kind) {
             case VK:
@@ -132,9 +132,16 @@ public class AccountPresenter implements AccountContract.Presenter {
                 throw new IllegalStateException("Unexpected value: " + kind);
         }
 
+        String url;
+        if (kind != INST) {
+            url = baseUrl + socialUserId;
+        } else {
+            url = baseUrl + username;
+        }
+
         loginManager.bindSocial(
                 kind,
-                baseUrl + socialUserId,
+                url,
                 socialUserId,
                 accessToken,
                 new DtoCallback<ResponseDto>() {
@@ -157,38 +164,6 @@ public class AccountPresenter implements AccountContract.Presenter {
                             view.showErrorNetworkDialog(fail);
                     }
                 });
-    }
-
-    @Override
-    public void getInstSocialUserIdAndBind(String auth_token) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("https://api.instagram.com/v1/users/self/?access_token=" + auth_token)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.body().string());
-                        JSONObject jsonData = jsonObject.getJSONObject("data");
-                        String socialUserId = jsonData.getString("username");
-
-                        bindSocial(INST, socialUserId, auth_token);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    throw new IOException("Unexpected code " + response);
-                }
-            }
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     @Override

@@ -100,7 +100,8 @@ public class ProfileFragment extends DaggerFragment {
         viewPager.setAdapter(photosAdapter);
 
         setName(profileDto.getUsername());
-        socialIsBinded = socialSP.get().equals("true");
+        if (socialSP != null)
+            socialIsBinded = socialSP.get().equals("true");
         setSocials();
     }
 
