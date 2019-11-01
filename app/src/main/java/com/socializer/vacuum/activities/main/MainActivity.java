@@ -218,7 +218,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void onRefresh() {
-        recyclerView.
         presenter.refresh();
     }
 

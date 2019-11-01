@@ -69,12 +69,13 @@ public class ImageUtils {
         }
         if (!TextUtils.isEmpty(imageUrl)) {
             RequestOptions options = new RequestOptions();
-            options.centerCrop();
+            options.centerInside();
             if (TextUtils.isEmpty(imagePreview))
                 options.placeholder(imageDefault);
             Glide.with(context)
                     .load(imageUrl)
                     .apply(options)
+                    .error(R.drawable.close_blue)
                     .into(target);
         } else {
             setImagePreview(target, imagePreview, imageDefault);
@@ -201,7 +202,27 @@ public class ImageUtils {
         return bitmap;
     }
 
+    /*public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
 
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+        final float roundPx = 12;
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
+    }*/
 
     private Bitmap getRoundedCroppedBitmap(Bitmap bitmap) {
         int widthLight = bitmap.getWidth();
