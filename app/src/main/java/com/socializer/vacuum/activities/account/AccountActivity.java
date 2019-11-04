@@ -25,8 +25,6 @@ import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.socializer.vacuum.utils.DialogUtils;
-import com.socializer.vacuum.utils.ImageUtils;
-import com.socializer.vacuum.utils.NetworkUtils;
 import com.socializer.vacuum.utils.StringPreference;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -70,9 +68,6 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
 
     @BindView(R.id.nameText)
     TextView nameText;
-
-    @BindView(R.id.statusImage)
-    ImageView statusImage;
 
     @BindView(R.id.vpPlaceholder)
     TextView vpPlaceholder;
@@ -135,9 +130,9 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
 
         int status = accountDto.getStatus();
         if (status == 1) {
-            new ImageUtils().setImage(statusImage, null, null, R.drawable.online);
+            //new ImageUtils().setImage(statusImage, null, null, R.drawable.online);
         } else {
-            new ImageUtils().setImage(statusImage, null, null, R.drawable.offline);
+            //new ImageUtils().setImage(statusImage, null, null, R.drawable.offline);
         }
 
         nameText.setText(accountDto.getUsername());
@@ -360,7 +355,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
         }
     }
 
-    @OnClick({R.id.backImage, R.id.backText})
+    @OnClick(R.id.backBtn)
     void onBackClick() {
         onBackPressed();
     }

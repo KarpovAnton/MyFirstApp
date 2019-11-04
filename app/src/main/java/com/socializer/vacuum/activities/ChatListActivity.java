@@ -17,7 +17,6 @@ import com.socializer.vacuum.network.data.dto.ResponseDto;
 import com.socializer.vacuum.network.data.dto.socket.DialogsResponseDto;
 import com.socializer.vacuum.network.data.managers.ChatManager;
 import com.socializer.vacuum.utils.DialogUtils;
-import com.socializer.vacuum.utils.NetworkUtils;
 import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 
@@ -111,7 +110,7 @@ public class ChatListActivity extends DaggerAppCompatActivity {
         });
     }
 
-    @OnClick({R.id.backImage, R.id.backText})
+    @OnClick(R.id.backBtn)
     void onBackClick() {
         onBackPressed();
     }

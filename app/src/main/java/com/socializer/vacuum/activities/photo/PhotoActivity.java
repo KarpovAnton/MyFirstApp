@@ -13,7 +13,6 @@ import com.socializer.vacuum.R;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
-import com.socializer.vacuum.utils.NetworkUtils;
 import com.socializer.vacuum.views.adapters.PhotoEditAdapter;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -142,7 +141,7 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
         }
     }
 
-    @OnClick({R.id.backImage, R.id.backText})
+    @OnClick(R.id.backBtn)
     void onBackClick() {
         onBackPressed();
     }

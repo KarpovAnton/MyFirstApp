@@ -1,6 +1,5 @@
 package com.socializer.vacuum.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,7 +24,6 @@ import com.socializer.vacuum.network.data.dto.socket.ChatMessageOutDto;
 import com.socializer.vacuum.network.data.dto.socket.LastMessagesResponseDto;
 import com.socializer.vacuum.network.data.managers.ChatManager;
 import com.socializer.vacuum.utils.DialogUtils;
-import com.socializer.vacuum.utils.NetworkUtils;
 import com.socializer.vacuum.utils.StringPreference;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -288,7 +286,7 @@ public class ChatActivity extends DaggerAppCompatActivity {
         mSocket.off("notifyChatMessage", onNotifyChatMessage);
     }
 
-    @OnClick({R.id.backImage, R.id.backText})
+    @OnClick(R.id.backBtn)
     void onBackClick() {
         onBackPressed();
     }

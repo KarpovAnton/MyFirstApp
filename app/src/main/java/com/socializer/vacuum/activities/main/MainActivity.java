@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -63,9 +62,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @BindView(R.id.swipeLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-
-    @BindView(R.id.fragmentBg)
-    View fragmentBg;
 
     private boolean isBluetoothOn;
     private boolean isAdvertising;
@@ -146,7 +142,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Override
     public void onProfileSelected(ProfilePreviewDto previewDto) {
         router.openProfile(previewDto);
-        fragmentBg.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.profileButton)
@@ -164,15 +159,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
     }
 
     private void initViews() {
-        fragmentBg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-                fragmentBg.setVisibility(View.GONE);
-            }
-        });
-
-        fragmentBg.setVisibility(View.GONE);
         SpannedGridLayoutManager manager = new SpannedGridLayoutManager(
                 new SpannedGridLayoutManager.GridSpanLookup() {
                     @Override
@@ -263,6 +249,5 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        fragmentBg.setVisibility(View.GONE);
     }
 }

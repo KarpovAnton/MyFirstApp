@@ -222,6 +222,8 @@ public class ProfileFragment extends DaggerFragment {
         }
     }
 
-    @OnClick(R.id.fragmentLayout)
-    void onLayoutClick() { }
+    @OnClick(R.id.backBtn)
+    void onBackBtnClick() {
+        getActivity().onBackPressed();
+    }
 }
