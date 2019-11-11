@@ -108,6 +108,10 @@ public class SpannedGridLayoutManager extends RecyclerView.LayoutManager {
         }
     }
 
+    public int getCellHeight() {
+        return cellHeight;
+    }
+
     @Override
     public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
         calculateWindowSize();

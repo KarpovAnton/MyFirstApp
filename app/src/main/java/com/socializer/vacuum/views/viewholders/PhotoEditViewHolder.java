@@ -39,6 +39,7 @@ public class PhotoEditViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(PhotoEditItem item) {
+        photoImage.setClipToOutline(true);
         setCoverImage(item.getUri());
         updateViewByState(item.isLoading());
     }

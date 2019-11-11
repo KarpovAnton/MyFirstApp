@@ -75,14 +75,14 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginRight="9dp"
-                android:background="@drawable/ic_group_1475" />
+                android:background="@drawable/group1475" />
 
             <Button
                 android:id="@+id/fbButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginLeft="9dp"
-                android:background="@drawable/ic_group_1476" />
+                android:background="@drawable/group1476" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

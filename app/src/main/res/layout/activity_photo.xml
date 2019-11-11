@@ -29,6 +29,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="40dp"
                 android:paddingLeft="20dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="15dp"
                 android:src="@drawable/ic_arrow"/>
 
             <ImageView
@@ -36,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="26dp"
-                android:src="@drawable/ic_logo"/>
+                android:src="@drawable/logo"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -102,11 +104,17 @@
             android:layout_height="match_parent"
             android:layout_marginTop="18dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"/>
+            </LinearLayout>
         </RelativeLayout>
-
     </LinearLayout>
 </LinearLayout>

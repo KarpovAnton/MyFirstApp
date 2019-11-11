@@ -101,7 +101,15 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
                             if (!addedUsersId.contains(userId)) {
                                 Timber.d("moe users.add %s", userId);
                                 addedUsersId.add(userId);
-                                adapter.onAdd(response);
+                                if (view != null) {
+                                    if (adapter.getItemCount() == 0) {
+                                        view.showSingleItem(profileDto);
+                                        adapter.onAddToList(response);
+                                    } else {
+                                        view.hideSingleItem();
+                                        adapter.onAdd(response);
+                                    }
+                                }
                             }
                         }
 
@@ -123,7 +131,7 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
             public void onScanFailed(int errorCode) {
                 Timber.d("moe onScanFailed %s", errorCode);
                 super.onScanFailed(errorCode);
-                //bleManager.scan(scanCallback);//TODO настроить перезапуск при фейле
+                //bleManager.scan(scanCallback);//TODO просить перезапустить тел
             }
         };
     }
@@ -140,6 +148,16 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
 
     @Override
     public void startScan() {
+        ArrayList<ProfilePreviewDto> list = new ArrayList<>();
+        ArrayList<ProfilePreviewDto> list2 = new ArrayList<>();
+        list.add(new ProfilePreviewDto());
+        list2.add(new ProfilePreviewDto());
+/*        adapter.onAdd(list);
+        adapter.onAdd(list2);
+        adapter.onAdd(list2);
+        adapter.onAdd(list2);
+        adapter.onAdd(list2);*/
+
         new Handler(getMainLooper()).post(new Runnable() {
               @Override
               public void run() {

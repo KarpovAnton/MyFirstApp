@@ -29,6 +29,10 @@ public interface MainContract {
         void refreshed();
 
         void showErrorNetworkDialog(FailTypes fail);
+
+        void showSingleItem(ProfilePreviewDto profileDto);
+
+        void hideSingleItem();
     }
 
     interface Presenter extends BasePresenter<View> {

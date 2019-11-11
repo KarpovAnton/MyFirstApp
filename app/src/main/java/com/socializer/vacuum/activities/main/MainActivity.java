@@ -4,10 +4,20 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,8 +32,11 @@ import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.managers.ProfilesManager;
 import com.socializer.vacuum.utils.DialogUtils;
+import com.socializer.vacuum.utils.ImageUtils;
 import com.socializer.vacuum.utils.StringPreference;
 import com.socializer.vacuum.views.custom.SpannedGridLayoutManager;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -63,6 +76,15 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @BindView(R.id.swipeLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    @BindView(R.id.singleItem)
+    LinearLayout singleItem;
+
+    @BindView(R.id.avatarImage)
+    ImageView avatarImage;
+
+    @BindView(R.id.nameText)
+    TextView nameText;
+
     private boolean isBluetoothOn;
     private boolean isAdvertising;
     private boolean testIsLoaded;
@@ -87,6 +109,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         if (isBluetoothOn && !testIsLoaded) {
             presenter.loadTestProfiles();
         }
+
     }
 
     private void attemptStartScanAndAdvertising() {
@@ -175,12 +198,87 @@ public class MainActivity extends DaggerAppCompatActivity implements
                 1f // how big is default item
         );
 
+/*        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        Timber.d("moe dpHeight dpWidth " + dpHeight + "  " + dpWidth);*/
+
+        Configuration configuration = getResources().getConfiguration();
+        int screenWidthDp = configuration.screenWidthDp;
+        int smallestScreenWidthDp = configuration.smallestScreenWidthDp;
+        Timber.d("moe configuration " + screenWidthDp + "  " + smallestScreenWidthDp);
+
+        final float scale = getResources().getDisplayMetrics().density;
+        int pixels = (int) (screenWidthDp * scale + 0.5f);
+        pixels = pixels / 3;
+        Timber.d("moe pixels %s", pixels);
+
+        int dp = convertPxToDp(pixels);
+        int singleItemHeight = dp /*+ nameTextHeight*/ + 16;
+        int singleItemHeightInPix = convertDpToPx(singleItemHeight);
+        ViewGroup.LayoutParams params = singleItem.getLayoutParams();
+        params.width = pixels;
+        params.height = singleItemHeightInPix;
+        singleItem.setLayoutParams(params);
+
         recyclerView.setLayoutManager(manager);
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
         //recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         //recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
         swipeRefreshLayout.setOnRefreshListener(this);
+    }
+    public static int convertPxToDp(int px){
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float dp = px / (metrics.densityDpi / 160f);
+        return Math.round(dp);
+    }
+    public static int convertDpToPx(int dp){
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float px = dp * (metrics.densityDpi / 160f);
+        return Math.round(px);
+    }
+    public static int convertSpToPixels(float sp, Context context) {
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp,
+                context.getResources().getDisplayMetrics());
+        return px;
+    }
+    @Override
+    public void showSingleItem(ProfilePreviewDto profileDto) {
+        recyclerView.setVisibility(View.GONE);
+        singleItem.setVisibility(View.VISIBLE);
+        avatarImage.setClipToOutline(true);
+
+        List<ProfilePreviewDto.ProfileImageDto> photos = profileDto.getImages();
+
+        if (photos != null && !photos.isEmpty()) {
+            ProfilePreviewDto.ProfileImageDto avatar = photos.get(0);
+            setAvatar(avatar.getPreview(), avatar.getUrl());
+        } else {
+            setAvatarPlaceholder();
+        }
+
+        setName(profileDto.getUsername());
+    }
+
+    @Override
+    public void hideSingleItem() {
+        recyclerView.setVisibility(View.VISIBLE);
+        singleItem.setVisibility(View.GONE);
+    }
+
+    private void setAvatarPlaceholder() {
+        new ImageUtils().setImage(avatarImage, null, null,
+                R.drawable.default_avatar);
+    }
+
+    private void setAvatar(String preview, String url) {
+        new ImageUtils().setAuthImage(this, avatarImage, url, preview,
+                R.drawable.default_avatar);
+    }
+
+    private void setName(String username) {
+        nameText.setText(username);
     }
 
     void checkPermissions() {

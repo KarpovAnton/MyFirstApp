@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.socializer.vacuum.R;
@@ -74,8 +74,8 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
     }
 
     void initViews() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        GridLayoutManager manager = new GridLayoutManager(this, 3);
+        recyclerView.setLayoutManager(manager);
     }
 
     @OnClick({R.id.addPhotoButton})

@@ -79,9 +79,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyItemRangeInserted(initPosition, updateCount);
     }
 
+    public void onAddToList(List<ProfilePreviewDto> dtoList) {
+        this.items.add(dtoList.get(0));
+    }
+
     public void onAdd(List<ProfilePreviewDto> dtoList) {
         int position = getItemCount();
         this.items.add(dtoList.get(0));
+
         notifyItemInserted(position);
     }
 

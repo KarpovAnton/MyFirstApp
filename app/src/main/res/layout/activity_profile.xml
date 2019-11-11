@@ -30,6 +30,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="40dp"
                 android:paddingLeft="20dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="15dp"
                 android:src="@drawable/ic_arrow"/>
 
             <ImageView
@@ -37,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="26dp"
-                android:src="@drawable/ic_logo"/>
+                android:src="@drawable/logo"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -70,7 +72,8 @@
                     android:textSize="16sp"
                     android:textColor="@color/colorWhite"
                     android:textStyle="bold"
-                    android:textAllCaps="false"/>
+                    android:textAllCaps="false"
+                    android:outlineProvider="bounds"/>
             </LinearLayout>
         </RelativeLayout>
 
@@ -88,24 +91,40 @@
             tools:text="Anton"/>
 
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp">
+            android:layout_width="285dp"
+            android:layout_height="285dp"
+            android:layout_marginTop="18dp"
+            android:layout_gravity="center_horizontal">
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/viewPager"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="285dp"/>
+                android:layout_height="match_parent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="0dp">
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewPager"
+                        android:layout_width="285dp"
+                        android:layout_height="285dp"
+                        android:background="@drawable/bg_rounded"/>
+                </androidx.cardview.widget.CardView>
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/vpPlaceholder"
-                android:layout_width="match_parent"
+                android:layout_width="285dp"
                 android:layout_height="285dp"
-                android:background="@color/colorViolent"
+                android:background="@drawable/ph_bg"
                 android:text="Нет фото"
                 android:textStyle="bold"
                 android:textColor="@color/colorWhite"
-                android:textSize="22dp"
+                android:textSize="22sp"
                 android:gravity="center"
                 android:visibility="gone"
                 tools:visibility="visible"/>
@@ -158,10 +177,10 @@
             android:layout_height="54dp"
             android:background="@drawable/button_orange"
             android:text="Мои фото"
+            android:textColor="@drawable/button_orange_text_bg"
             android:textSize="19sp"
             android:textStyle="bold"
-            android:textAllCaps="false"
-            android:textColor="@color/colorWhite"/>
+            android:textAllCaps="false" />
 
         <TextView
             android:layout_width="wrap_content"
