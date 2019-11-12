@@ -205,8 +205,6 @@ public class LoginManager extends AbstractManager {
                 if (response.isSuccessful()) {
                     if (response.body() != null)
                         callback.onSuccessful(response.body());
-                } else {
-
                 }
             }
             @Override

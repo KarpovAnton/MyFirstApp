@@ -25,6 +25,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Url;
 
 
 public interface VacuumApi {
@@ -79,6 +80,6 @@ public interface VacuumApi {
     Call<List<LastMessagesResponseDto>> getLastMsgs(@Header("Authorization") String token, @Path("id") String id);
 
     @Headers("Content-Type: application/json")
-    @GET("/chat/list")
-    Call<List<DialogsResponseDto>> getChatList(@Header("Authorization") String token);
+    @GET
+    Call<List<DialogsResponseDto>> getChatList(@Url String url, @Header("Authorization") String token);
 }

@@ -43,6 +43,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 
+import static android.os.Looper.getMainLooper;
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_DEVICE_NAME;
 
 public class AccountActivity extends DaggerAppCompatActivity implements AccountContract.View, AuthenticationDialog.AuthInstListener {
@@ -87,6 +88,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     boolean isVkBind;
     boolean isFbBind;
     boolean isInstBind;
+    private boolean isDialogShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -350,7 +352,18 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
                 //new NetworkUtils().logoutError(getApplicationContext());
                 break;
             case CONNECTION_ERROR:
-                DialogUtils.showNetworkErrorMessage(this);
+
+                if (!isDialogShow) {
+                    DialogUtils.showNetworkErrorMessage(this);
+                    isDialogShow = true;
+                }
+                new Handler(getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isDialogShow = false;
+                    }
+                }, 3000);
+
                 break;
         }
     }

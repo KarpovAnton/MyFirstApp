@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
@@ -88,6 +89,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
     private boolean isBluetoothOn;
     private boolean isAdvertising;
     private boolean testIsLoaded;
+    private boolean isDialogShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -324,7 +326,17 @@ public class MainActivity extends DaggerAppCompatActivity implements
                 //new NetworkUtils().logoutError(this);
                 break;
             case CONNECTION_ERROR:
-                DialogUtils.showNetworkErrorMessage(this);
+
+                if (!isDialogShow) {
+                    DialogUtils.showNetworkErrorMessage(this);
+                    isDialogShow = true;
+                }
+                new Handler(getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isDialogShow = false;
+                    }
+                }, 3000);
                 break;
         }
         runOnUiThread(new Runnable() {

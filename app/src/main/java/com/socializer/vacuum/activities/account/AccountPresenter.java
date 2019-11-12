@@ -14,6 +14,7 @@ import com.socializer.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.socializer.vacuum.network.data.dto.ResponseDto;
 import com.socializer.vacuum.network.data.managers.LoginManager;
 import com.socializer.vacuum.network.data.managers.ProfilesManager;
+import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.services.BleManager;
 import com.socializer.vacuum.utils.StringPreference;
 import com.socializer.vacuum.views.adapters.PhotosAdapter;
@@ -147,7 +148,7 @@ public class AccountPresenter implements AccountContract.Presenter {
                 new DtoCallback<ResponseDto>() {
                     @Override
                     public void onSuccessful(@NonNull ResponseDto response) {
-                        //AuthSession.getInstance().setToken(accessToken);
+                        AuthSession.getInstance().setToken(accessToken);
                         ProfilePreviewDto result = (ProfilePreviewDto) response;
                         String newId = result.getUserId();
                         String deviceName = newId + BASE_DEVICE_NAME_PART;

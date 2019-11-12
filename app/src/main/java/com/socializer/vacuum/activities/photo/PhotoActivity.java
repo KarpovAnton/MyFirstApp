@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -46,6 +47,7 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
     PhotoRouter router;
 
     ArrayList<String> photoList;
+    private boolean isDialogShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,7 +138,18 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
                 //new NetworkUtils().logoutError(getApplicationContext());
                 break;
             case CONNECTION_ERROR:
-                DialogUtils.showNetworkErrorMessage(this);
+
+                if (!isDialogShow) {
+                    DialogUtils.showNetworkErrorMessage(this);
+                    isDialogShow = true;
+                }
+                new Handler(getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isDialogShow = false;
+                    }
+                }, 3000);
+
                 break;
         }
     }
