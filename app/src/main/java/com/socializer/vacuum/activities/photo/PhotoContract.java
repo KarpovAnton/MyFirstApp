@@ -11,6 +11,9 @@ public interface PhotoContract {
 
     interface Router {
 
+        void openProfileActivity();
+
+        void openAccountActivity();
     }
 
     interface View extends BaseView<Presenter> {

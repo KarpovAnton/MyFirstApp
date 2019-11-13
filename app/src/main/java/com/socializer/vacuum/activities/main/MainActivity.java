@@ -35,6 +35,7 @@ import com.socializer.vacuum.network.data.managers.ProfilesManager;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
 import com.socializer.vacuum.utils.StringPreference;
+import com.socializer.vacuum.utils.ViewUtils;
 import com.socializer.vacuum.views.custom.SpannedGridLayoutManager;
 
 import java.util.List;
@@ -90,6 +91,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
     private boolean isAdvertising;
     private boolean testIsLoaded;
     private boolean isDialogShow;
+    private ProfilePreviewDto singleItemProfileDto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,12 +103,14 @@ public class MainActivity extends DaggerAppCompatActivity implements
         initViews();
         checkPermissions();
         presenter.setBtName();
+        presenter.takeView(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.takeView(this);
+
+        presenter.refresh();
         attemptStartScanAndAdvertising();
         if (isBluetoothOn && !testIsLoaded) {
             presenter.loadTestProfiles();
@@ -200,28 +204,28 @@ public class MainActivity extends DaggerAppCompatActivity implements
                 1f // how big is default item
         );
 
-/*        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
-        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        Timber.d("moe dpHeight dpWidth " + dpHeight + "  " + dpWidth);*/
-
         Configuration configuration = getResources().getConfiguration();
         int screenWidthDp = configuration.screenWidthDp;
         int smallestScreenWidthDp = configuration.smallestScreenWidthDp;
-        Timber.d("moe configuration " + screenWidthDp + "  " + smallestScreenWidthDp);
 
         final float scale = getResources().getDisplayMetrics().density;
         int pixels = (int) (screenWidthDp * scale + 0.5f);
         pixels = pixels / 3;
-        Timber.d("moe pixels %s", pixels);
 
-        int dp = convertPxToDp(pixels);
-        int singleItemHeight = dp /*+ nameTextHeight*/ + 16;
-        int singleItemHeightInPix = convertDpToPx(singleItemHeight);
+        int dp = ViewUtils.convertPxToDp(pixels);
+        int singleItemHeight = dp + 16;
+        int singleItemHeightInPix = ViewUtils.convertDpToPx(singleItemHeight);
         ViewGroup.LayoutParams params = singleItem.getLayoutParams();
         params.width = pixels;
         params.height = singleItemHeightInPix;
         singleItem.setLayoutParams(params);
+        singleItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (singleItemProfileDto != null)
+                    router.openProfile(singleItemProfileDto);
+            }
+        });
 
         recyclerView.setLayoutManager(manager);
         recyclerView.setItemViewCacheSize(20);
@@ -230,23 +234,10 @@ public class MainActivity extends DaggerAppCompatActivity implements
         //recyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
-    public static int convertPxToDp(int px){
-        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
-        float dp = px / (metrics.densityDpi / 160f);
-        return Math.round(dp);
-    }
-    public static int convertDpToPx(int dp){
-        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
-        float px = dp * (metrics.densityDpi / 160f);
-        return Math.round(px);
-    }
-    public static int convertSpToPixels(float sp, Context context) {
-        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp,
-                context.getResources().getDisplayMetrics());
-        return px;
-    }
+
     @Override
     public void showSingleItem(ProfilePreviewDto profileDto) {
+        singleItemProfileDto = profileDto;
         recyclerView.setVisibility(View.GONE);
         singleItem.setVisibility(View.VISIBLE);
         avatarImage.setClipToOutline(true);

@@ -14,6 +14,7 @@ import com.socializer.vacuum.R;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
+import com.socializer.vacuum.utils.StringPreference;
 import com.socializer.vacuum.views.adapters.PhotoEditAdapter;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -27,11 +28,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
+
+import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
 
 public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContract.View {
 
@@ -39,6 +43,10 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+
+    @Inject
+    @Named(NAMED_PREF_SOCIAL)
+    StringPreference socialSP;
 
     @Inject
     PhotoPresenter presenter;
@@ -90,6 +98,24 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
         startActivityForResult(intent, ADD_IMAGE_REQUEST_CODE);
     }
 
+    @OnClick(R.id.chatListBtn)
+    void onChatListBtnClick() {
+        if (socialSP.get().equals("true")) {
+            router.openProfileActivity();
+        } else {
+            DialogUtils.showErrorMessage(this, R.string.dialog_msg_social_error);
+        }
+    }
+
+    @OnClick(R.id.profileButton)
+    void onProfileButtonClick() {
+        if (socialSP.get().equals("true")) {
+            router.openAccountActivity();
+        } else {
+            DialogUtils.showErrorMessage(this, R.string.dialog_msg_social_error);
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -129,6 +155,12 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
     @Override
     public void onPhotoUploaded() {
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        presenter.dropView();
     }
 
     @Override

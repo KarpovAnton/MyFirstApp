@@ -1,7 +1,7 @@
 package com.socializer.vacuum.di.module;
 
 import com.socializer.vacuum.activities.ChatActivity;
-import com.socializer.vacuum.activities.ChatListActivity;
+import com.socializer.vacuum.activities.chatlist.ChatListActivity;
 import com.socializer.vacuum.activities.LoginActivity;
 import com.socializer.vacuum.activities.SplashActivity;
 import com.socializer.vacuum.activities.account.AccountActivity;

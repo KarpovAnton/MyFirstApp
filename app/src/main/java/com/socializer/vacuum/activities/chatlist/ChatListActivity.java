@@ -1,4 +1,4 @@
-package com.socializer.vacuum.activities;
+package com.socializer.vacuum.activities.chatlist;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.VacuumApplication;
+import com.socializer.vacuum.activities.ChatActivity;
 import com.socializer.vacuum.models.chat.Dialog;
 import com.socializer.vacuum.models.chat.Message;
 import com.socializer.vacuum.models.chat.MessageAuthor;
@@ -17,6 +18,7 @@ import com.socializer.vacuum.network.data.dto.ResponseDto;
 import com.socializer.vacuum.network.data.dto.socket.DialogsResponseDto;
 import com.socializer.vacuum.network.data.managers.ChatManager;
 import com.socializer.vacuum.utils.DialogUtils;
+import com.socializer.vacuum.utils.StringPreference;
 import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
 
@@ -24,16 +26,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class ChatListActivity extends DaggerAppCompatActivity {
+import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
+
+public class ChatListActivity extends DaggerAppCompatActivity implements ChatListContract.View {
 
     @Inject
     ChatManager chatManager;
+
+    @Inject
+    ChatListRouter router;
+
+    @Inject
+    @Named(NAMED_PREF_SOCIAL)
+    StringPreference socialSP;
 
     @BindView(R.id.dialogsList)
     DialogsList dialogsList;
@@ -70,8 +82,8 @@ public class ChatListActivity extends DaggerAppCompatActivity {
         dialogsList.setAdapter(dialogsListAdapter);
     }
 
-
-    private void loadChatList() {
+    @Override
+    public void loadChatList() {
         chatManager.getChatList(new ChatManager.ChatListCallback<ResponseDto>() {
             @Override
             public void onSuccessful(@NonNull List<DialogsResponseDto> response) {
@@ -108,6 +120,15 @@ public class ChatListActivity extends DaggerAppCompatActivity {
                 }
             }
         });
+    }
+
+    @OnClick(R.id.profileButton)
+    void onProfileButtonClick() {
+        if (socialSP.get().equals("true")) {
+            router.openAccountActivity();
+        } else {
+            DialogUtils.showErrorMessage(this, R.string.dialog_msg_social_error);
+        }
     }
 
     @OnClick(R.id.backBtn)

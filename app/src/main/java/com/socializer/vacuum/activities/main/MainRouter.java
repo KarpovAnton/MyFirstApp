@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.socializer.vacuum.R;
-import com.socializer.vacuum.activities.ChatListActivity;
+import com.socializer.vacuum.activities.chatlist.ChatListActivity;
 import com.socializer.vacuum.activities.account.AccountActivity;
 import com.socializer.vacuum.fragments.Profile.ProfileFragment;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;

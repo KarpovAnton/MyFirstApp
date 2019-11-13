@@ -36,6 +36,7 @@ import static com.socializer.vacuum.utils.Consts.BASE_DEVICE_NAME_PART;
 
 @ActivityScoped
 public class MainPresenter implements MainContract.Presenter, RecyclerItemClickListener {
+
     @Nullable
     MainContract.View view;
 
@@ -102,12 +103,27 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
                                 Timber.d("moe users.add %s", userId);
                                 addedUsersId.add(userId);
                                 if (view != null) {
-                                    if (adapter.getItemCount() == 0) {
-                                        view.showSingleItem(profileDto);
-                                        adapter.onAddToList(response);
+                                    if (addedUsersId.size() == 1) {
+
+                                        new Handler(getMainLooper()).postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (addedUsersId.size() > 1) {
+                                                    adapter.onAdd(response);
+                                                    Timber.d("moe double together");
+                                                } else {
+                                                    if (view != null)
+                                                        view.showSingleItem(profileDto);
+                                                    adapter.onAddToList(response);
+                                                    Timber.d("moe single");
+                                                }
+                                            }
+                                        }, 1000);
+
                                     } else {
                                         view.hideSingleItem();
                                         adapter.onAdd(response);
+                                        Timber.d("moe common");
                                     }
                                 }
                             }
@@ -148,10 +164,10 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
 
     @Override
     public void startScan() {
-        ArrayList<ProfilePreviewDto> list = new ArrayList<>();
+/*        ArrayList<ProfilePreviewDto> list = new ArrayList<>();
         ArrayList<ProfilePreviewDto> list2 = new ArrayList<>();
         list.add(new ProfilePreviewDto());
-        list2.add(new ProfilePreviewDto());
+        list2.add(new ProfilePreviewDto());*/
 /*        adapter.onAdd(list);
         adapter.onAdd(list2);
         adapter.onAdd(list2);
@@ -214,6 +230,8 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
         addedUsersId.clear();
         clearAdapter();
         loadTestProfiles();
+        if (view != null)
+            view.hideSingleItem();
     }
 
     @Override

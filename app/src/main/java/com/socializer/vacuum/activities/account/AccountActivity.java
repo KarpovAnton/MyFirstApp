@@ -45,6 +45,7 @@ import dagger.android.support.DaggerAppCompatActivity;
 
 import static android.os.Looper.getMainLooper;
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_DEVICE_NAME;
+import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
 
 public class AccountActivity extends DaggerAppCompatActivity implements AccountContract.View, AuthenticationDialog.AuthInstListener {
 
@@ -57,6 +58,10 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @Inject
     @Named(NAMED_PREF_DEVICE_NAME)
     StringPreference deviceNameSP;
+
+    @Inject
+    @Named(NAMED_PREF_SOCIAL)
+    StringPreference socialSP;
 
     @Inject
     AccountPresenter presenter;
@@ -101,12 +106,12 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
         setAccountIdFromSP();
         callbackManager = CallbackManager.Factory.create();
         fbCallbackRegistration();
+        presenter.takeView(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.takeView(this);
         presenter.loadAccount(profileId);
     }
 
@@ -343,6 +348,21 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
             photoArray = imageList.toArray(new String[0]);
 
         router.openPhotoActivity(photoArray);
+    }
+
+    @OnClick(R.id.chatListBtn)
+    void onChatListBtnClick() {
+        if (socialSP.get().equals("true")) {
+            router.openChatListActivity();
+        } else {
+            DialogUtils.showErrorMessage(this, R.string.dialog_msg_social_error);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        presenter.dropView();
     }
 
     @Override

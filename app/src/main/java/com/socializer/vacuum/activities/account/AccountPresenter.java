@@ -104,7 +104,8 @@ public class AccountPresenter implements AccountContract.Presenter {
                         adapter.setPhotos(photos);
                     }
 
-                    view.onAccountLoaded(currentAccountDto);
+                    if (view != null)
+                        view.onAccountLoaded(currentAccountDto);
                 }
             }
 

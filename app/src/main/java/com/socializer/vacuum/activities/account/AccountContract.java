@@ -14,6 +14,8 @@ public interface AccountContract {
 
         void openPhotoActivity(String[] photoArray);
 
+        void openChatListActivity();
+
         void openVKProfile(String profileId);
 
         void openFBProfile(String profileId);

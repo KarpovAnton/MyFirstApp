@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
+import com.socializer.vacuum.activities.chatlist.ChatListActivity;
 import com.socializer.vacuum.activities.photo.PhotoActivity;
 
 import java.util.List;
@@ -28,6 +29,12 @@ public class AccountRouter implements AccountContract.Router {
         Intent intent = new Intent(activity.getApplicationContext(), PhotoActivity.class);
         intent.putExtra("imageArray", photoArray);
         activity.startActivity(intent);
+    }
+
+    @Override
+    public void openChatListActivity() {
+        Intent mainIntent = new Intent(activity.getApplicationContext(), ChatListActivity.class);
+        activity.startActivity(mainIntent);
     }
 
     @Override
