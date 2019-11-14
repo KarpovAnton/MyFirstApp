@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.VacuumApplication;
@@ -35,7 +36,7 @@ import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
 
-public class ChatListActivity extends DaggerAppCompatActivity implements ChatListContract.View {
+public class ChatListActivity extends DaggerAppCompatActivity implements ChatListContract.View, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     ChatManager chatManager;
@@ -49,6 +50,9 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
 
     @BindView(R.id.dialogsList)
     DialogsList dialogsList;
+
+    @BindView(R.id.swipeLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     Activity mActivity;
     DialogsListAdapter<Dialog> dialogsListAdapter;
@@ -80,6 +84,7 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
             }
         });
         dialogsList.setAdapter(dialogsListAdapter);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -106,6 +111,7 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
                     dialogs.add(dialog);
                 }
                 dialogsListAdapter.setItems(dialogs);
+                refreshed();
             }
 
             @Override
@@ -118,6 +124,22 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
                         DialogUtils.showNetworkErrorMessage(ChatListActivity.this);
                         break;
                 }
+                refreshed();
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        loadChatList();
+    }
+
+    public void refreshed() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (swipeRefreshLayout != null)
+                    swipeRefreshLayout.setRefreshing(false);
             }
         });
     }

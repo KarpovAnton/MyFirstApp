@@ -21,7 +21,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.socializer.vacuum.utils.Consts.CHAT_SERVER_URL;
+import static com.socializer.vacuum.utils.Consts.CHAT_ID_URL;
+import static com.socializer.vacuum.utils.Consts.CHAT_LIST_URL;
 
 public class ChatManager extends AbstractManager {
 
@@ -39,7 +40,7 @@ public class ChatManager extends AbstractManager {
 
         if (!checkNetworkAvailable(callback)) return;
 
-        Call<List<LastMessagesResponseDto>> call = mVacuumApi.getLastMsgs(getTokenString(), chatId);
+        Call<List<LastMessagesResponseDto>> call = mVacuumApi.getLastMsgs(CHAT_ID_URL + chatId, getTokenString());
         call.enqueue(new Callback<List<LastMessagesResponseDto>>() {
             @Override
             public void onResponse(Call<List<LastMessagesResponseDto>> call, Response<List<LastMessagesResponseDto>> response) {
@@ -61,7 +62,7 @@ public class ChatManager extends AbstractManager {
 
         if (!checkNetworkAvailable(callback)) return;
 
-        Call<List<DialogsResponseDto>> call = mVacuumApi.getChatList(CHAT_SERVER_URL, getTokenString());
+        Call<List<DialogsResponseDto>> call = mVacuumApi.getChatList(CHAT_LIST_URL, getTokenString());
         call.enqueue(new Callback<List<DialogsResponseDto>>() {
             @Override
             public void onResponse(Call<List<DialogsResponseDto>> call, Response<List<DialogsResponseDto>> response) {

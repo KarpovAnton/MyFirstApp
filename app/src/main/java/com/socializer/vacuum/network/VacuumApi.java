@@ -76,8 +76,8 @@ public interface VacuumApi {
 
 
     @Headers("Content-Type: application/json")
-    @GET("/chat/{id}")
-    Call<List<LastMessagesResponseDto>> getLastMsgs(@Header("Authorization") String token, @Path("id") String id);
+    @GET
+    Call<List<LastMessagesResponseDto>> getLastMsgs(@Url String url, @Header("Authorization") String token);
 
     @Headers("Content-Type: application/json")
     @GET

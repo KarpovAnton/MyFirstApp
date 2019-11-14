@@ -60,9 +60,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
     public static final int REQUEST_ENABLE_BT = 2;
 
     @Inject
-    ProfilesManager profilesManager;
-
-    @Inject
     MainPresenter presenter;
 
     @Inject
@@ -89,7 +86,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     private boolean isBluetoothOn;
     private boolean isAdvertising;
-    private boolean testIsLoaded;
+    //private boolean testIsLoaded;
     private boolean isDialogShow;
     private ProfilePreviewDto singleItemProfileDto;
 
@@ -103,6 +100,12 @@ public class MainActivity extends DaggerAppCompatActivity implements
         initViews();
         checkPermissions();
         presenter.setBtName();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         presenter.takeView(this);
     }
 
@@ -112,9 +115,10 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
         presenter.refresh();
         attemptStartScanAndAdvertising();
-        if (isBluetoothOn && !testIsLoaded) {
+
+/*        if (isBluetoothOn && !testIsLoaded) {
             presenter.loadTestProfiles();
-        }
+        }*/
 
     }
 
@@ -300,7 +304,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void refreshed() {
-        testIsLoaded = true;
+        //testIsLoaded = true;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -342,9 +346,9 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Override
     protected void onStop() {
         super.onStop();
+        //presenter.clearAdapter();
         presenter.dropView();
-        presenter.clearAdapter();
-        testIsLoaded = false;
+        //testIsLoaded = false;
     }
 
     @Override

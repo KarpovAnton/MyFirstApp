@@ -135,13 +135,6 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
             vpPlaceholder.setVisibility(View.VISIBLE);
         }
 
-        int status = accountDto.getStatus();
-        if (status == 1) {
-            //new ImageUtils().setImage(statusImage, null, null, R.drawable.online);
-        } else {
-            //new ImageUtils().setImage(statusImage, null, null, R.drawable.offline);
-        }
-
         nameText.setText(accountDto.getUsername());
 
         List<ProfilePreviewDto.ProfileAccountDto> accounts = accountDto.getAccounts();
@@ -391,5 +384,11 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @OnClick(R.id.backBtn)
     void onBackClick() {
         onBackPressed();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
     }
 }

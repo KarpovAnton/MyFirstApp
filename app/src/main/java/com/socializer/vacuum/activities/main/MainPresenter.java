@@ -118,7 +118,7 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
                                                     Timber.d("moe single");
                                                 }
                                             }
-                                        }, 1000);
+                                        }, 500);
 
                                     } else {
                                         view.hideSingleItem();
@@ -229,9 +229,11 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
         devices.clear();
         addedUsersId.clear();
         clearAdapter();
-        loadTestProfiles();
-        if (view != null)
+        //loadTestProfiles();
+        if (view != null) {
             view.hideSingleItem();
+            view.refreshed();
+        }
     }
 
     @Override

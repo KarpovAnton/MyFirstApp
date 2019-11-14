@@ -191,6 +191,7 @@ public class BleManager {
         } else {
             mScanning = false;
             bluetoothLeScanner.stopScan(callback);
+            Timber.d("moe stop scan");
 
             new Handler(getMainLooper()).postDelayed(new Runnable() {
                 @Override

@@ -72,7 +72,7 @@ public class VacuumApplication extends DaggerApplication implements Application.
 
             IO.Options options = new IO.Options();
             options.query = "token=" + as.getToken();
-            mSocket = IO.socket(Consts.CHAT_SERVER_URL, options);
+            mSocket = IO.socket(Consts.CHAT_BASE_URL, options);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
