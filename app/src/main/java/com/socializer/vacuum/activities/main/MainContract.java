@@ -44,7 +44,7 @@ public interface MainContract {
 
         boolean isBlueEnable();
 
-        void startAdvertising(AdvertiseCallback advertiseCallback);
+        void startAdvertising();
 
         void startScan();
 

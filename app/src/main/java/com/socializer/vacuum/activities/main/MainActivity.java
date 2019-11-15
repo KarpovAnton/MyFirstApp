@@ -100,7 +100,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
         initViews();
         checkPermissions();
         presenter.setBtName();
-
     }
 
     @Override
@@ -127,7 +126,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
             isBluetoothOn = true;
             presenter.startScan();
             if (!isAdvertising) {
-                presenter.startAdvertising(advertisingCallback);
+                //presenter.startAdvertising(/*advertisingCallback*/);
             }
         } else {
             Toast.makeText(this, R.string.bluetooth_canceled, Toast.LENGTH_SHORT).show();
@@ -136,7 +135,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         }
     }
 
-    AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
+    /*AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
         @Override
         public void onStartSuccess(AdvertiseSettings settingsInEffect) {
             super.onStartSuccess(settingsInEffect);
@@ -151,7 +150,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
             isAdvertising = false;
             Toast.makeText(getApplicationContext(), "Устройству не удалось раздать Bluetooth", Toast.LENGTH_SHORT).show();
         }
-    };
+    };*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

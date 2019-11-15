@@ -158,8 +158,8 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
     }
 
     @Override
-    public void startAdvertising(AdvertiseCallback advertiseCallback) {
-        bleManager.startAdvertising(advertiseCallback);
+    public void startAdvertising() {
+        bleManager.startAdvertising(bleManager.getCallback());
     }
 
     @Override

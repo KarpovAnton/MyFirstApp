@@ -233,7 +233,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
             public void run() {
                 presenter.loadAccount(profileId);
             }
-        }, 500);
+        }, 300);
     }
 
     @Override

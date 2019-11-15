@@ -74,12 +74,12 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
             @Override
             public void onDialogClick(Dialog dialog) {
                 String dialogId = dialog.getId();
-                ArrayList<MessageAuthor> users = dialog.getUsers();
+                String dialogName = dialog.getDialogName();
                 Intent intent = new Intent(VacuumApplication.applicationContext, ChatActivity.class);
                 /*String deviceName = profileDto.getUserId();
                 String username = profileDto.getUsername();*/
                 intent.putExtra("receiverId", dialogId);//TODO дилогайди здесь свонго акка, нужно вытаскивать ид собеседника
-                intent.putExtra("username", dialogId);
+                intent.putExtra("username", dialogName);
                 startActivity(intent);
             }
         });
@@ -101,7 +101,8 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
 
                     ArrayList<MessageAuthor> msgAutors = new ArrayList<>();
                     msgAutors.add(new MessageAuthor(chatId, "", null, true));
-                    Dialog dialog = new Dialog(chatId,
+                    Dialog dialog = new Dialog(
+                            chatId,
                             username,
                             "",
                             msgAutors,

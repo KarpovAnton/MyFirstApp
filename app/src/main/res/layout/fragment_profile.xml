@@ -58,7 +58,7 @@
             android:layout_height="48dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:src="@drawable/ic_fb"
+            android:src="@drawable/ic_instagram"
             android:visibility="gone"/>
 
         <ImageView
@@ -67,7 +67,7 @@
             android:layout_height="48dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:src="@drawable/ic_instagram"
+            android:src="@drawable/ic_fb"
             android:visibility="gone"/>
     </LinearLayout>
 

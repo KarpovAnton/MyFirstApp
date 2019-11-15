@@ -50,10 +50,14 @@ public class BleManager {
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         }
     }
+
     //TODO если онСканФейлит попробовать вкл и выкл авиа
     public void setBluetoothAdapterName(String name) {
         bluetoothAdapter.setName(name);
-        Timber.d("moe bladapter set name "+name);
+        Timber.d("moe bladapter set name %s", name);
+
+        stopAdvertising(callback);
+        startAdvertising(callback);
     }
 
     public Context getContext() {
@@ -245,10 +249,31 @@ public class BleManager {
                 .build();
 
         advertiser.startAdvertising(settings, data, callback);
+        Timber.d("moe startAdvertising ");
     }
 
     public void stopAdvertising(AdvertiseCallback callback) {
         BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
         advertiser.stopAdvertising(callback);
+        Timber.d("moe stopAdvertising ");
+    }
+
+    private AdvertiseCallback callback = new AdvertiseCallback() {
+        @Override
+        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+            super.onStartSuccess(settingsInEffect);
+            Timber.d("moe Device share successful");
+        }
+
+        @Override
+        public void onStartFailure(int errorCode) {
+            super.onStartFailure(errorCode);
+            Timber.d("moe Устройству не удалось раздать Bluetooth");
+
+        }
+    };
+
+    public AdvertiseCallback getCallback() {
+        return callback;
     }
 }
