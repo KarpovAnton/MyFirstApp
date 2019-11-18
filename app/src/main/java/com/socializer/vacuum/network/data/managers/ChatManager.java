@@ -23,6 +23,8 @@ import retrofit2.Response;
 
 import static com.socializer.vacuum.utils.Consts.CHAT_ID_URL;
 import static com.socializer.vacuum.utils.Consts.CHAT_LIST_URL;
+import static com.socializer.vacuum.utils.Consts.TOKEN_NOT_FOUND;
+import static com.socializer.vacuum.utils.Consts.UNAUTHORIZED;
 
 public class ChatManager extends AbstractManager {
 
@@ -47,7 +49,8 @@ public class ChatManager extends AbstractManager {
                 if (response.isSuccessful()) {
                     callback.onSuccessful(response.body());
                 } else {
-                    callback.onFailed(FailTypes.UNKNOWN_ERROR);
+                    if (response.code() == TOKEN_NOT_FOUND || response.code() == UNAUTHORIZED)
+                        callback.onFailed(FailTypes.AUTH_REQUIRED);
                 }
             }
 
@@ -69,7 +72,8 @@ public class ChatManager extends AbstractManager {
                 if (response.isSuccessful()) {
                     callback.onSuccessful(response.body());
                 } else {
-                    callback.onFailed(FailTypes.UNKNOWN_ERROR);
+                    if (response.code() == TOKEN_NOT_FOUND || response.code() == UNAUTHORIZED)
+                        callback.onFailed(FailTypes.AUTH_REQUIRED);
                 }
             }
 

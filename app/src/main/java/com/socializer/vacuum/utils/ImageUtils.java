@@ -20,7 +20,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.crashlytics.android.Crashlytics;
 import com.socializer.vacuum.R;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -126,8 +125,8 @@ public class ImageUtils {
         resizedBitmap.recycle();
         return new String(res);
     }
-    
     private class BitmapTask extends AsyncTask<String, Void, Drawable> {
+
         ImageView imageView;
 
         public BitmapTask(ImageView imageView) {
@@ -151,8 +150,8 @@ public class ImageUtils {
                 imageView.setImageDrawable(image);
         }
     }
-
     private class BitmapCircleTask extends AsyncTask<String, Void, Drawable> {
+
         ImageView imageView;
 
         public BitmapCircleTask(ImageView imageView) {

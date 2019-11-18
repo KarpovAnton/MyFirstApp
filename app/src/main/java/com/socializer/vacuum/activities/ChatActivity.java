@@ -1,9 +1,11 @@
 package com.socializer.vacuum.activities;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +25,9 @@ import com.socializer.vacuum.network.data.dto.socket.ChatMessageInDto;
 import com.socializer.vacuum.network.data.dto.socket.ChatMessageOutDto;
 import com.socializer.vacuum.network.data.dto.socket.LastMessagesResponseDto;
 import com.socializer.vacuum.network.data.managers.ChatManager;
+import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.DialogUtils;
+import com.socializer.vacuum.utils.ImageUtils;
 import com.socializer.vacuum.utils.StringPreference;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
@@ -55,6 +59,7 @@ public class ChatActivity extends DaggerAppCompatActivity {
     private String ownId;
     private String receiverId;
     MessagesListAdapter<Message> mAdapter;
+    private Activity mActivity;
     private Gson gson = new Gson();
 
     private Boolean isConnected = true;
@@ -78,6 +83,9 @@ public class ChatActivity extends DaggerAppCompatActivity {
     @BindView(R.id.input)
     MessageInput inputView;
 
+    @BindView(R.id.avatarImage)
+    ImageView avatarImage;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +96,7 @@ public class ChatActivity extends DaggerAppCompatActivity {
             ownId = deviceNameSP.get().split("@")[0];
         receiverId = getIntent().getStringExtra("receiverId");
         mSocket = VacuumApplication.getInstance().getSocket();
+        mActivity = this;
         initViews();
         loadLastMsgs();
 
@@ -124,6 +133,9 @@ public class ChatActivity extends DaggerAppCompatActivity {
                     case CONNECTION_ERROR:
                         DialogUtils.showNetworkErrorMessage(ChatActivity.this);
                         break;
+                    case AUTH_REQUIRED:
+                        AuthSession.getInstance().invalidate(mActivity);
+                        break;
                 }
             }
         });
@@ -131,6 +143,7 @@ public class ChatActivity extends DaggerAppCompatActivity {
 
     private void initViews() {
         nameReceiverText.setText(getIntent().getStringExtra("username"));
+        new ImageUtils().setImagePreview(avatarImage, getIntent().getStringExtra("photo"), R.drawable.default_avatar);
 
         mAdapter = new MessagesListAdapter<>(ownId, null);
         messagesList.setAdapter(mAdapter);

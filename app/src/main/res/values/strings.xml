@@ -31,5 +31,6 @@
     <string name="dialog_msg_social_error">Необходимо привязать соцсеть</string>
     <string name="dialog_msg_auth_error">Необходимо перезапустить приложение</string>
     <string name="dialog_restart_app_button">Перезапустить</string>
+    <string name="date_header_yesterday">Yesterday</string>
 
 </resources>

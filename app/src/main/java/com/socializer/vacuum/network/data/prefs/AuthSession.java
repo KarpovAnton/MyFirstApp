@@ -1,7 +1,10 @@
 package com.socializer.vacuum.network.data.prefs;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.socializer.vacuum.activities.SplashActivity;
 import com.socializer.vacuum.utils.StringPreference;
 
 import timber.log.Timber;
@@ -66,10 +69,12 @@ public class AuthSession {
         new StringPreference(prefs, PREF_KEY_EXP_DATE, "1").set(""+this.expiresIn);
     }
 
-    public void invalidate() {
+    public void invalidate(Context context) {
         token = null;
         expiresIn = 0;
         update(null, 0);
+        Intent intent = new Intent(context, SplashActivity.class);
+        context.startActivity(intent);
     }
 
     public String toString() {

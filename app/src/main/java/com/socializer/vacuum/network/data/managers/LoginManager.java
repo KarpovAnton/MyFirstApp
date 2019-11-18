@@ -8,7 +8,6 @@ import com.socializer.vacuum.network.VacuumApi;
 import com.socializer.vacuum.network.data.AbstractManager;
 import com.socializer.vacuum.network.data.DtoCallback;
 import com.socializer.vacuum.network.data.FailTypes;
-import com.socializer.vacuum.network.data.dto.ApiError;
 import com.socializer.vacuum.network.data.dto.BindSocialRequestDto;
 import com.socializer.vacuum.network.data.dto.LoginRequestDto;
 import com.socializer.vacuum.network.data.dto.LoginResponseDto;
@@ -27,7 +26,6 @@ import javax.inject.Singleton;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import timber.log.Timber;
 
 @Singleton
 public class LoginManager extends AbstractManager {
@@ -52,14 +50,6 @@ public class LoginManager extends AbstractManager {
             public void onResponse(Call<RegistrationResponseDto> call, Response<RegistrationResponseDto> response) {
                 if (response.isSuccessful()) {
                     callback.onSuccessful(response.body());
-                } else {
-                    // parse the response body …
-                    ApiError error = mErrorUtils.parseError(response);
-                    if (error.getCode() == ApiError.AUTH_EXCEPTION_NO_FOUND) {
-                        // TODO add fail types
-                        // callback.onFailedCardAdding(FailTypes.LOGIN_USER_NOT_FOUND);
-                        Timber.d("error message: %s", error.getMessage());
-                    }
                 }
             }
 
@@ -89,8 +79,6 @@ public class LoginManager extends AbstractManager {
                         authSession.update(token, ExpiresIn);
                     }
                     callback.onSuccessful(ResponseDto.empty());
-                } else {
-
                 }
             }
             @Override
@@ -115,8 +103,6 @@ public class LoginManager extends AbstractManager {
                     authSession.update(accessToken, expiresIn);
                     if (response.body() != null)
                         callback.onSuccessful(response.body());
-                } else {
-
                 }
             }
             @Override
@@ -147,8 +133,6 @@ public class LoginManager extends AbstractManager {
                     authSession.update(accessToken, expiresIn);
                     if (response.body() != null)
                         callback.onSuccessful(response.body());
-                } else {
-
                 }
             }
             @Override
@@ -227,8 +211,6 @@ public class LoginManager extends AbstractManager {
                 if (response.isSuccessful()) {
                     if (response.body() != null)
                         callback.onSuccessful(response.body());
-                } else {
-
                 }
             }
             @Override

@@ -8,6 +8,10 @@ public class Consts {
 
     public static final int LOCATION_PERMISSION_CODE = 3;
 
+    public static final int TOKEN_NOT_FOUND = 404;
+
+    public static final int UNAUTHORIZED = 401;
+
     public static final String CHAT_BASE_URL = "https://chat.vacuum.live";
 
     public static final String CHAT_LIST_URL = CHAT_BASE_URL + "/chat/list";

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.network.data.FailTypes;
+import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
 import com.socializer.vacuum.utils.StringPreference;
@@ -182,6 +183,10 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
                     }
                 }, 3000);
 
+                break;
+
+            case AUTH_REQUIRED:
+                AuthSession.getInstance().invalidate(this);
                 break;
         }
     }

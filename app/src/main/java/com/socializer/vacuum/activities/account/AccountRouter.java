@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static com.socializer.vacuum.activities.account.AccountPresenter.FB_BASE_URL;
 import static com.socializer.vacuum.activities.account.AccountPresenter.INST_BASE_URL;
 import static com.socializer.vacuum.activities.account.AccountPresenter.VK_BASE_URL;
@@ -33,8 +34,10 @@ public class AccountRouter implements AccountContract.Router {
 
     @Override
     public void openChatListActivity() {
-        Intent mainIntent = new Intent(activity.getApplicationContext(), ChatListActivity.class);
-        activity.startActivity(mainIntent);
+        Intent intent = new Intent(activity.getApplicationContext(), ChatListActivity.class);
+        intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
     }
 
     @Override

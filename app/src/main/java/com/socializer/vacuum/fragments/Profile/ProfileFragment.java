@@ -214,8 +214,10 @@ public class ProfileFragment extends DaggerFragment {
             Intent intent = new Intent(getContext(), ChatActivity.class);
             String deviceName = profileDto.getUserId();
             String username = profileDto.getUsername();
+            String preview = profileDto.getImages().get(0).getPreview();
             intent.putExtra("receiverId", deviceName);
             intent.putExtra("username", username);
+            intent.putExtra("photo", preview);
             getActivity().startActivity(intent);
         } else {
             DialogUtils.showErrorMessage(getActivity(), R.string.dialog_msg_social_error);

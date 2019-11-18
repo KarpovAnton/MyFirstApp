@@ -2,18 +2,12 @@ package com.socializer.vacuum.activities.main;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.le.AdvertiseCallback;
-import android.bluetooth.le.AdvertiseSettings;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,7 +25,7 @@ import com.socializer.vacuum.R;
 import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
-import com.socializer.vacuum.network.data.managers.ProfilesManager;
+import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
 import com.socializer.vacuum.utils.StringPreference;
@@ -47,7 +41,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
-import timber.log.Timber;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
 import static com.socializer.vacuum.utils.Consts.LOCATION_PERMISSION_CODE;
@@ -332,7 +325,12 @@ public class MainActivity extends DaggerAppCompatActivity implements
                     }
                 }, 3000);
                 break;
+
+            case AUTH_REQUIRED:
+                AuthSession.getInstance().invalidate(this);
+                break;
         }
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

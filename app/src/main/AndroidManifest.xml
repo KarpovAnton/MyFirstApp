@@ -45,7 +45,8 @@
 
         <activity
             android:name="com.socializer.vacuum.activities.account.AccountActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"/>
 
         <activity
             android:name="com.socializer.vacuum.activities.photo.PhotoActivity"
@@ -87,7 +88,8 @@
 
         <activity
             android:name=".activities.chatlist.ChatListActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop">
         </activity>
 
     </application>

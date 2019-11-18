@@ -24,6 +24,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.socializer.vacuum.utils.Consts.TOKEN_NOT_FOUND;
+import static com.socializer.vacuum.utils.Consts.UNAUTHORIZED;
+
 public class ProfilesManager extends AbstractManager {
 
     @Inject
@@ -40,11 +43,10 @@ public class ProfilesManager extends AbstractManager {
             @Override
             public void onResponse(Call<List<ProfilePreviewDto>> call, Response<List<ProfilePreviewDto>> response) {
                 if (response.isSuccessful()) {
-
                     callback.onSuccessful(response.body());
-
                 } else {
-                    callback.onFailed(FailTypes.UNKNOWN_ERROR);
+                    if (response.code() == TOKEN_NOT_FOUND || response.code() == UNAUTHORIZED)
+                    callback.onFailed(FailTypes.AUTH_REQUIRED);
                 }
             }
 
@@ -64,11 +66,10 @@ public class ProfilesManager extends AbstractManager {
             @Override
             public void onResponse(Call<List<ProfilePreviewDto>> call, Response<List<ProfilePreviewDto>> response) {
                 if (response.isSuccessful()) {
-
                     callback.onSuccessful(response.body());
-
                 } else {
-                    callback.onFailed(FailTypes.UNKNOWN_ERROR);
+                    if (response.code() == TOKEN_NOT_FOUND || response.code() == UNAUTHORIZED)
+                        callback.onFailed(FailTypes.AUTH_REQUIRED);
                 }
             }
 
@@ -87,7 +88,12 @@ public class ProfilesManager extends AbstractManager {
         call.enqueue(new Callback<PhotoResponseDto>() {
             @Override
             public void onResponse(Call<PhotoResponseDto> call, Response<PhotoResponseDto> response) {
-                callback.onSuccessful(response.body());
+                if (response.isSuccessful()) {
+                    callback.onSuccessful(response.body());
+                } else {
+                    if (response.code() == TOKEN_NOT_FOUND || response.code() == UNAUTHORIZED)
+                        callback.onFailed(FailTypes.AUTH_REQUIRED);
+                }
             }
 
             @Override
@@ -105,7 +111,12 @@ public class ProfilesManager extends AbstractManager {
         call.enqueue(new Callback<PhotoResponseDto>() {
             @Override
             public void onResponse(Call<PhotoResponseDto> call, Response<PhotoResponseDto> response) {
-                callback.onSuccessful(response.body());
+                if (response.isSuccessful()) {
+                    callback.onSuccessful(response.body());
+                } else {
+                    if (response.code() == TOKEN_NOT_FOUND || response.code() == UNAUTHORIZED)
+                        callback.onFailed(FailTypes.AUTH_REQUIRED);
+                }
             }
 
             @Override

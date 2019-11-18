@@ -6,7 +6,7 @@ public class DialogsResponseDto extends ResponseDto {
 
     String uid;
 
-    int ts;
+    long ts;
 
     String message;
 
@@ -18,7 +18,7 @@ public class DialogsResponseDto extends ResponseDto {
         return uid;
     }
 
-    public int getTs() {
+    public long getTs() {
         return ts;
     }
 

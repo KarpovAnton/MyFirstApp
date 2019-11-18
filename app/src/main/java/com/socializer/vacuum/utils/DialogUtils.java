@@ -116,7 +116,8 @@ public class DialogUtils {
                 .buttonsGravity(GravityEnum.CENTER)
                 .onPositive(positiveCallback)
                 .onNegative(negativeCallback)
-                .cancelable(false).build();
+                .cancelable(true)
+                .build();
         dialog.show();
 
         return dialog;

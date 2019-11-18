@@ -24,6 +24,7 @@ import com.socializer.vacuum.commons.AuthenticationDialog;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
+import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.StringPreference;
 import com.vk.sdk.VKAccessToken;
@@ -43,7 +44,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 
-import static android.os.Looper.getMainLooper;
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_DEVICE_NAME;
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
 
@@ -233,7 +233,9 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
             public void run() {
                 presenter.loadAccount(profileId);
             }
-        }, 300);
+        }, 2000);
+
+        //presenter.loadAccount(profileId);
     }
 
     @Override
@@ -364,8 +366,8 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
             case UNKNOWN_ERROR:
                 //new NetworkUtils().logoutError(getApplicationContext());
                 break;
-            case CONNECTION_ERROR:
 
+            case CONNECTION_ERROR:
                 if (!isDialogShow) {
                     DialogUtils.showNetworkErrorMessage(this);
                     isDialogShow = true;
@@ -376,7 +378,10 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
                         isDialogShow = false;
                     }
                 }, 3000);
+                break;
 
+            case AUTH_REQUIRED:
+                AuthSession.getInstance().invalidate(this);
                 break;
         }
     }
