@@ -1,88 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorViolent">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-22dp"
-        android:src="@drawable/ic_group_1451"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:textColor="@color/white"
-        android:layout_gravity="center_horizontal"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:text="Hello!"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:layout_gravity="center_horizontal"
-        android:textSize="30sp"
-        android:text="What is your name?"/>
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/colorViolent">
 
-    <EditText
-        android:id="@+id/nameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginTop="28dp"
-        style="@style/EditTextStyle" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-22dp"
+            android:src="@drawable/ic_group_1451"/>
 
-    <Button
-        android:id="@+id/enterButton"
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/button_orange"
-        android:text="Войти"
-        android:textSize="19sp"
-        android:textStyle="bold"
-        android:textAllCaps="false"
-        android:textColor="@color/colorWhite"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textColor="@color/white"
+            android:layout_gravity="center_horizontal"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:text="Hello!"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="45dp"
-            android:textSize="16sp"
-            android:text="Enter via social networks"/>
+            android:textSize="30sp"
+            android:text="What is your name?"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:gravity="center">
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/nameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="28dp"
+                style="@style/EditTextStyle" />
 
             <Button
-                android:id="@+id/vkButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginRight="9dp"
-                android:background="@drawable/group1475" />
+                android:id="@+id/enterButton"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/button_orange"
+                android:text="Войти"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"/>
 
-            <Button
-                android:id="@+id/fbButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginLeft="9dp"
-                android:background="@drawable/group1476" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="45dp"
+                android:textSize="16sp"
+                android:text="Enter via social networks"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/vkButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@drawable/group1475" />
+
+                <Button
+                    android:id="@+id/fbButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="9dp"
+                    android:background="@drawable/group1476" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <ImageView
+        android:id="@+id/loadingImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:background="@color/colorViolentTranc"
+        android:src="@drawable/loading_screen"
+        android:scaleType="centerCrop"
+        android:visibility="gone">
+    </ImageView>
+</RelativeLayout>

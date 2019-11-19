@@ -76,16 +76,28 @@
         app:outcomingBubblePaddingRight="8dp"
         app:outcomingBubblePaddingLeft="8dp"
         app:dateHeaderTextSize="12dp"
-
         app:outcomingDefaultBubbleColor="@color/colorViolent"/>
 
-    <com.stfalcon.chatkit.messages.MessageInput
-        android:id="@+id/input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:inputButtonIcon="@drawable/ic_chat_send"
-        app:inputButtonBackground="@color/colorWhite"
-        app:inputHint="@string/hint_enter_a_message"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="68dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="@color/colorGreyTranc"/>
+
+        <com.stfalcon.chatkit.messages.MessageInput
+            android:id="@+id/input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:inputButtonIcon="@android:drawable/ic_menu_send"
+            app:inputButtonBackground="@drawable/chat_message_out_background"
+            app:inputHint="@string/hint_enter_a_message"
+            app:inputButtonMargin="0dp"/>
+    </RelativeLayout>
 
     <!--<LinearLayout
         android:id="@+id/inputLayout"

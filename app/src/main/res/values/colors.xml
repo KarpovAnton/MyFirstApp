@@ -7,6 +7,7 @@
     <color name="colorFont">#242424</color>
 
     <color name="colorViolent">#3C1E52</color>
+    <color name="colorViolentTranc">#633C1E52</color>
     <color name="colorOrange">#FF7154</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorWhitePressed">#BCCAF2</color>
