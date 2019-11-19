@@ -187,7 +187,7 @@ public class AccountPresenter implements AccountContract.Presenter {
     }
 
     private void checkIfAnySocialBinded() {
-        String profileId = deviceNameSP.get();
+        String profileId = deviceNameSP.get().split("@")[0];
         if (profileId != null) {
             profilesManager.getProfile(profileId, new DtoListCallback<ResponseDto>() {
                 @Override
@@ -195,13 +195,11 @@ public class AccountPresenter implements AccountContract.Presenter {
                     if (!response.isEmpty()) {
                         currentAccountDto = response.get(0);
                         List<ProfileAccountDto> accounts = currentAccountDto.getAccounts();
+                        socialSP.set("false");
                         for (int i = 0; i < accounts.size(); i++) {
                             ProfileAccountDto acc = accounts.get(i);
-                            if (acc.getKind() == VK || acc.getKind() == FB || acc.getKind() == INST) {
+                            if (acc.getKind() == VK || acc.getKind() == FB || acc.getKind() == INST)
                                 socialSP.set("true");
-                            } else {
-                                socialSP.set("false");
-                            }
                         }
                     }
                 }

@@ -116,6 +116,7 @@ public class ChatActivity extends DaggerAppCompatActivity {
                     LastMessagesResponseDto dto = response.get(i);
                     String textToSend = dto.getMessage().getText();
                     String sender = dto.getSender();
+                    long ts = dto.getMessage().getTs();//TODO ADD Date ts to message
 
                     MessageAuthor author = new MessageAuthor(sender, "", null, true);
                     Message chatMsg = new Message("0", author, textToSend);
@@ -145,7 +146,12 @@ public class ChatActivity extends DaggerAppCompatActivity {
         nameReceiverText.setText(getIntent().getStringExtra("username"));
         new ImageUtils().setImagePreview(avatarImage, getIntent().getStringExtra("photo"), R.drawable.default_avatar);
 
-        mAdapter = new MessagesListAdapter<>(ownId, null);
+        MessagesListAdapter.HoldersConfig holdersConfig = new MessagesListAdapter.HoldersConfig();
+        holdersConfig.setIncomingLayout(R.layout.item_custom_incoming_message);
+        holdersConfig.setOutcomingLayout(R.layout.item_custom_outcoming_message);
+        //holdersConfig.setDateHeaderLayout(R.layout.item_custom_date_header);
+
+        mAdapter = new MessagesListAdapter<>(ownId, holdersConfig, null);
         messagesList.setAdapter(mAdapter);
 
         inputView.setInputListener(new MessageInput.InputListener() {

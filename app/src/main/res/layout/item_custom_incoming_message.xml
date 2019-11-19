@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="20dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@color/colorBlack">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@id/messageUserAvatar"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+
+    <!--this view is needed for custom holder-->
+    <ImageView
+        android:id="@+id/onlineIndicator"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignEnd="@id/messageUserAvatar"
+        android:layout_alignRight="@id/messageUserAvatar"
+        android:layout_alignTop="@id/messageUserAvatar"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"/>
+
+    <RelativeLayout
+        android:id="@id/bubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/messageUserAvatar"
+        android:layout_toRightOf="@id/messageUserAvatar">
+
+        <ImageView
+            android:id="@+id/msgArrow"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/chat_incoming_arrow"/>
+
+        <TextView
+            android:id="@id/messageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/msgArrow"
+            android:background="@drawable/bg_white"
+            android:layout_marginLeft="-12dp"
+            android:layout_marginRight="4dp"
+            android:paddingLeft="18dp"
+            android:paddingRight="18dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"/>
+    </RelativeLayout>
+
+<!--    <TextView
+        android:id="@id/messageTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/bubble"
+        android:layout_centerVertical="true"/>-->
+</RelativeLayout>

@@ -1,5 +1,5 @@
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@id/dialogRootLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -10,11 +10,26 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@id/dialogAvatar"
+        <FrameLayout
+            android:id="@+id/dialogAvatarContainer"
             android:layout_width="@dimen/dialog_avatar_width"
             android:layout_height="@dimen/dialog_avatar_height"
-            android:layout_margin="16dp"/>
+            android:layout_margin="16dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/dialogAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_rounded"
+                    android:scaleType="centerCrop"/>
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
 
         <TextView
             android:id="@id/dialogName"
@@ -23,9 +38,9 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="19dp"
-            android:layout_toEndOf="@id/dialogAvatar"
+            android:layout_toEndOf="@id/dialogAvatarContainer"
             android:layout_toLeftOf="@id/dialogDate"
-            android:layout_toRightOf="@id/dialogAvatar"
+            android:layout_toRightOf="@id/dialogAvatarContainer"
             android:layout_toStartOf="@id/dialogDate"
             android:ellipsize="end"
             android:fontFamily="@string/font_fontFamily_medium"
@@ -51,9 +66,9 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="7dp"
-            android:layout_toEndOf="@id/dialogAvatar"
+            android:layout_toEndOf="@id/dialogAvatarContainer"
             android:layout_toLeftOf="@+id/dialogUnreadBubble"
-            android:layout_toRightOf="@id/dialogAvatar"
+            android:layout_toRightOf="@id/dialogAvatarContainer"
             android:layout_toStartOf="@+id/dialogUnreadBubble">
 
             <com.stfalcon.chatkit.utils.ShapeImageView

@@ -24,6 +24,8 @@ public class LastMessagesResponseDto extends ResponseDto {
 
         private String preview;
 
+        private long ts;
+
         public String getText() {
             return text;
         }
@@ -34,6 +36,10 @@ public class LastMessagesResponseDto extends ResponseDto {
 
         public String getPreview() {
             return preview;
+        }
+
+        public long getTs() {
+            return ts;
         }
     }
 }
