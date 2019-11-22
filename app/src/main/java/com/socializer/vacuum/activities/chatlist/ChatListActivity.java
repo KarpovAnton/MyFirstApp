@@ -9,16 +9,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.activities.ChatActivity;
 import com.socializer.vacuum.models.chat.Dialog;
 import com.socializer.vacuum.models.chat.Message;
 import com.socializer.vacuum.models.chat.MessageAuthor;
+import com.socializer.vacuum.network.data.DtoCallback;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ResponseDto;
 import com.socializer.vacuum.network.data.dto.socket.DialogsResponseDto;
 import com.socializer.vacuum.network.data.managers.ChatManager;
+import com.socializer.vacuum.network.data.managers.LoginManager;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
@@ -39,6 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
+import timber.log.Timber;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
 
@@ -46,6 +53,9 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
 
     @Inject
     ChatManager chatManager;
+
+    @Inject
+    LoginManager loginManager;
 
     @Inject
     ChatListRouter router;
@@ -99,6 +109,37 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
         dialogsListAdapter.setDatesFormatter(this);
         dialogsList.setAdapter(dialogsListAdapter);
         swipeRefreshLayout.setOnRefreshListener(this);
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Timber.d(task.getException(), "moe getInstanceId failed");
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        //String msg = getString(R.string.msg_token_fmt, token);
+                        Timber.d("moe " + token);
+                        //Toast.makeText(this, "gngn", Toast.LENGTH_SHORT).show();
+
+                        loginManager.sendPushToken(token, new DtoCallback<ResponseDto>() {
+                            @Override
+                            public void onSuccessful(@NonNull ResponseDto response) {
+                                Timber.d("moe chat act sendPushToken succ");
+                            }
+
+                            @Override
+                            public void onFailed(FailTypes fail) {
+                                Timber.d("moe chat act sendPushToken fail");
+                            }
+                        });
+                    }
+                });
     }
 
     @Override

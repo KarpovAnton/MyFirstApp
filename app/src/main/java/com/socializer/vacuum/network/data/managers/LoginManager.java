@@ -16,6 +16,7 @@ import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.RegistrationRequestDto;
 import com.socializer.vacuum.network.data.dto.RegistrationResponseDto;
 import com.socializer.vacuum.network.data.dto.ResponseDto;
+import com.socializer.vacuum.network.data.dto.SendPushTokenRequestDto;
 import com.socializer.vacuum.network.data.dto.UnBindSocialRequestDto;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.ErrorUtils;
@@ -142,37 +143,27 @@ public class LoginManager extends AbstractManager {
         });
     }
 
-    /*public void sendInstData(@NonNull String userId,
-                           @NonNull String accessToken,
-                           @NonNull long expiresIn,
-                           @NonNull final DtoCallback<?> callback) {
+    public void sendPushToken(@NonNull String access_token,
+                              @NonNull final DtoCallback<?> callback) {
 
         if (!checkNetworkAvailable(callback)) return;
 
-        Call<ProfilePreviewDto> loginConfirm = mVacuumApi.sendInstData(new LoginSocialRequestDto(userId, accessToken));
+        Call<ProfilePreviewDto> loginConfirm = mVacuumApi.sendPushToken(getTokenString(), new SendPushTokenRequestDto(access_token));
         loginConfirm.enqueue(new Callback<ProfilePreviewDto>() {
             @Override
             public void onResponse(@NonNull Call<ProfilePreviewDto> call, @NonNull Response<ProfilePreviewDto> response) {
                 if (response.isSuccessful()) {
-                    *//*LoginResponseDto body = response.body();
-                    if (body != null) {
-                        String token = body.getAccessToken();
-                        long ExpiresIn = body.getExpiresIn();
-                        authSession.update(token, ExpiresIn);
-                    }*//*
-                    authSession.update(accessToken, expiresIn);
                     if (response.body() != null)
                         callback.onSuccessful(response.body());
-                } else {
-
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<ProfilePreviewDto> call, @NonNull Throwable t) {
                 callback.onFailed(FailTypes.UNKNOWN_ERROR);
             }
         });
-    }*/
+    }
 
     public void bindSocial(@NonNull int kind,
                            @NonNull String url,

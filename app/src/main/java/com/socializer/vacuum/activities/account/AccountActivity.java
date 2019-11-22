@@ -106,12 +106,12 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
         setAccountIdFromSP();
         callbackManager = CallbackManager.Factory.create();
         fbCallbackRegistration();
-        presenter.takeView(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        presenter.takeView(this);
         presenter.loadAccount(profileId);
     }
 
@@ -228,14 +228,14 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @Override
     public void onSocialBinded() {
         setAccountIdFromSP();
-        new Handler(getMainLooper()).postDelayed(new Runnable() {
+/*        new Handler(getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 presenter.loadAccount(profileId);
             }
-        }, 2000);
+        }, 2000);*/
 
-        //presenter.loadAccount(profileId);
+        presenter.loadAccount(profileId);
     }
 
     @Override
@@ -355,8 +355,8 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         presenter.dropView();
     }
 

@@ -11,8 +11,8 @@ android {
         applicationId "com.socializer.vacuum"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 15
-        versionName "1.15"
+        versionCode 16
+        versionName "1.16"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs "en", "ru"
     }
@@ -105,4 +105,5 @@ dependencies {
     //firebase
     implementation 'com.google.firebase:firebase-core:17.2.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.firebase:firebase-messaging:20.0.1'
 }

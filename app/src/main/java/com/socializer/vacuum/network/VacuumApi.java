@@ -11,6 +11,7 @@ import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.ProfilesRequestDto;
 import com.socializer.vacuum.network.data.dto.RegistrationRequestDto;
 import com.socializer.vacuum.network.data.dto.RegistrationResponseDto;
+import com.socializer.vacuum.network.data.dto.SendPushTokenRequestDto;
 import com.socializer.vacuum.network.data.dto.UnBindSocialRequestDto;
 import com.socializer.vacuum.network.data.dto.socket.DialogsResponseDto;
 import com.socializer.vacuum.network.data.dto.socket.LastMessagesResponseDto;
@@ -65,6 +66,10 @@ public interface VacuumApi {
     @Headers("Content-Type: application/json")
     @PUT("/api/users")
     Call<PhotoResponseDto> deletePhotoImage(@Header("Authorization") String token, @Body PhotoDeleteRequestDto dto);
+
+    @Headers("Content-Type: application/json")
+    @PUT("/api/users")
+    Call<ProfilePreviewDto> sendPushToken(@Header("Authorization") String token, @Body SendPushTokenRequestDto dto);
 
     @Headers("Content-Type: application/json")
     @PUT("/api/users")

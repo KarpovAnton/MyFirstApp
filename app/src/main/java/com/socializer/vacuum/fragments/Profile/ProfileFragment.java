@@ -210,14 +210,16 @@ public class ProfileFragment extends DaggerFragment {
 
     @OnClick(R.id.chatBtn)
     void onChatBtnClick() {
-        if (socialIsBinded) {
+        if (socialIsBinded && profileDto != null) {
             Intent intent = new Intent(getContext(), ChatActivity.class);
             String deviceName = profileDto.getUserId();
             String username = profileDto.getUsername();
-            String preview = profileDto.getImages().get(0).getPreview();
-            intent.putExtra("receiverId", deviceName);
+            if (profileDto.getImages().size() > 0) {
+                String preview = profileDto.getImages().get(0).getPreview();
+                intent.putExtra("photo", preview);
+            }
             intent.putExtra("username", username);
-            intent.putExtra("photo", preview);
+            intent.putExtra("receiverId", deviceName);
             getActivity().startActivity(intent);
         } else {
             DialogUtils.showErrorMessage(getActivity(), R.string.dialog_msg_social_error);
