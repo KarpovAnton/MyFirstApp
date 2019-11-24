@@ -9,17 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.activities.ChatActivity;
 import com.socializer.vacuum.models.chat.Dialog;
 import com.socializer.vacuum.models.chat.Message;
 import com.socializer.vacuum.models.chat.MessageAuthor;
-import com.socializer.vacuum.network.data.DtoCallback;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ResponseDto;
 import com.socializer.vacuum.network.data.dto.socket.DialogsResponseDto;
@@ -45,7 +40,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
-import timber.log.Timber;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
 
@@ -110,7 +104,7 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
         dialogsList.setAdapter(dialogsListAdapter);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        FirebaseInstanceId.getInstance().getInstanceId()
+        /*FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -139,7 +133,7 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
                             }
                         });
                     }
-                });
+                });*/
     }
 
     @Override
@@ -204,6 +198,7 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
 
     @Override
     public void onRefresh() {
+        dialogsListAdapter.clear();
         loadChatList();
     }
 

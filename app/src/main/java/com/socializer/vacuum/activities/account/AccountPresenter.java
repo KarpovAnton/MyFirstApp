@@ -19,20 +19,10 @@ import com.socializer.vacuum.services.BleManager;
 import com.socializer.vacuum.utils.StringPreference;
 import com.socializer.vacuum.views.adapters.PhotosAdapter;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import static com.socializer.vacuum.activities.account.AccountActivity.FB;
 import static com.socializer.vacuum.activities.account.AccountActivity.INST;

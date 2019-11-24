@@ -1,5 +1,6 @@
 package com.socializer.vacuum.activities.main;
 
+import android.app.Activity;
 import android.bluetooth.le.AdvertiseCallback;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +29,7 @@ public interface MainContract {
 
         void refreshed();
 
-        void showErrorNetworkDialog(FailTypes fail);
+        void showErrorDialog(FailTypes fail);
 
         void showSingleItem(ProfilePreviewDto profileDto);
 
@@ -42,10 +43,6 @@ public interface MainContract {
 
         void refresh();
 
-        boolean isBlueEnable();
-
-        void startAdvertising();
-
         void startScan();
 
         void loadTestProfiles();
@@ -53,5 +50,9 @@ public interface MainContract {
         void clearAdapter();
 
         void setBtName();
+
+        void startAdvertise(AdvertiseCallback callback);
+
+        boolean isBlueEnable(Activity activity);
     }
 }

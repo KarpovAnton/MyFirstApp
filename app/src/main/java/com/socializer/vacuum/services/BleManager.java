@@ -1,5 +1,6 @@
 package com.socializer.vacuum.services;
 
+import android.app.Activity;
 import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -12,16 +13,23 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.widget.Toast;
+
+import com.socializer.vacuum.R;
 
 import java.util.List;
 
 import timber.log.Timber;
 
 import static android.os.Looper.getMainLooper;
+import static com.socializer.vacuum.activities.main.MainActivity.REQUEST_ENABLE_BT;
 
 public class BleManager {
+    public static final int ADVERTISING_ERROR = 123;
+
     public enum BluetoothState {ENABLE, DISABLE, NOT_SUPPORT, TURNED_ON, CANCELED}
 
     private Application context;
@@ -55,9 +63,6 @@ public class BleManager {
     public void setBluetoothAdapterName(String name) {
         bluetoothAdapter.setName(name);
         Timber.d("moe bladapter set name %s", name);
-
-        stopAdvertising(callback);
-        startAdvertising(callback);
     }
 
     public Context getContext() {
@@ -135,6 +140,17 @@ public class BleManager {
         return bluetoothAdapter != null && bluetoothAdapter.isEnabled();
     }
 
+    public boolean isBlueEnable(Activity activity) {
+        if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
+            return true;
+        } else {
+            Toast.makeText(activity, R.string.bluetooth_canceled, Toast.LENGTH_SHORT).show();
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            return false;
+        }
+    }
+
     public List<String> getAllConnectedDevice() {
         return null;
     }
@@ -174,8 +190,6 @@ public class BleManager {
             throw new IllegalArgumentException("ScanCallback can not be Null!");
         }
 
-        if (!isBlueEnable()) return;
-
         final BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
         List<ScanFilter> scanFilters = null;
         ScanSettings scanSettings = buildScanSettings();
@@ -208,21 +222,6 @@ public class BleManager {
     }
 
     /**
-     * scan device then connect
-     *
-     * @param callback
-     */
-    public void scanAndConnect(ScanCallback callback) {
-        if (callback == null) {
-            throw new IllegalArgumentException("BleScanAndConnectCallback can not be Null!");
-        }
-
-        if (!isBlueEnable()) return;
-
-        //todo
-    }
-
-    /**
      * connect a device through its mac without scan,whether or not it has been connected
      */
     /*public BluetoothGatt connect(String mac, BleGattCallback bleGattCallback) {
@@ -237,6 +236,10 @@ public class BleManager {
 
     public void startAdvertising(AdvertiseCallback callback) {
         BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
+        if (advertiser == null) {
+            callback.onStartFailure(ADVERTISING_ERROR);
+            return;
+        }
 
         AdvertiseSettings settings = new AdvertiseSettings.Builder()
                 .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
@@ -256,24 +259,5 @@ public class BleManager {
         BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
         advertiser.stopAdvertising(callback);
         Timber.d("moe stopAdvertising ");
-    }
-
-    private AdvertiseCallback callback = new AdvertiseCallback() {
-        @Override
-        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-            super.onStartSuccess(settingsInEffect);
-            Timber.d("moe Device share successful");
-        }
-
-        @Override
-        public void onStartFailure(int errorCode) {
-            super.onStartFailure(errorCode);
-            Timber.d("moe Устройству не удалось раздать Bluetooth");
-
-        }
-    };
-
-    public AdvertiseCallback getCallback() {
-        return callback;
     }
 }

@@ -1,5 +1,6 @@
 package com.socializer.vacuum.activities.main;
 
+import android.app.Activity;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
@@ -132,7 +133,7 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
                         @Override
                         public void onFailed(FailTypes fail) {
                             if (view != null)
-                                view.showErrorNetworkDialog(fail);
+                                view.showErrorDialog(fail);
                         }
                     });
                 }
@@ -153,13 +154,8 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
     }
 
     @Override
-    public boolean isBlueEnable() {
-        return bleManager.isBlueEnable();
-    }
-
-    @Override
-    public void startAdvertising() {
-        bleManager.startAdvertising(bleManager.getCallback());
+    public boolean isBlueEnable(Activity activity) {
+        return bleManager.isBlueEnable(activity);
     }
 
     @Override
@@ -211,7 +207,7 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
             @Override
             public void onFailed(FailTypes fail) {
                 if (view != null)
-                    view.showErrorNetworkDialog(fail);
+                    view.showErrorDialog(fail);
             }
         });
     }
@@ -229,7 +225,6 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
         devices.clear();
         addedUsersId.clear();
         clearAdapter();
-        //loadTestProfiles();
         if (view != null) {
             view.hideSingleItem();
             view.refreshed();
@@ -247,5 +242,10 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
         if (deviceNameSP != null)
             userID = deviceNameSP.get();
         bleManager.setBluetoothAdapterName(userID);
+    }
+
+    @Override
+    public void startAdvertise(AdvertiseCallback callback) {
+        bleManager.startAdvertising(callback);
     }
 }

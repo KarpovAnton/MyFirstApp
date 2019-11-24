@@ -91,8 +91,8 @@
             tools:text="Anton"/>
 
         <RelativeLayout
-            android:layout_width="260dp"
-            android:layout_height="260dp"
+            android:layout_width="285dp"
+            android:layout_height="285dp"
             android:layout_marginTop="18dp"
             android:layout_gravity="center_horizontal">
 
@@ -110,16 +110,16 @@
 
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/viewPager"
-                        android:layout_width="260dp"
-                        android:layout_height="260dp"
+                        android:layout_width="285dp"
+                        android:layout_height="285dp"
                         android:background="@drawable/bg_rounded"/>
                 </androidx.cardview.widget.CardView>
             </FrameLayout>
 
             <TextView
                 android:id="@+id/vpPlaceholder"
-                android:layout_width="260dp"
-                android:layout_height="260dp"
+                android:layout_width="285dp"
+                android:layout_height="285dp"
                 android:background="@drawable/ph_bg"
                 android:text="Нет фото"
                 android:textStyle="bold"
@@ -139,24 +139,24 @@
 
             <ImageView
                 android:id="@+id/vkButton"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:src="@drawable/ic_vk" />
 
             <ImageView
                 android:id="@+id/instButton"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:src="@drawable/ic_instagram"/>
 
             <ImageView
                 android:id="@+id/fbButton"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:src="@drawable/ic_fb"/>
@@ -174,7 +174,7 @@
         <Button
             android:id="@+id/editPhotoButton"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="54dp"
             android:background="@drawable/button_orange"
             android:text="Мои фото"
             android:textColor="@drawable/button_orange_text_bg"

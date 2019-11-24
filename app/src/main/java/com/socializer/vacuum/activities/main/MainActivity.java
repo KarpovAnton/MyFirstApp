@@ -1,7 +1,8 @@
 package com.socializer.vacuum.activities.main;
 
 import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.le.AdvertiseCallback;
+import android.bluetooth.le.AdvertiseSettings;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -26,6 +27,7 @@ import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
+import com.socializer.vacuum.services.BleManager;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
 import com.socializer.vacuum.utils.StringPreference;
@@ -41,6 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
+import timber.log.Timber;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
 import static com.socializer.vacuum.utils.Consts.LOCATION_PERMISSION_CODE;
@@ -82,6 +85,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
     //private boolean testIsLoaded;
     private boolean isDialogShow;
     private ProfilePreviewDto singleItemProfileDto;
+    private boolean isBLdialogShowed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +96,12 @@ public class MainActivity extends DaggerAppCompatActivity implements
         VacuumApplication.getInstance().initSocket();
         initViews();
         checkPermissions();
-        presenter.setBtName();
+        if (presenter.isBlueEnable(this)) {
+            presenter.setBtName();
+            presenter.startAdvertise(callback);
+        } else {
+            isBLdialogShowed = true;
+        }
     }
 
     @Override
@@ -106,25 +115,15 @@ public class MainActivity extends DaggerAppCompatActivity implements
         super.onResume();
 
         presenter.refresh();
-        attemptStartScanAndAdvertising();
-
-/*        if (isBluetoothOn && !testIsLoaded) {
-            presenter.loadTestProfiles();
-        }*/
-
+        attemptStartScan();
     }
 
-    private void attemptStartScanAndAdvertising() {
-        if (presenter.isBlueEnable()) {
-            isBluetoothOn = true;
-            presenter.startScan();
-            if (!isAdvertising) {
-                //presenter.startAdvertising(/*advertisingCallback*/);
+    private void attemptStartScan() {
+        if (!isBLdialogShowed) {
+            if (presenter.isBlueEnable(this)) {
+                isBluetoothOn = true;
+                presenter.startScan();
             }
-        } else {
-            Toast.makeText(this, R.string.bluetooth_canceled, Toast.LENGTH_SHORT).show();
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
     }
 
@@ -152,6 +151,9 @@ public class MainActivity extends DaggerAppCompatActivity implements
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, R.string.bluetooth_on, Toast.LENGTH_SHORT).show();
                 isBluetoothOn = true;
+                isBLdialogShowed = false;
+                presenter.setBtName();
+                presenter.startAdvertise(callback);
             } else {
                 Toast.makeText(this, R.string.bluetooth_canceled, Toast.LENGTH_SHORT).show();
                 finish();
@@ -202,7 +204,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
         Configuration configuration = getResources().getConfiguration();
         int screenWidthDp = configuration.screenWidthDp;
-        int smallestScreenWidthDp = configuration.smallestScreenWidthDp;
 
         final float scale = getResources().getDisplayMetrics().density;
         int pixels = (int) (screenWidthDp * scale + 0.5f);
@@ -292,11 +293,11 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Override
     public void onRefresh() {
         presenter.refresh();
+        presenter.isBlueEnable(this);
     }
 
     @Override
     public void refreshed() {
-        //testIsLoaded = true;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -307,10 +308,10 @@ public class MainActivity extends DaggerAppCompatActivity implements
     }
 
     @Override
-    public void showErrorNetworkDialog(FailTypes fail) {
+    public void showErrorDialog(FailTypes fail) {
         switch (fail) {
             case UNKNOWN_ERROR:
-                //new NetworkUtils().logoutError(this);
+                DialogUtils.showErrorMessage(this, R.string.bluetooth_adv_error);
                 break;
             case CONNECTION_ERROR:
 
@@ -339,6 +340,23 @@ public class MainActivity extends DaggerAppCompatActivity implements
             }
         });
     }
+
+    private AdvertiseCallback callback = new AdvertiseCallback() {
+        @Override
+        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+            super.onStartSuccess(settingsInEffect);
+            Timber.d("moe Device share successful");
+        }
+
+        @Override
+        public void onStartFailure(int errorCode) {
+            super.onStartFailure(errorCode);
+            if (errorCode == BleManager.ADVERTISING_ERROR) {
+                showErrorDialog(FailTypes.UNKNOWN_ERROR);
+            }
+            Timber.d("moe Устройству не удалось раздать Bluetooth");
+        }
+    };
 
     @Override
     protected void onStop() {
