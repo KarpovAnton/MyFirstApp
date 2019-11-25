@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF7154</color>
 
     <color name="colorViolent">#3C1E52</color>
-    <color name="colorViolentTranc">#633C1E52</color>
+    <color name="colorViolentTranc">#993C1E52</color>
     <color name="colorOrange">#FF7154</color>
     <color name="colorTranc">#00000000</color>
     <color name="colorFont">#242424</color>
@@ -18,5 +18,6 @@
     <color name="colorGrey">#757575</color>
     <color name="colorGreyLight">#F5F5F5</color>
     <color name="colorGreyTranc">#55757575</color>
+    <color name="colorGreyBg">#E6E6E6</color>
 
 </resources>

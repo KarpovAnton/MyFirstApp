@@ -92,14 +92,23 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/loadingImage"
+    <RelativeLayout
+        android:id="@+id/loadingScreen"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:background="@color/colorViolentTranc"
-        android:src="@drawable/loading_screen"
-        android:scaleType="centerCrop"
-        android:visibility="gone">
-    </ImageView>
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="@color/colorViolentTranc"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_loading" />
+    </RelativeLayout>
 </RelativeLayout>

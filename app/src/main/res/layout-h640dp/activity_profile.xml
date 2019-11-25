@@ -16,11 +16,11 @@
         <RelativeLayout
             android:id="@+id/barLayout"
             android:layout_width="match_parent"
-            android:layout_height="95dp">
+            android:layout_height="113dp">
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="76dp"
+                android:layout_height="92dp"
                 android:background="@color/colorViolent"
                 android:src="@drawable/header_bg"/>
 
@@ -28,7 +28,7 @@
                 android:id="@+id/backBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="22dp"
+                android:paddingTop="40dp"
                 android:paddingLeft="20dp"
                 android:paddingBottom="10dp"
                 android:paddingRight="15dp"
@@ -38,12 +38,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="26dp"
                 android:src="@drawable/logo"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="38dp"
+                android:layout_height="42dp"
                 android:layout_alignParentBottom="true"
                 style="?android:attr/buttonBarStyle"
                 android:orientation="horizontal">
@@ -82,18 +82,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:singleLine="true"
             android:textColor="@color/colorViolent"
-            android:textSize="25sp"
+            android:textSize="26sp"
             android:textStyle="bold"
             android:ellipsize="marquee"
             tools:text="Anton"/>
 
         <RelativeLayout
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="275dp"
+            android:layout_height="275dp"
+            android:layout_marginTop="12dp"
             android:layout_gravity="center_horizontal">
 
             <FrameLayout
@@ -110,16 +110,16 @@
 
                     <androidx.viewpager.widget.ViewPager
                         android:id="@+id/viewPager"
-                        android:layout_width="240dp"
-                        android:layout_height="240dp"
+                        android:layout_width="275dp"
+                        android:layout_height="275dp"
                         android:background="@drawable/bg_rounded"/>
                 </androidx.cardview.widget.CardView>
             </FrameLayout>
 
             <RelativeLayout
                 android:id="@+id/vpPlaceholder"
-                android:layout_width="240dp"
-                android:layout_height="240dp"
+                android:layout_width="275dp"
+                android:layout_height="275dp"
                 android:visibility="gone">
 
                 <TextView
@@ -143,30 +143,30 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="18dp"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal">
 
             <ImageView
                 android:id="@+id/vkButton"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:src="@drawable/ic_vk" />
 
             <ImageView
                 android:id="@+id/instButton"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:src="@drawable/ic_instagram"/>
 
             <ImageView
                 android:id="@+id/fbButton"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:src="@drawable/ic_fb"/>
@@ -176,7 +176,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="14dp"
             android:layout_marginBottom="2dp"
             android:text="regular"/>
 
@@ -198,11 +198,11 @@
         <Button
             android:id="@+id/editPhotoButton"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="50dp"
             android:background="@drawable/button_orange"
             android:text="Мои фото"
             android:textColor="@drawable/button_orange_text_bg"
-            android:textSize="18sp"
+            android:textSize="19sp"
             android:textStyle="bold"
             android:textAllCaps="false" />
 
@@ -210,8 +210,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="6dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="10dp"
             android:textColor="#C2C0C4"
             android:textSize="12sp"
             android:textStyle="bold"

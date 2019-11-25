@@ -204,6 +204,9 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
         Configuration configuration = getResources().getConfiguration();
         int screenWidthDp = configuration.screenWidthDp;
+        int screenHeightDp = configuration.screenHeightDp;
+        Timber.d("moe screenWidthDp " + screenWidthDp);
+        Timber.d("moe screenHeightDp " + screenHeightDp);
 
         final float scale = getResources().getDisplayMetrics().density;
         int pixels = (int) (screenWidthDp * scale + 0.5f);

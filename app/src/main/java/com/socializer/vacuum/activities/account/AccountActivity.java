@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -76,7 +77,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     TextView nameText;
 
     @BindView(R.id.vpPlaceholder)
-    TextView vpPlaceholder;
+    RelativeLayout vpPlaceholder;
 
     @BindView(R.id.vkButton)
     ImageView vkButton;
