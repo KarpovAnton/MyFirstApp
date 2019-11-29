@@ -96,11 +96,32 @@
             android:launchMode="singleTop">
         </activity>
 
-        <!--<service
+<!--        <service
             android:name=".services.FirebaseMsgService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>-->
+
+<!--        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.example.gcm" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="com.example.gcm" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.example.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>-->
 

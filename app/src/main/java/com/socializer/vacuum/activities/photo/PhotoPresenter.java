@@ -89,23 +89,23 @@ public class PhotoPresenter implements PhotoContract.Presenter, PhotoEditAdapter
 
     @Override
     public void onClickDeleteImage(int pos) {
-        String deletePhotoUrl = adapter.getUrlPhotoByPos(pos);
-        profilesManager.deletePhotoImage(deletePhotoUrl, new DtoCallback<ResponseDto>() {
-            @Override
-            public void onSuccessful(@NonNull ResponseDto response) {
+        if (pos < adapter.getItemCount()) {
+            String deletePhotoUrl = adapter.getUriPhotoByPos(pos);
+            profilesManager.deletePhotoImage(deletePhotoUrl, new DtoCallback<ResponseDto>() {
+                @Override
+                public void onSuccessful(@NonNull ResponseDto response) {
 
-            }
+                }
 
-            @Override
-            public void onFailed(FailTypes fail) {
-                if (view != null)
-                    view.showErrorNetworkDialog(fail);
-            }
-        });
+                @Override
+                public void onFailed(FailTypes fail) {
+                    if (view != null)
+                        view.showErrorNetworkDialog(fail);
+                }
+            });
 
-        adapter.onRemove(pos);
-        /*if (view != null)
-            view.onRemoveImage(pos);*/
+            adapter.onRemove(pos);
+        }
     }
 
     @Override

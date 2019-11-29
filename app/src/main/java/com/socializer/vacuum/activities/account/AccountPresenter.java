@@ -1,5 +1,7 @@
 package com.socializer.vacuum.activities.account;
 
+import android.bluetooth.le.AdvertiseCallback;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -144,7 +146,6 @@ public class AccountPresenter implements AccountContract.Presenter {
                         String newId = result.getUserId();
                         String deviceName = newId + BASE_DEVICE_NAME_PART;
                         deviceNameSP.set(deviceName);
-                        bleManager.setBluetoothAdapterName(deviceName);
                         socialSP.set("true");
                         if (view != null)
                             view.onSocialBinded();
@@ -243,5 +244,12 @@ public class AccountPresenter implements AccountContract.Presenter {
                 return;
             }
         }
+    }
+
+    @Override
+    public void restartAdvertising(AdvertiseCallback advertiseCallback, String deviceName) {
+        bleManager.stopAdvertising(advertiseCallback);
+        bleManager.setBluetoothAdapterName(deviceName);
+        bleManager.startAdvertising(advertiseCallback);
     }
 }

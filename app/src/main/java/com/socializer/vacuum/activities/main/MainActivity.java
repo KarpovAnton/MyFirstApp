@@ -22,10 +22,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.VacuumApplication;
+import com.socializer.vacuum.network.data.DtoCallback;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
+import com.socializer.vacuum.network.data.dto.ResponseDto;
+import com.socializer.vacuum.network.data.managers.LoginManager;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.services.BleManager;
 import com.socializer.vacuum.utils.DialogUtils;
@@ -62,6 +69,9 @@ public class MainActivity extends DaggerAppCompatActivity implements
     MainRouter router;
 
     @Inject
+    LoginManager loginManager;
+
+    @Inject
     @Named(NAMED_PREF_SOCIAL)
     StringPreference socialSP;
 
@@ -96,12 +106,46 @@ public class MainActivity extends DaggerAppCompatActivity implements
         VacuumApplication.getInstance().initSocket();
         initViews();
         checkPermissions();
+        //sendPushToken();
         if (presenter.isBlueEnable(this)) {
             presenter.setBtName();
             presenter.startAdvertise(callback);
         } else {
             isBLdialogShowed = true;
         }
+    }
+
+    private void sendPushToken() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Timber.d(task.getException(), "moe getInstanceId failed");
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        //String msg = getString(R.string.msg_token_fmt, token);
+                        Timber.d("moe " + token);
+                        //Toast.makeText(this, "gngn", Toast.LENGTH_SHORT).show();
+
+                        loginManager.sendPushToken(token, new DtoCallback<ResponseDto>() {
+                            @Override
+                            public void onSuccessful(@NonNull ResponseDto response) {
+                                Timber.d("moe chat act sendPushToken succ");
+                            }
+
+                            @Override
+                            public void onFailed(FailTypes fail) {
+                                Timber.d("moe chat act sendPushToken fail");
+                            }
+                        });
+                    }
+                });
     }
 
     @Override
@@ -178,11 +222,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @OnClick(R.id.chatListBtn)
     void onChatListBtnClick() {
-        if (socialSP.get().equals("true")) {
-            router.openChatListActivity();
-        } else {
-            DialogUtils.showErrorMessage(this, R.string.dialog_msg_social_error);
-        }
+        router.openChatListActivity();
     }
 
     private void initViews() {
@@ -262,12 +302,12 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     private void setAvatarPlaceholder() {
         new ImageUtils().setImage(avatarImage, null, null,
-                R.drawable.default_avatar);
+                R.drawable.ph_photo);
     }
 
     private void setAvatar(String preview, String url) {
         new ImageUtils().setAuthImage(this, avatarImage, url, preview,
-                R.drawable.default_avatar);
+                R.drawable.ph_photo);
     }
 
     private void setName(String username) {

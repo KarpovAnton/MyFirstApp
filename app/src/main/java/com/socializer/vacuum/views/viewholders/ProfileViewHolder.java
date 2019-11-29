@@ -58,12 +58,12 @@ public class ProfileViewHolder extends RecyclerView.ViewHolder {
 
     private void setAvatarPlaceholder() {
         new ImageUtils().setImage(avatarImage, null, null,
-                R.drawable.default_avatar);
+                R.drawable.ph_photo);
     }
 
     private void setAvatar(String preview, String url) {
         new ImageUtils().setAuthImage(context, avatarImage, url, preview,
-                R.drawable.default_avatar);
+                R.drawable.ph_photo);
     }
 
     private void setName(String username) {

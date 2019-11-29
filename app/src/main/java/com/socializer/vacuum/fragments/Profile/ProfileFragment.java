@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -34,7 +35,6 @@ import dagger.android.support.DaggerFragment;
 
 import static com.socializer.vacuum.activities.account.AccountActivity.FB;
 import static com.socializer.vacuum.activities.account.AccountActivity.INST;
-import static com.socializer.vacuum.activities.account.AccountActivity.NOONE;
 import static com.socializer.vacuum.activities.account.AccountActivity.VK;
 import static com.socializer.vacuum.activities.account.AccountPresenter.FB_BASE_URL;
 import static com.socializer.vacuum.activities.account.AccountPresenter.INST_BASE_URL;
@@ -44,6 +44,7 @@ import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SO
 public class ProfileFragment extends DaggerFragment {
 
     private ProfilePreviewDto profileDto;
+    private boolean callFromChat;
     private String fbProfileId;
     private String vkProfileId;
     private String instProfileId;
@@ -57,6 +58,9 @@ public class ProfileFragment extends DaggerFragment {
 
     @BindView(R.id.viewPager)
     ViewPager viewPager;
+
+    @BindView(R.id.vpPlaceholder)
+    RelativeLayout vpPlaceholder;
 
     @BindView(R.id.nameText)
     TextView nameText;
@@ -77,6 +81,11 @@ public class ProfileFragment extends DaggerFragment {
         profileDto = profilePreviewDto;
     }
 
+    public void configure(ProfilePreviewDto profilePreviewDto, boolean fromChatActivity) {
+        profileDto = profilePreviewDto;
+        callFromChat = fromChatActivity;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +104,11 @@ public class ProfileFragment extends DaggerFragment {
 
         if (profileDto == null) return;
         List<ProfileImageDto> photos = profileDto.getImages();
-        photosAdapter.setPhotos(photos);
+        if (!photos.isEmpty()) {
+            photosAdapter.setPhotos(photos);
+        } else {
+            vpPlaceholder.setVisibility(View.VISIBLE);
+        }
 
         viewPager.setAdapter(photosAdapter);
 
@@ -200,16 +213,23 @@ public class ProfileFragment extends DaggerFragment {
                         }
                     });
                     break;
-                case NOONE:
-                    break;
                 default:
-                    throw new IllegalStateException("unknown type");
+                    break;
             }
         }
     }
 
     @OnClick(R.id.chatBtn)
     void onChatBtnClick() {
+        if (callFromChat) {
+/*            for (Fragment fragment : getActivity().getSupportFragmentManager().getFragments()) {
+                if (fragment != null)
+                    getActivity().getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }*/
+            onBackBtnClick();
+            return;
+        }
+
         if (socialIsBinded && profileDto != null) {
             Intent intent = new Intent(getContext(), ChatActivity.class);
             String deviceName = profileDto.getUserId();

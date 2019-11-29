@@ -57,7 +57,7 @@ public class PhotoEditAdapter extends BaseAdapter<PhotoEditItem, RecyclerView.Vi
         });
     }
 
-    public String getUrlPhotoByPos(int pos) {
+    public String getUriPhotoByPos(int pos) {
         return items.get(pos).getUri();
     }
 

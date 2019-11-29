@@ -8,11 +8,11 @@
     <RelativeLayout
         android:id="@+id/barLayout"
         android:layout_width="match_parent"
-        android:layout_height="113dp">
+        android:layout_height="95dp">
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="92dp"
+            android:layout_height="76dp"
             android:background="@color/colorViolent"
             android:src="@drawable/header_bg"/>
 
@@ -20,7 +20,7 @@
             android:id="@+id/backBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="40dp"
+            android:paddingTop="22dp"
             android:paddingLeft="20dp"
             android:paddingBottom="10dp"
             android:paddingRight="15dp"
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="16dp"
             android:src="@drawable/logo"/>
 
         <LinearLayout

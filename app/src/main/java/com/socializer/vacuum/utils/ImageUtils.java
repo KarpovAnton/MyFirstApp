@@ -52,7 +52,7 @@ public class ImageUtils {
             Glide.with(context)
                     .load(imageUrl)
                     .apply(options)
-                    .error(R.drawable.close_blue)
+                    .error(R.drawable.ph_photo)
                     .into(target);
         } else {
             setImagePreview(target, imagePreview, imageDefault);
@@ -74,7 +74,7 @@ public class ImageUtils {
             Glide.with(context)
                     .load(imageUrl)
                     .apply(options)
-                    .error(R.drawable.close_blue)
+                    .error(R.drawable.ph_photo)
                     .into(target);
         } else {
             setImagePreview(target, imagePreview, imageDefault);

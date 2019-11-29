@@ -3,7 +3,6 @@ package com.socializer.vacuum.services;
 import android.app.Activity;
 import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
@@ -34,7 +33,6 @@ public class BleManager {
 
     private Application context;
     private BluetoothAdapter bluetoothAdapter;
-    private BluetoothManager bluetoothManager;
 
     public static final int DEFAULT_SCAN_TIME = 10000;
     private static final int DEFAULT_MAX_MULTIPLE_DEVICE = 7;
@@ -52,9 +50,6 @@ public class BleManager {
     public BleManager(Application app) {
         if (context == null && app != null) {
             context = app;
-            if (isSupportBle()) {
-                bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
-            }
             bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         }
     }
@@ -67,10 +62,6 @@ public class BleManager {
 
     public Context getContext() {
         return context;
-    }
-
-    public BluetoothManager getBluetoothManager() {
-        return bluetoothManager;
     }
 
     public BluetoothAdapter getBluetoothAdapter() {
@@ -155,30 +146,6 @@ public class BleManager {
         return null;
     }
 
-    /*public int getConnectState(BleDevice bleDevice) {
-        if (bleDevice != null) {
-            return bluetoothManager.getConnectionState(bleDevice.getDevice(), BluetoothProfile.GATT);
-        } else {
-            return BluetoothProfile.STATE_DISCONNECTED;
-        }
-    }
-
-    public boolean isConnected(BleDevice bleDevice) {
-        return getConnectState(bleDevice) == BluetoothProfile.STATE_CONNECTED;
-    }
-
-    public boolean isConnected(String mac) {
-        List<BleDevice> list = getAllConnectedDevice();
-        for (BleDevice bleDevice : list) {
-            if (bleDevice != null) {
-                if (bleDevice.getMac().equals(mac)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }*/
-
     private ScanSettings buildScanSettings() {
         ScanSettings.Builder builder = new ScanSettings.Builder();
         builder.setScanMode(ScanSettings.SCAN_MODE_LOW_POWER);
@@ -195,15 +162,6 @@ public class BleManager {
         ScanSettings scanSettings = buildScanSettings();
 
         if (!mScanning) {
-            // Stops scanning after a pre-defined scan period.
-/*            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScanning = false;
-                    bluetoothLeScanner.stopScan(callback);
-                }
-            }, DEFAULT_SCAN_TIME);*/
-
             mScanning = true;
             bluetoothLeScanner.startScan(scanFilters, scanSettings, callback);
         } else {
@@ -220,15 +178,6 @@ public class BleManager {
 
         }
     }
-
-    /**
-     * connect a device through its mac without scan,whether or not it has been connected
-     */
-    /*public BluetoothGatt connect(String mac, BleGattCallback bleGattCallback) {
-        BluetoothDevice bluetoothDevice = getBluetoothAdapter().getRemoteDevice(mac);
-        BleDevice bleDevice = new BleDevice(bluetoothDevice, 0, null, 0);
-        return connect(bleDevice, bleGattCallback);
-    }*/
 
     public void cancelScan() {
         //BleScanner.getInstance().stopLeScan();

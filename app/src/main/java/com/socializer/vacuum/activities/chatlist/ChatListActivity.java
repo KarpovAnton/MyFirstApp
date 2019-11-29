@@ -19,7 +19,6 @@ import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ResponseDto;
 import com.socializer.vacuum.network.data.dto.socket.DialogsResponseDto;
 import com.socializer.vacuum.network.data.managers.ChatManager;
-import com.socializer.vacuum.network.data.managers.LoginManager;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
@@ -47,9 +46,6 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
 
     @Inject
     ChatManager chatManager;
-
-    @Inject
-    LoginManager loginManager;
 
     @Inject
     ChatListRouter router;
@@ -82,9 +78,10 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
         dialogsListAdapter = new DialogsListAdapter<>(R.layout.item_dialog, new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, @Nullable String url, @Nullable Object payload) {
-                new ImageUtils().setImagePreview(imageView, url, R.drawable.default_avatar);
+                new ImageUtils().setImagePreview(imageView, url, R.drawable.ph_photo);
             }
         });
+
         dialogsListAdapter.setOnDialogClickListener(new DialogsListAdapter.OnDialogClickListener<Dialog>() {
             @Override
             public void onDialogClick(Dialog dialog) {
@@ -92,9 +89,7 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
                 String dialogName = dialog.getDialogName();
                 String dialogPhoto = dialog.getDialogPhoto();
                 Intent intent = new Intent(VacuumApplication.applicationContext, ChatActivity.class);
-                /*String deviceName = profileDto.getUserId();
-                String username = profileDto.getUsername();*/
-                intent.putExtra("receiverId", dialogId);//TODO дилогайди здесь свонго акка, нужно вытаскивать ид собеседника
+                intent.putExtra("receiverId", dialogId);
                 intent.putExtra("username", dialogName);
                 intent.putExtra("photo", dialogPhoto);
                 startActivity(intent);
@@ -103,37 +98,6 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
         dialogsListAdapter.setDatesFormatter(this);
         dialogsList.setAdapter(dialogsListAdapter);
         swipeRefreshLayout.setOnRefreshListener(this);
-
-        /*FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Timber.d(task.getException(), "moe getInstanceId failed");
-                            return;
-                        }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        // Log and toast
-                        //String msg = getString(R.string.msg_token_fmt, token);
-                        Timber.d("moe " + token);
-                        //Toast.makeText(this, "gngn", Toast.LENGTH_SHORT).show();
-
-                        loginManager.sendPushToken(token, new DtoCallback<ResponseDto>() {
-                            @Override
-                            public void onSuccessful(@NonNull ResponseDto response) {
-                                Timber.d("moe chat act sendPushToken succ");
-                            }
-
-                            @Override
-                            public void onFailed(FailTypes fail) {
-                                Timber.d("moe chat act sendPushToken fail");
-                            }
-                        });
-                    }
-                });*/
     }
 
     @Override
@@ -214,11 +178,7 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
 
     @OnClick(R.id.profileButton)
     void onProfileButtonClick() {
-        if (socialSP.get().equals("true")) {
-            router.openAccountActivity();
-        } else {
-            DialogUtils.showErrorMessage(this, R.string.dialog_msg_social_error);
-        }
+        router.openAccountActivity();
     }
 
     @OnClick(R.id.backBtn)

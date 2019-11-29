@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginRight="20dp"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:background="@color/colorBlack">
+    tools:background="@color/colorGreyTranc">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@id/messageUserAvatar"
@@ -51,10 +51,11 @@
             android:paddingTop="8dp"/>
     </RelativeLayout>
 
-<!--    <TextView
+    <TextView
         android:id="@id/messageTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/bubble"
-        android:layout_centerVertical="true"/>-->
+        android:layout_centerVertical="true"
+        tools:text="17:12"/>
 </RelativeLayout>

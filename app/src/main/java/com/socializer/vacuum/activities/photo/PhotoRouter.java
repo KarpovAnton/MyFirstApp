@@ -17,7 +17,7 @@ public class PhotoRouter implements PhotoContract.Router {
     }
 
     @Override
-    public void openProfileActivity() {
+    public void openChatListActivity() {
         Intent mainIntent = new Intent(activity.getApplicationContext(), ChatListActivity.class);
         activity.startActivity(mainIntent);
     }

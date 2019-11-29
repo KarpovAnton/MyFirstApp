@@ -11,7 +11,7 @@ public interface PhotoContract {
 
     interface Router {
 
-        void openProfileActivity();
+        void openChatListActivity();
 
         void openAccountActivity();
     }

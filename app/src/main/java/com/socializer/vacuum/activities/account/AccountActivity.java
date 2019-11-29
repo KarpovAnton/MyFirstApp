@@ -1,15 +1,20 @@
 package com.socializer.vacuum.activities.account;
 
+import android.bluetooth.le.AdvertiseCallback;
+import android.bluetooth.le.AdvertiseSettings;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -26,6 +31,7 @@ import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
+import com.socializer.vacuum.services.BleManager;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.StringPreference;
 import com.vk.sdk.VKAccessToken;
@@ -44,16 +50,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
+import timber.log.Timber;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_DEVICE_NAME;
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
+import static com.socializer.vacuum.utils.Consts.BASE_DEVICE_NAME_PART;
 
 public class AccountActivity extends DaggerAppCompatActivity implements AccountContract.View, AuthenticationDialog.AuthInstListener {
 
     public static final int FB = 0;
     public static final int VK = 1;
     public static final int INST = 2;
-    public static final int NOONE = 3;
 
 
     @Inject
@@ -76,8 +83,17 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @BindView(R.id.nameText)
     TextView nameText;
 
+    @BindView(R.id.aboutText)
+    TextView aboutText;
+
     @BindView(R.id.vpPlaceholder)
-    RelativeLayout vpPlaceholder;
+    RelativeLayout vpPh;
+
+    @BindView(R.id.barLayout)
+    RelativeLayout barLayout;
+
+    @BindView(R.id.cardView)
+    CardView cardView;
 
     @BindView(R.id.vkButton)
     ImageView vkButton;
@@ -99,8 +115,18 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_account);
         ButterKnife.bind(this);
+
+        aboutText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://www.vacuum.live/ru/privacy_policy.htm";
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+            }
+        });
         vkButton.setImageAlpha(100);
         fbButton.setImageAlpha(100);
         instButton.setImageAlpha(100);
@@ -130,10 +156,21 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
                 imageList.add(imageDto.getUrl());
             }
         }
+
+        viewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) cardView.getLayoutParams();
+                params.width = cardView.getHeight();
+                params.height = cardView.getHeight();
+                cardView.setLayoutParams(params);
+            }
+        });
+
         if (imageList.size() > 0) {
-            vpPlaceholder.setVisibility(View.GONE);
+            vpPh.setVisibility(View.GONE);
         } else {
-            vpPlaceholder.setVisibility(View.VISIBLE);
+            vpPh.setVisibility(View.VISIBLE);
         }
 
         nameText.setText(accountDto.getUsername());
@@ -229,14 +266,52 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @Override
     public void onSocialBinded() {
         setAccountIdFromSP();
-/*        new Handler(getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                presenter.loadAccount(profileId);
-            }
-        }, 2000);*/
-
         presenter.loadAccount(profileId);
+        String deviceName = profileId + BASE_DEVICE_NAME_PART;
+        presenter.restartAdvertising(advertiseCallback, deviceName);
+    }
+
+    AdvertiseCallback advertiseCallback = new AdvertiseCallback() {
+        @Override
+        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+            super.onStartSuccess(settingsInEffect);
+            Timber.d("moe Device share successful");
+        }
+
+        @Override
+        public void onStartFailure(int errorCode) {
+            super.onStartFailure(errorCode);
+            if (errorCode == BleManager.ADVERTISING_ERROR) {
+                showErrorDialog(FailTypes.UNKNOWN_ERROR);
+            }
+            Timber.d("moe Устройству не удалось раздать Bluetooth");
+        }
+    };
+
+    @Override
+    public void showErrorDialog(FailTypes fail) {
+        switch (fail) {
+            case UNKNOWN_ERROR:
+                DialogUtils.showErrorMessage(this, R.string.bluetooth_adv_error);
+                break;
+            case CONNECTION_ERROR:
+
+                if (!isDialogShow) {
+                    DialogUtils.showNetworkErrorMessage(this);
+                    isDialogShow = true;
+                }
+                new Handler(getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isDialogShow = false;
+                    }
+                }, 3000);
+                break;
+
+            case AUTH_REQUIRED:
+                AuthSession.getInstance().invalidate(this);
+                break;
+        }
     }
 
     @Override
@@ -330,10 +405,8 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
                     instButton.setImageAlpha(100);
                 }
                 break;
-            case NOONE:
-                break;
             default:
-                throw new IllegalStateException("unknown type");
+                break;
         }
     }
 
@@ -348,11 +421,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
 
     @OnClick(R.id.chatListBtn)
     void onChatListBtnClick() {
-        if (socialSP.get().equals("true")) {
-            router.openChatListActivity();
-        } else {
-            DialogUtils.showErrorMessage(this, R.string.dialog_msg_social_error);
-        }
+        router.openChatListActivity();
     }
 
     @Override

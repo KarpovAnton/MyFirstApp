@@ -8,12 +8,27 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="376dp">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="376dp" />
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/vpPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ph_bg"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="58dp"
+                android:layout_height="58dp"
+                android:src="@drawable/ic_ph_photo"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/backBtn"
@@ -72,6 +87,7 @@
     </LinearLayout>
 
     <Button
+        style="?android:attr/borderlessButtonStyle"
         android:id="@+id/chatBtn"
         android:layout_width="match_parent"
         android:layout_height="54dp"

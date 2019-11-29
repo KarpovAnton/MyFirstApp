@@ -101,20 +101,12 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
 
     @OnClick(R.id.chatListBtn)
     void onChatListBtnClick() {
-        if (socialSP.get().equals("true")) {
-            router.openProfileActivity();
-        } else {
-            DialogUtils.showErrorMessage(this, R.string.dialog_msg_social_error);
-        }
+        router.openChatListActivity();
     }
 
     @OnClick(R.id.profileButton)
     void onProfileButtonClick() {
-        if (socialSP.get().equals("true")) {
-            router.openAccountActivity();
-        } else {
-            DialogUtils.showErrorMessage(this, R.string.dialog_msg_social_error);
-        }
+        router.openAccountActivity();
     }
 
     @Override

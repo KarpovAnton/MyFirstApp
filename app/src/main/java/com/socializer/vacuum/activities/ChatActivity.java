@@ -11,20 +11,25 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.VacuumApplication;
+import com.socializer.vacuum.fragments.Profile.ProfileFragment;
 import com.socializer.vacuum.models.chat.Message;
 import com.socializer.vacuum.models.chat.MessageAuthor;
+import com.socializer.vacuum.network.data.DtoListCallback;
 import com.socializer.vacuum.network.data.FailTypes;
+import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.ResponseDto;
 import com.socializer.vacuum.network.data.dto.socket.ChatCallback;
 import com.socializer.vacuum.network.data.dto.socket.ChatMessageInDto;
 import com.socializer.vacuum.network.data.dto.socket.ChatMessageOutDto;
 import com.socializer.vacuum.network.data.dto.socket.LastMessagesResponseDto;
 import com.socializer.vacuum.network.data.managers.ChatManager;
+import com.socializer.vacuum.network.data.managers.ProfilesManager;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
@@ -70,6 +75,9 @@ public class ChatActivity extends DaggerAppCompatActivity {
 
     @Inject
     ChatManager chatManager;
+
+    @Inject
+    ProfilesManager profilesManager;
 
     @BindView(R.id.nameReceiverText)
     TextView nameReceiverText;
@@ -144,12 +152,28 @@ public class ChatActivity extends DaggerAppCompatActivity {
 
     private void initViews() {
         nameReceiverText.setText(getIntent().getStringExtra("username"));
-        new ImageUtils().setImagePreview(avatarImage, getIntent().getStringExtra("photo"), R.drawable.default_avatar);
+        new ImageUtils().setImagePreview(avatarImage, getIntent().getStringExtra("photo"), R.drawable.ph_photo);
+        avatarImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profilesManager.getProfile(receiverId, new DtoListCallback<ResponseDto>() {
+                    @Override
+                    public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
+                        ProfilePreviewDto profileDto = response.get(0);
+                        openProfile(profileDto);
+                    }
+
+                    @Override
+                    public void onFailed(FailTypes fail) {
+
+                    }
+                });
+            }
+        });
 
         MessagesListAdapter.HoldersConfig holdersConfig = new MessagesListAdapter.HoldersConfig();
-        holdersConfig.setIncomingLayout(R.layout.item_custom_incoming_message);
-        holdersConfig.setOutcomingLayout(R.layout.item_custom_outcoming_message);
-        //holdersConfig.setDateHeaderLayout(R.layout.item_custom_date_header);
+        holdersConfig.setIncomingTextLayout(R.layout.item_custom_incoming_message);
+        holdersConfig.setOutcomingTextLayout(R.layout.item_custom_outcoming_message);
 
         mAdapter = new MessagesListAdapter<>(ownId, holdersConfig, null);
         messagesList.setAdapter(mAdapter);
@@ -173,6 +197,15 @@ public class ChatActivity extends DaggerAppCompatActivity {
                 emitTypeEvent("stopTyping");
             }
         });
+    }
+
+    public void openProfile(ProfilePreviewDto profileDto) {
+        ProfileFragment fragment = new ProfileFragment();
+        fragment.configure(profileDto, true);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.profileContainer, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void emitTypeEvent(String event) {

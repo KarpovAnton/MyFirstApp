@@ -1,5 +1,7 @@
 package com.socializer.vacuum.activities.account;
 
+import android.bluetooth.le.AdvertiseCallback;
+
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 
@@ -31,6 +33,8 @@ public interface AccountContract {
 
         void setAccountIdFromSP();
 
+        void showErrorDialog(FailTypes fail);
+
         void onSocUnBind(int kind);
 
         void showErrorNetworkDialog(FailTypes fail);
@@ -55,5 +59,7 @@ public interface AccountContract {
         void openFBProfile();
 
         void openInstProfile();
+
+        void restartAdvertising(AdvertiseCallback advertiseCallback, String deviceName);
     }
 }

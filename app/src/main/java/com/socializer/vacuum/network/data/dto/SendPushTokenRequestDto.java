@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class SendPushTokenRequestDto {
 
     public SendPushTokenRequestDto(String access_token) {
-        accounts.add(new InnerData(3, access_token));
+        accounts.add(new InnerData(5, access_token));
     }
 
     ArrayList<InnerData> accounts = new ArrayList<>();

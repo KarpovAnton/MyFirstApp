@@ -1,153 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/barLayout"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="92dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
 
-        <ImageView
-            android:id="@+id/backBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="40dp"
-            android:paddingLeft="20dp"
-            android:paddingBottom="30dp"
-            android:paddingRight="16dp"
-            android:src="@drawable/ic_arrow"
-            android:tint="@color/colorViolent"/>
+        <RelativeLayout
+            android:id="@+id/barLayout"
+            android:layout_width="match_parent"
+            android:layout_height="92dp"
+            android:orientation="horizontal">
 
-        <FrameLayout
-            android:id="@+id/avatarContainer"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_toRightOf="@+id/backBtn"
-            android:layout_centerVertical="true">
+            <ImageView
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="40dp"
+                android:paddingLeft="20dp"
+                android:paddingBottom="30dp"
+                android:paddingRight="16dp"
+                android:src="@drawable/ic_arrow"
+                android:tint="@color/colorViolent"/>
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="0dp">
+            <FrameLayout
+                android:id="@+id/avatarContainer"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_toRightOf="@+id/backBtn"
+                android:layout_centerVertical="true">
 
-                <ImageView
-                    android:id="@+id/avatarImage"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_rounded"
-                    android:scaleType="centerCrop"/>
-            </androidx.cardview.widget.CardView>
-        </FrameLayout>
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="0dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginLeft="12dp"
-            android:layout_toRightOf="@+id/avatarContainer"
-            android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/avatarImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_rounded"
+                        android:scaleType="centerCrop"/>
+                </androidx.cardview.widget.CardView>
+            </FrameLayout>
 
-            <TextView
-                android:id="@+id/nameReceiverText"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorViolent"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:text="Имя" />
+                android:layout_marginTop="28dp"
+                android:layout_marginLeft="12dp"
+                android:layout_toRightOf="@+id/avatarContainer"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/typingNotifyText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorViolent"
-                android:textSize="12sp"
-                android:text="@string/typingNotifyMsg"
-                android:visibility="gone"/>
-        </LinearLayout>
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/nameReceiverText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorViolent"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:text="Имя" />
 
-    <com.stfalcon.chatkit.messages.MessagesList
-        android:id="@+id/messagesList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingBottom="8dp"
-        android:background="@color/colorGreyLight"
-        app:incomingBubbleDrawable="@color/colorTranc"
-        app:outcomingBubbleDrawable="@color/colorTranc"
-        app:incomingBubblePaddingBottom="4dp"
-        app:incomingBubblePaddingTop="4dp"
-        app:incomingBubblePaddingRight="6dp"
-        app:incomingBubblePaddingLeft="8dp"
-        app:outcomingBubblePaddingBottom="4dp"
-        app:outcomingBubblePaddingTop="4dp"
-        app:outcomingBubblePaddingRight="8dp"
-        app:outcomingBubblePaddingLeft="6dp"
-        app:incomingTextColor="#5A585C"
-        app:outcomingTextColor="#49444D"
-        app:dateHeaderTextColor="@color/colorOrange"/>
+                <TextView
+                    android:id="@+id/typingNotifyText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorViolent"
+                    android:textSize="12sp"
+                    android:text="@string/typingNotifyMsg"
+                    android:visibility="gone"/>
+            </LinearLayout>
+        </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="68dp">
-
-        <ImageView
+        <com.stfalcon.chatkit.messages.MessagesList
+            android:id="@+id/messagesList"
             android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_marginRight="18dp"
-            android:layout_marginLeft="18dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/chat_input_bg"/>
-
-        <com.stfalcon.chatkit.messages.MessageInput
-            android:id="@+id/input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="16dp"
-            app:inputButtonIcon="@drawable/ic_chat_send"
-            app:inputHint="@string/hint_enter_a_message"
-            app:inputButtonBackground="@color/colorTranc"
-            app:inputButtonWidth="40dp"/>
-    </RelativeLayout>
-
-    <!--<LinearLayout
-        android:id="@+id/inputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-
-        <EditText
-            android:id="@+id/message_input"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:hint="Сообщение"
-            android:imeActionId="@+id/send"
-            android:imeActionLabel="send"
-            android:imeOptions="actionSend"
-            android:inputType="text"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:background="@android:color/transparent"/>
+            android:paddingBottom="8dp"
+            android:background="@color/colorGreyLight"
+            app:incomingBubbleDrawable="@color/colorTranc"
+            app:outcomingBubbleDrawable="@color/colorTranc"
+            app:incomingBubblePaddingBottom="4dp"
+            app:incomingBubblePaddingTop="4dp"
+            app:incomingBubblePaddingRight="6dp"
+            app:incomingBubblePaddingLeft="8dp"
+            app:outcomingBubblePaddingBottom="4dp"
+            app:outcomingBubblePaddingTop="4dp"
+            app:outcomingBubblePaddingRight="8dp"
+            app:outcomingBubblePaddingLeft="6dp"
+            app:incomingTextColor="#5A585C"
+            app:outcomingTextColor="#49444D"
+            app:dateHeaderTextColor="@color/colorOrange"
+            app:incomingTimeTextColor="@color/colorGreyTranc"
+            app:outcomingTimeTextColor="@color/colorGreyTranc"/>
 
-        <TextView
-            android:id="@+id/send_button"
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send"
-            android:textSize="18dp"/>
+            android:layout_height="68dp">
 
-    </LinearLayout>-->
-</LinearLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginRight="18dp"
+                android:layout_marginLeft="18dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/chat_input_bg"/>
+
+            <com.stfalcon.chatkit.messages.MessageInput
+                android:id="@+id/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="16dp"
+                app:inputButtonIcon="@drawable/ic_chat_send"
+                app:inputHint="@string/hint_enter_a_message"
+                app:inputButtonBackground="@color/colorTranc"
+                app:inputButtonWidth="40dp"/>
+        </RelativeLayout>
+
+        <!--<LinearLayout
+            android:id="@+id/inputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <EditText
+                android:id="@+id/message_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Сообщение"
+                android:imeActionId="@+id/send"
+                android:imeActionLabel="send"
+                android:imeOptions="actionSend"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:background="@android:color/transparent"/>
+
+            <TextView
+                android:id="@+id/send_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Send"
+                android:textSize="18dp"/>
+
+        </LinearLayout>-->
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/profileContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>

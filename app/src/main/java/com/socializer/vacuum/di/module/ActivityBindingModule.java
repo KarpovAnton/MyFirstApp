@@ -38,7 +38,9 @@ public abstract class ActivityBindingModule {
     abstract PhotoActivity photoActivity();
 
     @ActivityScoped
-    @ContributesAndroidInjector(modules = {})
+    @ContributesAndroidInjector(modules = {
+            ProfileModule.class
+    })
     abstract ChatActivity chatActivity();
 
     @ActivityScoped

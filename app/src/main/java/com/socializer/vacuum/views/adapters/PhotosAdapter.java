@@ -60,12 +60,12 @@ public class PhotosAdapter extends PagerAdapter {
 
     private void setPhoto(String preview, String url) {
         new ImageUtils().setAuthImage(context, photoImage, url, preview,
-                R.drawable.default_avatar);
+                R.drawable.ph_photo);
     }
 
     private void setPhotoPlaceholder() {
         new ImageUtils().setImage(photoImage, null, null,
-                R.drawable.default_avatar);
+                R.drawable.ph_photo);
     }
 
     private String getTokenString() {
