@@ -2,13 +2,22 @@ package com.socializer.vacuum.activities.account;
 
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -83,6 +92,15 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @BindView(R.id.nameText)
     TextView nameText;
 
+    @BindView(R.id.nameLayout)
+    LinearLayout nameLayout;
+
+    @BindView(R.id.nameEditText)
+    EditText nameEditText;
+
+    @BindView(R.id.editNameBtn)
+    ImageView editNameBtn;
+
     @BindView(R.id.aboutText)
     TextView aboutText;
 
@@ -111,12 +129,46 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     boolean isFbBind;
     boolean isInstBind;
     private boolean isDialogShow;
+    private boolean isEditTextShowed;
+    private String oldAccName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         ButterKnife.bind(this);
+
+        //show keyboard when push edit btn
+        nameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null)
+                        imm.showSoftInput(nameEditText, 0);
+                }
+            }
+        });
+
+        //done keyboard button
+        nameEditText.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String newName = nameEditText.getText().toString().trim();
+                    if (TextUtils.isEmpty(newName)) {
+                        onNameChanged(oldAccName);
+                    } else {
+                        presenter.renameAcc(newName);
+                    }
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null)
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         aboutText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +201,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
 
     @Override
     public void onAccountLoaded(ProfilePreviewDto accountDto) {
+        editNameBtn.setVisibility(View.VISIBLE);
         imageList = new ArrayList<>();
         List<ProfileImageDto> imageDtoList = accountDto.getImages();
         if (imageDtoList != null) {
@@ -266,6 +319,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @Override
     public void onSocialBinded() {
         setAccountIdFromSP();
+        editNameBtn.setVisibility(View.GONE);
         presenter.loadAccount(profileId);
         String deviceName = profileId + BASE_DEVICE_NAME_PART;
         presenter.restartAdvertising(advertiseCallback, deviceName);
@@ -408,6 +462,47 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                    String newName = nameEditText.getText().toString().trim();
+                    if (TextUtils.isEmpty(newName)) {
+                        onNameChanged(oldAccName);
+                    } else {
+                        presenter.renameAcc(newName);
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+
+    @OnClick(R.id.nameLayout)
+    void onEditNameClick() {
+        isEditTextShowed = true;
+        nameLayout.setVisibility(View.GONE);
+        nameEditText.setVisibility(View.VISIBLE);
+        oldAccName = nameEditText.getText().toString();
+        nameEditText.getText().clear();
+        nameEditText.requestFocus();
+    }
+
+    @Override
+    public void onNameChanged(String username) {
+        nameEditText.setVisibility(View.GONE);
+        nameLayout.setVisibility(View.VISIBLE);
+        nameText.setText(username);
     }
 
     @OnClick(R.id.editPhotoButton)

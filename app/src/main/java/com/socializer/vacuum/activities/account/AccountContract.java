@@ -40,6 +40,8 @@ public interface AccountContract {
         void showErrorNetworkDialog(FailTypes fail);
 
         void onSocialBinded();
+
+        void onNameChanged(String username);
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -61,5 +63,7 @@ public interface AccountContract {
         void openInstProfile();
 
         void restartAdvertising(AdvertiseCallback advertiseCallback, String deviceName);
+
+        void renameAcc(String newName);
     }
 }

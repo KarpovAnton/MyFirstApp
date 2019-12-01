@@ -76,18 +76,55 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/nameText"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="18dp"
-            android:singleLine="true"
-            android:textColor="@color/colorViolent"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:ellipsize="marquee"
-            tools:text="Anton"/>
+ >
+
+            <LinearLayout
+                android:id="@+id/nameLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="11dp">
+
+                <TextView
+                    android:id="@+id/nameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textColor="@color/colorViolent"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:ellipsize="marquee"
+                    tools:text="Anton"/>
+
+                <ImageView
+                    android:id="@+id/editNameBtn"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="2dp"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_pencil"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/nameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:singleLine="true"
+                android:textColor="@color/colorViolent"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:visibility="gone"
+                tools:text="Nick"/>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

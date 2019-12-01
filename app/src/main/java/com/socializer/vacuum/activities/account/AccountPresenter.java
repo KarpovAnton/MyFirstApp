@@ -1,6 +1,7 @@
 package com.socializer.vacuum.activities.account;
 
 import android.bluetooth.le.AdvertiseCallback;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -251,5 +252,30 @@ public class AccountPresenter implements AccountContract.Presenter {
         bleManager.stopAdvertising(advertiseCallback);
         bleManager.setBluetoothAdapterName(deviceName);
         bleManager.startAdvertising(advertiseCallback);
+    }
+
+    @Override
+    public void renameAcc(String newName) {
+        if (TextUtils.isEmpty(newName))
+            return;
+
+        profilesManager.renameAcc(newName, new DtoCallback<ResponseDto>() {
+            @Override
+            public void onSuccessful(@NonNull ResponseDto response) {
+                currentAccountDto = (ProfilePreviewDto) response;
+
+                String username = currentAccountDto.getUsername();
+
+                if (view != null)
+                    view.onNameChanged(username);
+            }
+
+
+            @Override
+            public void onFailed(FailTypes fail) {
+                if (view != null)
+                    view.showErrorNetworkDialog(fail);
+            }
+        });
     }
 }

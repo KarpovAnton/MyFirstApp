@@ -14,6 +14,7 @@ import com.socializer.vacuum.network.data.dto.PhotoRequestDto;
 import com.socializer.vacuum.network.data.dto.PhotoResponseDto;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
 import com.socializer.vacuum.network.data.dto.ProfilesRequestDto;
+import com.socializer.vacuum.network.data.dto.RenameRequestDto;
 import com.socializer.vacuum.utils.ErrorUtils;
 
 import java.util.List;
@@ -75,6 +76,26 @@ public class ProfilesManager extends AbstractManager {
 
             @Override
             public void onFailure(Call<List<ProfilePreviewDto>> call, Throwable t) {
+                callback.onFailed(FailTypes.UNKNOWN_ERROR);
+            }
+        });
+    }
+
+    public void renameAcc(@NonNull String name,
+                          @NonNull final DtoCallback<?> callback) {
+
+        if (!checkNetworkAvailable(callback)) return;
+
+        Call<ProfilePreviewDto> loginConfirm = mVacuumApi.renameAcc(getTokenString(), new RenameRequestDto(name));
+        loginConfirm.enqueue(new Callback<ProfilePreviewDto>() {
+            @Override
+            public void onResponse(@NonNull Call<ProfilePreviewDto> call, @NonNull Response<ProfilePreviewDto> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccessful(response.body());
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<ProfilePreviewDto> call, @NonNull Throwable t) {
                 callback.onFailed(FailTypes.UNKNOWN_ERROR);
             }
         });
