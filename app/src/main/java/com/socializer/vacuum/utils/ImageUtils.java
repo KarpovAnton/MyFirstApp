@@ -37,7 +37,7 @@ public class ImageUtils {
     private static final int MAX_IMAGE_WIDTH = 1536;
     private static final double MAX_ASCPECT = 16./9.;
 
-    public void setAuthCircleImage(Context context, ImageView target, String imageUrl,
+/*    public void setAuthCircleImage(Context context, ImageView target, String imageUrl,
                                    String imagePreview, int imageDefault) {
 
         if (!TextUtils.isEmpty(imagePreview)) {
@@ -57,7 +57,7 @@ public class ImageUtils {
         } else {
             setImagePreview(target, imagePreview, imageDefault);
         }
-    }
+    }*/
 
     public void setAuthImage(Context context, ImageView target, String imageUrl,
                              String imagePreview, int imageDefault) {
@@ -146,11 +146,11 @@ public class ImageUtils {
 
         @Override
         protected void onPostExecute(Drawable image) {
-            if (imageView.getDrawable() == null)
+            //if (imageView.getDrawable() == null)
                 imageView.setImageDrawable(image);
         }
     }
-    private class BitmapCircleTask extends AsyncTask<String, Void, Drawable> {
+    /*private class BitmapCircleTask extends AsyncTask<String, Void, Drawable> {
 
         ImageView imageView;
 
@@ -177,7 +177,7 @@ public class ImageUtils {
             if (imageView.getDrawable() == null)
                 imageView.setImageDrawable(image);
         }
-    }
+    }*/
 
     public static Bitmap drawableToBitmap (Drawable drawable) {
         Bitmap bitmap = null;

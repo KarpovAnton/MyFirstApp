@@ -55,7 +55,7 @@ public class FirebaseMsgService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         try {
-            Timber.d("zxc msg rec");
+            Timber.d("moe msg rec");
             //sendNotification(remoteMessage);
             //String message = remoteMessage.getData().get("message");
             VacuumApplication.getInstance().getMessageManager().changeState(true);

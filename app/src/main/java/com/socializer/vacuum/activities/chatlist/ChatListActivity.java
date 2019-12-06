@@ -47,7 +47,8 @@ import dagger.android.support.DaggerAppCompatActivity;
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_UNREAD_MSG;
 
-public class ChatListActivity extends DaggerAppCompatActivity implements ChatListContract.View, SwipeRefreshLayout.OnRefreshListener, DateFormatter.Formatter {
+public class ChatListActivity extends DaggerAppCompatActivity implements ChatListContract.View,
+        SwipeRefreshLayout.OnRefreshListener, DateFormatter.Formatter {
 
     @Inject
     ChatManager chatManager;
@@ -195,7 +196,6 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
 
     @Override
     public void onRefresh() {
-        dialogsListAdapter.clear();
         loadChatList();
     }
 

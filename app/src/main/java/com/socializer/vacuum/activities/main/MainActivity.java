@@ -131,8 +131,16 @@ public class MainActivity extends DaggerAppCompatActivity implements
         messageManager.subscribe(new MessageManager.NewMsgListener() {
             @Override
             public void update(boolean hasNewMsg) {
-                Timber.d("zxc update " + hasNewMsg);
-                messageManager.changeIconVisibility(hasNewMsg, newMsgImage);
+                Timber.d("moe update " + hasNewMsg);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        newMsgImage.setVisibility(hasNewMsg ? View.VISIBLE : View.GONE);
+                    }
+                });
+
+                if (unreadMsgSP != null)
+                    unreadMsgSP.set(String.valueOf(hasNewMsg));
             }
         });
     }
