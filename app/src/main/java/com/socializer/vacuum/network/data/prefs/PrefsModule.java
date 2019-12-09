@@ -17,11 +17,13 @@ public class PrefsModule {
     private static final String PREF_KEY_TOKEN = "TOKEN";
     private static final String PREF_KEY_DEVICE_NAME = "DEVICE_NAME";
     private static final String PREF_KEY_SOCIAL = "SOCIAL";
+    private static final String PREF_KEY_PUSH_TOKEN = "PUSH_TOKEN";
 
     public static final String NAMED_PREF_PHONE = "pref_phone";
     public static final String NAMED_PREF_TOKEN = "pref_token";
     public static final String NAMED_PREF_DEVICE_NAME = "pref_device_name";
     public static final String NAMED_PREF_SOCIAL = "pref_social";
+    public static final String NAMED_PREF_PUSH_TOKEN = "pref_push_token";
 
     @Provides
     @Singleton
@@ -50,4 +52,11 @@ public class PrefsModule {
     StringPreference provideSocial(SharedPreferences prefs) {
         return new StringPreference(prefs, PREF_KEY_SOCIAL, "false");
     }
+
+/*    @Provides
+    @Singleton
+    @Named(NAMED_PREF_PUSH_TOKEN)
+    StringPreference providePushToken(SharedPreferences prefs) {
+        return new StringPreference(prefs, PREF_KEY_PUSH_TOKEN, null);
+    }*/
 }

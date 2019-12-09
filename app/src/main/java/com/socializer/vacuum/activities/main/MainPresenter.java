@@ -248,4 +248,93 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
     public void startAdvertise(AdvertiseCallback callback) {
         bleManager.startAdvertising(callback);
     }
+
+    @Override
+    public void loadTestUser() {
+
+
+        profilesManager.getProfile("PvaAjPP6jTb8", new DtoListCallback<ResponseDto>() {
+            @Override
+            public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
+                ProfilePreviewDto profileDto = response.get(0);
+                String userId = profileDto.getUserId();
+                if (!addedUsersId.contains(userId)) {
+                    Timber.d("moe users.add %s", userId);
+                    addedUsersId.add(userId);
+                    if (view != null) {
+                        if (addedUsersId.size() == 1) {
+
+                            new Handler(getMainLooper()).postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (addedUsersId.size() > 1) {
+                                        adapter.onAdd(response);
+                                        Timber.d("moe double together");
+                                    } else {
+                                        if (view != null)
+                                            view.showSingleItem(profileDto);
+                                        adapter.onAddToList(response);
+                                        Timber.d("moe single");
+                                    }
+                                }
+                            }, 500);
+
+                        } else {
+                            view.hideSingleItem();
+                            adapter.onAdd(response);
+                            Timber.d("moe common");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailed(FailTypes fail) {
+                if (view != null)
+                    view.showErrorDialog(fail);
+            }
+        });
+
+        profilesManager.getProfile("lfQ6PfXSVxE", new DtoListCallback<ResponseDto>() {
+            @Override
+            public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
+                ProfilePreviewDto profileDto = response.get(0);
+                String userId = profileDto.getUserId();
+                if (!addedUsersId.contains(userId)) {
+                    Timber.d("moe users.add %s", userId);
+                    addedUsersId.add(userId);
+                    if (view != null) {
+                        if (addedUsersId.size() == 1) {
+
+                            new Handler(getMainLooper()).postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (addedUsersId.size() > 1) {
+                                        adapter.onAdd(response);
+                                        Timber.d("moe double together");
+                                    } else {
+                                        if (view != null)
+                                            view.showSingleItem(profileDto);
+                                        adapter.onAddToList(response);
+                                        Timber.d("moe single");
+                                    }
+                                }
+                            }, 500);
+
+                        } else {
+                            view.hideSingleItem();
+                            adapter.onAdd(response);
+                            Timber.d("moe common");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailed(FailTypes fail) {
+                if (view != null)
+                    view.showErrorDialog(fail);
+            }
+        });
+    }
 }

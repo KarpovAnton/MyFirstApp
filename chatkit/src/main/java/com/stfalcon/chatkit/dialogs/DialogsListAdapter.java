@@ -149,6 +149,40 @@ public class DialogsListAdapter<DIALOG extends IDialog>
         }
     }
 
+    public void deleteItem(int position) {
+        DIALOG dialog = items.get(position);
+        items.remove(position);
+        notifyItemRemoved(position);
+        showUndoSnackbar(position, dialog);
+        Log.d("TAG", "moe "+dialog.getId());
+    }
+
+    private void showUndoSnackbar(final int position, final DIALOG dialog) {
+        View view = activity.findViewById(android.R.id.content);
+        Resources res = activity.getResources();
+        String snackbarText = res.getString(R.string.snackbar_delete_chat_text);
+        Snackbar snackbar = Snackbar.make(view, snackbarText, BaseTransientBottomBar.LENGTH_LONG);
+        snackbar.setAction(res.getString(R.string.snackbar_delete_chat_action), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                undoDelete(position, dialog);
+            }
+        });
+        snackbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                super.onDismissed(transientBottomBar, event);
+                deleteDialog.deleteDialog(dialog.getId());
+            }
+        });
+        snackbar.show();
+    }
+
+    private void undoDelete(int position, DIALOG dialog) {
+        items.add(position, dialog);
+        notifyItemInserted(position);
+    }
+
     /**
      * Returns {@code true} if, and only if, dialogs count in adapter is non-zero.
      *
@@ -720,5 +754,9 @@ public class DialogsListAdapter<DIALOG extends IDialog>
             this.dialogStyle = dialogStyle;
             applyStyle();
         }
+    }
+
+    public interface IDeleteDialog {
+        void deleteDialog(String id);
     }
 }

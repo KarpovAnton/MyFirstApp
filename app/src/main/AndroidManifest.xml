@@ -104,6 +104,12 @@
             </intent-filter>
         </service>-->
 
+<!--        <receiver android:name=".service.StartFirebaseAtBoot">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>-->
+
 <!--        <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"

@@ -322,7 +322,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
         editNameBtn.setVisibility(View.GONE);
         presenter.loadAccount(profileId);
         String deviceName = profileId + BASE_DEVICE_NAME_PART;
-        presenter.restartAdvertising(advertiseCallback, deviceName);
+        //presenter.restartAdvertising(advertiseCallback, deviceName);
     }
 
     AdvertiseCallback advertiseCallback = new AdvertiseCallback() {

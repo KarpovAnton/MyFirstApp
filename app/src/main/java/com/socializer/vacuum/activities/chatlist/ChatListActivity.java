@@ -17,7 +17,9 @@ import com.socializer.vacuum.models.chat.Message;
 import com.socializer.vacuum.models.chat.MessageAuthor;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ResponseDto;
+import com.socializer.vacuum.network.data.dto.socket.ChatCallback;
 import com.socializer.vacuum.network.data.dto.socket.DialogsResponseDto;
+import com.socializer.vacuum.network.data.dto.socket.LastMessagesResponseDto;
 import com.socializer.vacuum.network.data.managers.ChatManager;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.DialogUtils;
@@ -62,6 +64,23 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
 
     Activity mActivity;
     DialogsListAdapter<Dialog> dialogsListAdapter;
+
+    private DialogsListAdapter.IDeleteDialog deleteDialog = new DialogsListAdapter.IDeleteDialog() {
+        @Override
+        public void deleteDialog(String id) {
+            chatManager.deleteDialog(id, new ChatCallback<ResponseDto>() {
+                @Override
+                public void onSuccessful(@NonNull List<LastMessagesResponseDto> response) {
+
+                }
+
+                @Override
+                public void onFailed(FailTypes fail) {
+
+                }
+            });
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
