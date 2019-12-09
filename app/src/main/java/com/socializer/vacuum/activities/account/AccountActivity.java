@@ -129,7 +129,6 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     boolean isFbBind;
     boolean isInstBind;
     private boolean isDialogShow;
-    private boolean isEditTextShowed;
     private String oldAccName;
 
     @Override
@@ -490,10 +489,9 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
 
     @OnClick(R.id.nameLayout)
     void onEditNameClick() {
-        isEditTextShowed = true;
+        oldAccName = nameText.getText().toString();
         nameLayout.setVisibility(View.GONE);
         nameEditText.setVisibility(View.VISIBLE);
-        oldAccName = nameEditText.getText().toString();
         nameEditText.getText().clear();
         nameEditText.requestFocus();
     }

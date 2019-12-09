@@ -1,1 +1,4 @@
-<resources/>
+<resources>
+    <string name="snackbar_delete_chat_text">Отменить удаление?</string>
+    <string name="snackbar_delete_chat_action">ВЕРНУТЬ</string>
+</resources>

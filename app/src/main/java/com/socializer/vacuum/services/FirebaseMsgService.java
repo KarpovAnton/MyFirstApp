@@ -1,11 +1,9 @@
-/*
 package com.socializer.vacuum.services;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
@@ -14,7 +12,6 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.socializer.vacuum.R;
-import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.activities.chatlist.ChatListActivity;
 
 import java.util.Date;
@@ -26,23 +23,21 @@ public class FirebaseMsgService extends FirebaseMessagingService {
 
     private static final String GROUP_KEY = "com.socializer.vacuum.NOTIFICATIONS";
 
-*/
 /*    @Inject
     @Named(NAMED_PREF_PUSH_TOKEN)
-    StringPreference pushTokenSP;*//*
+    StringPreference pushTokenSP;*/
 
 
     @Override
     public void onNewToken(String token) {
         Timber.d("moe Refreshed token: " + token);
 
-        SharedPreferences.Editor editor = VacuumApplication.applicationContext.getSharedPreferences("prefs", MODE_PRIVATE).edit();
+/*        SharedPreferences.Editor editor = VacuumApplication.applicationContext.getSharedPreferences("prefs", MODE_PRIVATE).edit();
         editor.putString("PUSH_TOKEN", token);
         editor.apply();
-        editor.commit();
+        editor.commit();*/
 
-        */
-/*loginManager.sendPushToken(token, new DtoCallback<ResponseDto>() {
+/*        loginManager.sendPushToken(token, new DtoCallback<ResponseDto>() {
             @Override
             public void onSuccessful(@NonNull ResponseDto response) {
                 Timber.d("moe sendPushToken succ");
@@ -52,7 +47,7 @@ public class FirebaseMsgService extends FirebaseMessagingService {
             public void onFailed(FailTypes fail) {
                 Timber.d("moe sendPushToken fail");
             }
-        });*//*
+        });*/
 
     }
 
@@ -101,4 +96,3 @@ public class FirebaseMsgService extends FirebaseMessagingService {
         }
     }
 }
-*/

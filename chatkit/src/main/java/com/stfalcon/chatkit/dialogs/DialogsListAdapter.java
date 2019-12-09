@@ -16,8 +16,12 @@
 
 package com.stfalcon.chatkit.dialogs;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +33,8 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.stfalcon.chatkit.R;
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.commons.ViewHolder;
@@ -57,6 +63,8 @@ public class DialogsListAdapter<DIALOG extends IDialog>
     private int itemLayoutId;
     private Class<? extends BaseDialogViewHolder> holderClass;
     private ImageLoader imageLoader;
+    private Activity activity;
+    private IDeleteDialog deleteDialog;
     private OnDialogClickListener<DIALOG> onDialogClickListener;
     private OnDialogViewClickListener<DIALOG> onDialogViewClickListener;
     private OnDialogLongClickListener<DIALOG> onLongItemClickListener;
@@ -69,8 +77,8 @@ public class DialogsListAdapter<DIALOG extends IDialog>
      *
      * @param imageLoader image loading method
      */
-    public DialogsListAdapter(ImageLoader imageLoader) {
-        this(R.layout.item_dialog, DialogViewHolder.class, imageLoader);
+    public DialogsListAdapter(IDeleteDialog deleteDialog, Activity activity, ImageLoader imageLoader) {
+        this(R.layout.item_dialog, DialogViewHolder.class, deleteDialog, activity, imageLoader);
     }
 
     /**
@@ -79,8 +87,8 @@ public class DialogsListAdapter<DIALOG extends IDialog>
      * @param itemLayoutId custom list item resource id
      * @param imageLoader  image loading method
      */
-    public DialogsListAdapter(@LayoutRes int itemLayoutId, ImageLoader imageLoader) {
-        this(itemLayoutId, DialogViewHolder.class, imageLoader);
+    public DialogsListAdapter(@LayoutRes int itemLayoutId, IDeleteDialog deleteDialog, Activity activity, ImageLoader imageLoader) {
+        this(itemLayoutId, DialogViewHolder.class, deleteDialog, activity, imageLoader);
     }
 
     /**
@@ -91,10 +99,16 @@ public class DialogsListAdapter<DIALOG extends IDialog>
      * @param imageLoader  image loading method
      */
     public DialogsListAdapter(@LayoutRes int itemLayoutId, Class<? extends BaseDialogViewHolder> holderClass,
-                              ImageLoader imageLoader) {
+                              IDeleteDialog deleteDialog, Activity activity, ImageLoader imageLoader) {
+        this.activity = activity;
         this.itemLayoutId = itemLayoutId;
         this.holderClass = holderClass;
+        this.deleteDialog = deleteDialog;
         this.imageLoader = imageLoader;
+    }
+
+    public Context getContext() {
+        return activity.getApplicationContext();
     }
 
     @SuppressWarnings("unchecked")
@@ -478,15 +492,15 @@ public class DialogsListAdapter<DIALOG extends IDialog>
     }
 
     /**
-    * @return the position of a dialog in the dialogs list.
-    */
+     * @return the position of a dialog in the dialogs list.
+     */
     public int getDialogPosition(DIALOG dialog) {
         return this.items.indexOf(dialog);
     }
 
     /*
-    * LISTENERS
-    * */
+     * LISTENERS
+     * */
     public interface OnDialogClickListener<DIALOG extends IDialog> {
         void onDialogClick(DIALOG dialog);
     }
@@ -504,8 +518,8 @@ public class DialogsListAdapter<DIALOG extends IDialog>
     }
 
     /*
-    * HOLDERS
-    * */
+     * HOLDERS
+     * */
     public abstract static class BaseDialogViewHolder<DIALOG extends IDialog>
             extends ViewHolder<DIALOG> {
 
@@ -696,9 +710,9 @@ public class DialogsListAdapter<DIALOG extends IDialog>
             }
 
             //Set Last message user avatar with check if there is last message
-            if (imageLoader != null && dialog.getLastMessage() != null) {
+/*            if (imageLoader != null && dialog.getLastMessage() != null) {
                 imageLoader.loadImage(ivLastMessageUser, dialog.getLastMessage().getUser().getAvatar(), null);
-            }
+            }*/
             ivLastMessageUser.setVisibility(dialogStyle.isDialogMessageAvatarEnabled()
                     && dialog.getUsers().size() > 1
                     && dialog.getLastMessage() != null ? VISIBLE : GONE);

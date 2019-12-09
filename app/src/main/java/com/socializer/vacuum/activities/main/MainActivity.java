@@ -28,8 +28,10 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.socializer.vacuum.R;
 import com.socializer.vacuum.VacuumApplication;
+import com.socializer.vacuum.network.data.DtoCallback;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
+import com.socializer.vacuum.network.data.dto.ResponseDto;
 import com.socializer.vacuum.network.data.managers.LoginManager;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.services.BleManager;
@@ -73,10 +75,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Named(NAMED_PREF_SOCIAL)
     StringPreference socialSP;
 
-/*    @Inject
-    @Named(NAMED_PREF_PUSH_TOKEN)
-    StringPreference pushTokenSP;*/
-
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -109,12 +107,12 @@ public class MainActivity extends DaggerAppCompatActivity implements
         initViews();
         checkPermissions();
         //sendPushToken();
-        /*if (presenter.isBlueEnable(this)) {
+        if (presenter.isBlueEnable(this)) {
             presenter.setBtName();
             presenter.startAdvertise(callback);
         } else {
             isBLdialogShowed = true;
-        }*/
+        }
     }
 
     private void sendPushToken() {
@@ -132,10 +130,10 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
                         // Log and toast
                         //String msg = getString(R.string.msg_token_fmt, token);
-                        Timber.d("moe sendPushToken" + token);
+                        Timber.d("moe " + token);
                         //Toast.makeText(this, "gngn", Toast.LENGTH_SHORT).show();
 
-/*                        loginManager.sendPushToken(token, new DtoCallback<ResponseDto>() {
+                        loginManager.sendPushToken(token, new DtoCallback<ResponseDto>() {
                             @Override
                             public void onSuccessful(@NonNull ResponseDto response) {
                                 Timber.d("moe chat act sendPushToken succ");
@@ -145,7 +143,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
                             public void onFailed(FailTypes fail) {
                                 Timber.d("moe chat act sendPushToken fail");
                             }
-                        });*/
+                        });
                     }
                 });
     }
@@ -161,6 +159,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
         super.onResume();
 
         presenter.refresh();
+        presenter.loadTestUser();
         attemptStartScan();
     }
 
@@ -172,6 +171,23 @@ public class MainActivity extends DaggerAppCompatActivity implements
             }
         }
     }
+
+    /*AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
+        @Override
+        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+            super.onStartSuccess(settingsInEffect);
+            isAdvertising = true;
+            //Toast.makeText(getApplicationContext(), "Device share successful", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onStartFailure(int errorCode) {
+            Timber.e("Advertising onStartFailure: %s", errorCode);
+            super.onStartFailure(errorCode);
+            isAdvertising = false;
+            Toast.makeText(getApplicationContext(), "Устройству не удалось раздать Bluetooth", Toast.LENGTH_SHORT).show();
+        }
+    };*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -229,6 +245,10 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
         Configuration configuration = getResources().getConfiguration();
         int screenWidthDp = configuration.screenWidthDp;
+        int screenHeightDp = configuration.screenHeightDp;
+        Timber.d("moe screenWidthDp " + screenWidthDp);
+        Timber.d("moe screenHeightDp " + screenHeightDp);
+
         final float scale = getResources().getDisplayMetrics().density;
         int pixels = (int) (screenWidthDp * scale + 0.5f);
         pixels = pixels / 3;
@@ -317,6 +337,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Override
     public void onRefresh() {
         presenter.refresh();
+        presenter.loadTestUser();
         presenter.isBlueEnable(this);
     }
 

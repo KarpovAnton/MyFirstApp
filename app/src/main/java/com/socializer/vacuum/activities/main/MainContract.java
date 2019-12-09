@@ -54,5 +54,7 @@ public interface MainContract {
         void startAdvertise(AdvertiseCallback callback);
 
         boolean isBlueEnable(Activity activity);
+
+        void loadTestUser();
     }
 }

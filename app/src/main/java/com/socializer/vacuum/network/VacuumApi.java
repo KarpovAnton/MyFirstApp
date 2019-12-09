@@ -21,6 +21,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -91,4 +92,8 @@ public interface VacuumApi {
     @Headers("Content-Type: application/json")
     @GET
     Call<List<DialogsResponseDto>> getChatList(@Url String url, @Header("Authorization") String token);
+
+    @Headers("Content-Type: application/json")
+    @DELETE
+    Call<List<LastMessagesResponseDto>> deleteDialog(@Url String url, @Header("Authorization") String token);
 }

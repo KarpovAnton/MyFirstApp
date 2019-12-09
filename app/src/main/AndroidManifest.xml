@@ -96,13 +96,13 @@
             android:launchMode="singleTop">
         </activity>
 
-<!--        <service
+        <service
             android:name=".services.FirebaseMsgService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>-->
+        </service>
 
 <!--        <receiver android:name=".service.StartFirebaseAtBoot">
             <intent-filter>

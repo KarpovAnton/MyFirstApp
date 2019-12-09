@@ -83,4 +83,27 @@ public class ChatManager extends AbstractManager {
             }
         });
     }
+
+    public void deleteDialog(@NonNull String chatId, @NonNull final ChatCallback<?> callback) {
+
+        if (!checkNetworkAvailable(callback)) return;
+
+        Call<List<LastMessagesResponseDto>> call = mVacuumApi.deleteDialog(CHAT_ID_URL + chatId, getTokenString());
+        call.enqueue(new Callback<List<LastMessagesResponseDto>>() {
+            @Override
+            public void onResponse(Call<List<LastMessagesResponseDto>> call, Response<List<LastMessagesResponseDto>> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccessful(response.body());
+                } else {
+                    if (response.code() == TOKEN_NOT_FOUND || response.code() == UNAUTHORIZED)
+                        callback.onFailed(FailTypes.AUTH_REQUIRED);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<LastMessagesResponseDto>> call, Throwable t) {
+                callback.onFailed(FailTypes.UNKNOWN_ERROR);
+            }
+        });
+    }
 }

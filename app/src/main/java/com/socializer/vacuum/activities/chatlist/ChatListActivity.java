@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.socializer.vacuum.R;
@@ -28,6 +29,7 @@ import com.socializer.vacuum.utils.StringPreference;
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.dialogs.DialogsList;
 import com.stfalcon.chatkit.dialogs.DialogsListAdapter;
+import com.stfalcon.chatkit.dialogs.SwipeToDeleteCallback;
 import com.stfalcon.chatkit.utils.DateFormatter;
 
 import java.util.ArrayList;
@@ -94,7 +96,7 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
     }
 
     private void initViews() {
-        dialogsListAdapter = new DialogsListAdapter<>(R.layout.item_dialog, new ImageLoader() {
+        dialogsListAdapter = new DialogsListAdapter<>( R.layout.item_dialog, deleteDialog, this, new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, @Nullable String url, @Nullable Object payload) {
                 new ImageUtils().setImagePreview(imageView, url, R.drawable.ph_photo);
@@ -116,6 +118,8 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
         });
         dialogsListAdapter.setDatesFormatter(this);
         dialogsList.setAdapter(dialogsListAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(dialogsListAdapter));
+        itemTouchHelper.attachToRecyclerView(dialogsList);
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 

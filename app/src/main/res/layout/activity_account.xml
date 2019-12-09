@@ -80,14 +80,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="18dp"
- >
+            android:layout_marginTop="18dp">
 
             <LinearLayout
                 android:id="@+id/nameLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="11dp">
+                android:layout_marginLeft="26dp">
 
                 <TextView
                     android:id="@+id/nameText"
@@ -106,6 +105,7 @@
                     android:layout_height="22dp"
                     android:layout_gravity="bottom"
                     android:layout_marginBottom="2dp"
+                    android:layout_marginLeft="4dp"
                     android:padding="4dp"
                     android:src="@drawable/ic_pencil"
                     android:visibility="gone"
