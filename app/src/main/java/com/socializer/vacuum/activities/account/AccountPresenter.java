@@ -86,8 +86,6 @@ public class AccountPresenter implements AccountContract.Presenter {
 
     @Override
     public void loadAccount(String profileId) {
-        socialSP.set("true");
-
         profilesManager.getProfile(profileId, new DtoListCallback<ResponseDto>() {
             @Override
             public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {

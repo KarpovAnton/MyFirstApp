@@ -16,6 +16,7 @@ import com.socializer.vacuum.di.component.AppComponent;
 import com.socializer.vacuum.di.component.DaggerAppComponent;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.Consts;
+import com.socializer.vacuum.utils.MessageManager;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.vk.sdk.VKAccessToken;
@@ -44,6 +45,7 @@ public class VacuumApplication extends DaggerApplication implements Application.
     Activity currentActivity;
     public static volatile Context applicationContext;
     Socket mSocket;
+    MessageManager messageManager = new MessageManager();
 
     VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
         @Override
@@ -62,6 +64,10 @@ public class VacuumApplication extends DaggerApplication implements Application.
         Timber.plant(new Timber.DebugTree());
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(applicationContext);
+    }
+
+    public MessageManager getMessageManager() {
+        return messageManager;
     }
 
     public void initSocket() {

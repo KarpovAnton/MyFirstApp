@@ -80,7 +80,9 @@
             app:dialogTitleTextSize="17dp"
             app:dialogTitleTextStyle="bold"
             app:dialogTitleTextColor="@color/colorViolent"
-            app:dialogMessageTextSize="13sp" />
+            app:dialogMessageTextSize="13sp"
+            app:dialogUnreadBubbleBackgroundColor="@color/colorOrange"
+            app:dialogUnreadBubbleTextSize="3sp"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 

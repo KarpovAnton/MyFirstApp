@@ -18,12 +18,14 @@ public class PrefsModule {
     private static final String PREF_KEY_DEVICE_NAME = "DEVICE_NAME";
     private static final String PREF_KEY_SOCIAL = "SOCIAL";
     private static final String PREF_KEY_PUSH_TOKEN = "PUSH_TOKEN";
+    private static final String PREF_KEY_UNREAD_MSG = "UNREAD_MSG";
 
     public static final String NAMED_PREF_PHONE = "pref_phone";
     public static final String NAMED_PREF_TOKEN = "pref_token";
     public static final String NAMED_PREF_DEVICE_NAME = "pref_device_name";
     public static final String NAMED_PREF_SOCIAL = "pref_social";
     public static final String NAMED_PREF_PUSH_TOKEN = "pref_push_token";
+    public static final String NAMED_PREF_UNREAD_MSG = "pref_unread_msg";
 
     @Provides
     @Singleton
@@ -59,4 +61,11 @@ public class PrefsModule {
     StringPreference providePushToken(SharedPreferences prefs) {
         return new StringPreference(prefs, PREF_KEY_PUSH_TOKEN, null);
     }*/
+
+    @Provides
+    @Singleton
+    @Named(NAMED_PREF_UNREAD_MSG)
+    StringPreference provideUnreadMsg(SharedPreferences prefs) {
+        return new StringPreference(prefs, PREF_KEY_UNREAD_MSG, "false");
+    }
 }

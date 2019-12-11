@@ -37,6 +37,7 @@ import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.services.BleManager;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
+import com.socializer.vacuum.utils.MessageManager;
 import com.socializer.vacuum.utils.StringPreference;
 import com.socializer.vacuum.utils.ViewUtils;
 import com.socializer.vacuum.views.custom.SpannedGridLayoutManager;
@@ -53,6 +54,7 @@ import dagger.android.support.DaggerAppCompatActivity;
 import timber.log.Timber;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
+import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_UNREAD_MSG;
 import static com.socializer.vacuum.utils.Consts.LOCATION_PERMISSION_CODE;
 
 public class MainActivity extends DaggerAppCompatActivity implements
@@ -75,6 +77,10 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Named(NAMED_PREF_SOCIAL)
     StringPreference socialSP;
 
+    @Inject
+    @Named(NAMED_PREF_UNREAD_MSG)
+    StringPreference unreadMsgSP;
+
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
@@ -90,29 +96,45 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @BindView(R.id.nameText)
     TextView nameText;
 
+    @BindView(R.id.newMsgImage)
+    ImageView newMsgImage;
+
     private boolean isBluetoothOn;
     private boolean isAdvertising;
-    //private boolean testIsLoaded;
     private boolean isDialogShow;
     private ProfilePreviewDto singleItemProfileDto;
     private boolean isBLdialogShowed;
+    MessageManager messageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        socialSP.set("true");
 
         VacuumApplication.getInstance().initSocket();
         initViews();
         checkPermissions();
-        //sendPushToken();
+        initMessageManager();
+        sendPushToken();
         if (presenter.isBlueEnable(this)) {
             presenter.setBtName();
             presenter.startAdvertise(callback);
         } else {
             isBLdialogShowed = true;
         }
+    }
+
+    private void initMessageManager() {
+        messageManager = VacuumApplication.getInstance().getMessageManager();
+        messageManager.subscribe(new MessageManager.NewMsgListener() {
+            @Override
+            public void update(boolean hasNewMsg) {
+                Timber.d("zxc update " + hasNewMsg);
+                messageManager.changeIconVisibility(hasNewMsg, newMsgImage);
+            }
+        });
     }
 
     private void sendPushToken() {
@@ -130,7 +152,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
                         // Log and toast
                         //String msg = getString(R.string.msg_token_fmt, token);
-                        Timber.d("moe " + token);
+                        Timber.d("moe push token " + token);
                         //Toast.makeText(this, "gngn", Toast.LENGTH_SHORT).show();
 
                         loginManager.sendPushToken(token, new DtoCallback<ResponseDto>() {
@@ -158,6 +180,12 @@ public class MainActivity extends DaggerAppCompatActivity implements
     protected void onResume() {
         super.onResume();
 
+        if (unreadMsgSP != null && unreadMsgSP.get().equals("true")) {
+            newMsgImage.setVisibility(View.VISIBLE);
+        } else {
+            newMsgImage.setVisibility(View.GONE);
+        }
+
         presenter.refresh();
         presenter.loadTestUser();
         attemptStartScan();
@@ -171,23 +199,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
             }
         }
     }
-
-    /*AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
-        @Override
-        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-            super.onStartSuccess(settingsInEffect);
-            isAdvertising = true;
-            //Toast.makeText(getApplicationContext(), "Device share successful", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onStartFailure(int errorCode) {
-            Timber.e("Advertising onStartFailure: %s", errorCode);
-            super.onStartFailure(errorCode);
-            isAdvertising = false;
-            Toast.makeText(getApplicationContext(), "Устройству не удалось раздать Bluetooth", Toast.LENGTH_SHORT).show();
-        }
-    };*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -245,9 +256,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
         Configuration configuration = getResources().getConfiguration();
         int screenWidthDp = configuration.screenWidthDp;
-        int screenHeightDp = configuration.screenHeightDp;
-        Timber.d("moe screenWidthDp " + screenWidthDp);
-        Timber.d("moe screenHeightDp " + screenHeightDp);
 
         final float scale = getResources().getDisplayMetrics().density;
         int pixels = (int) (screenWidthDp * scale + 0.5f);

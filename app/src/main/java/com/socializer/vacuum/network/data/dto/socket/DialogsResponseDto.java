@@ -10,6 +10,8 @@ public class DialogsResponseDto extends ResponseDto {
 
     String message;
 
+    boolean hasnew;
+
     String preview;
 
     String username;
@@ -24,6 +26,10 @@ public class DialogsResponseDto extends ResponseDto {
 
     public String getMessage() {
         return message;
+    }
+
+    public boolean isHasnew() {
+        return hasnew;
     }
 
     public String getPreview() {

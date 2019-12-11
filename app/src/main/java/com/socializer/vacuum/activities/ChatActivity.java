@@ -57,6 +57,7 @@ import io.socket.emitter.Emitter;
 import timber.log.Timber;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_DEVICE_NAME;
+import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_UNREAD_MSG;
 
 public class ChatActivity extends DaggerAppCompatActivity {
 
@@ -72,6 +73,10 @@ public class ChatActivity extends DaggerAppCompatActivity {
     @Inject
     @Named(NAMED_PREF_DEVICE_NAME)
     StringPreference deviceNameSP;
+
+    @Inject
+    @Named(NAMED_PREF_UNREAD_MSG)
+    StringPreference unreadMsgSP;
 
     @Inject
     ChatManager chatManager;
@@ -99,6 +104,7 @@ public class ChatActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
+        unreadMsgSP.set("false");
 
         if (deviceNameSP != null)
             ownId = deviceNameSP.get().split("@")[0];

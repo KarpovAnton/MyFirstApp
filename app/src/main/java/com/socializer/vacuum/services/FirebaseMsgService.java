@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.socializer.vacuum.R;
+import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.activities.chatlist.ChatListActivity;
 
 import java.util.Date;
@@ -28,16 +29,16 @@ public class FirebaseMsgService extends FirebaseMessagingService {
     StringPreference pushTokenSP;*/
 
 
-    @Override
+/*    @Override
     public void onNewToken(String token) {
         Timber.d("moe Refreshed token: " + token);
 
-/*        SharedPreferences.Editor editor = VacuumApplication.applicationContext.getSharedPreferences("prefs", MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = VacuumApplication.applicationContext.getSharedPreferences("prefs", MODE_PRIVATE).edit();
         editor.putString("PUSH_TOKEN", token);
         editor.apply();
-        editor.commit();*/
+        editor.commit();
 
-/*        loginManager.sendPushToken(token, new DtoCallback<ResponseDto>() {
+*//*        loginManager.sendPushToken(token, new DtoCallback<ResponseDto>() {
             @Override
             public void onSuccessful(@NonNull ResponseDto response) {
                 Timber.d("moe sendPushToken succ");
@@ -47,16 +48,17 @@ public class FirebaseMsgService extends FirebaseMessagingService {
             public void onFailed(FailTypes fail) {
                 Timber.d("moe sendPushToken fail");
             }
-        });*/
+        });*//*
 
-    }
+    }*/
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         try {
-            Timber.d("moe msg rec");
+            Timber.d("zxc msg rec");
             //sendNotification(remoteMessage);
-            remoteMessage.getData().get("message");
+            //String message = remoteMessage.getData().get("message");
+            VacuumApplication.getInstance().getMessageManager().changeState(true);
         } catch (Exception e) {
             e.printStackTrace();
         }

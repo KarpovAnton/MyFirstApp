@@ -725,7 +725,8 @@ public class DialogsListAdapter<DIALOG extends IDialog>
             }
 
             //Set Unread message count bubble
-            tvBubble.setText(String.valueOf(dialog.getUnreadCount()));
+            //tvBubble.setText(String.valueOf(dialog.getUnreadCount()));
+            tvBubble.setText("");
             tvBubble.setVisibility(dialogStyle.isDialogUnreadBubbleEnabled() &&
                     dialog.getUnreadCount() > 0 ? VISIBLE : GONE);
 

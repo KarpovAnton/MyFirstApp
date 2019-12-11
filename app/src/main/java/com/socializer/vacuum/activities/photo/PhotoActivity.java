@@ -6,15 +6,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.socializer.vacuum.R;
+import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.utils.DialogUtils;
 import com.socializer.vacuum.utils.ImageUtils;
+import com.socializer.vacuum.utils.MessageManager;
 import com.socializer.vacuum.utils.StringPreference;
 import com.socializer.vacuum.views.adapters.PhotoEditAdapter;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -35,8 +39,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
+import timber.log.Timber;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
+import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_UNREAD_MSG;
 
 public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContract.View {
 
@@ -45,9 +51,16 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    @BindView(R.id.newMsgImage)
+    ImageView newMsgImage;
+
     @Inject
     @Named(NAMED_PREF_SOCIAL)
     StringPreference socialSP;
+
+    @Inject
+    @Named(NAMED_PREF_UNREAD_MSG)
+    StringPreference unreadMsgSP;
 
     @Inject
     PhotoPresenter presenter;
@@ -57,6 +70,7 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
 
     ArrayList<String> photoList;
     private boolean isDialogShow;
+    MessageManager messageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +82,7 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
             photoList = new ArrayList<>(Arrays.asList(photoArray));
         }
 
+        initMessageManager();
         initViews();
         presenter.setPhotos(photoList);
     }
@@ -82,6 +97,23 @@ public class PhotoActivity extends DaggerAppCompatActivity implements PhotoContr
     protected void onResume() {
         super.onResume();
         presenter.takeView(this);
+
+        if (unreadMsgSP != null && unreadMsgSP.get().equals("true")) {
+            newMsgImage.setVisibility(View.VISIBLE);
+        } else {
+            newMsgImage.setVisibility(View.GONE);
+        }
+    }
+
+    private void initMessageManager() {
+        messageManager = VacuumApplication.getInstance().getMessageManager();
+        messageManager.subscribe(new MessageManager.NewMsgListener() {
+            @Override
+            public void update(boolean hasNewMsg) {
+                Timber.d("zxc update " + hasNewMsg);
+                messageManager.changeIconVisibility(hasNewMsg, newMsgImage);
+            }
+        });
     }
 
     void initViews() {

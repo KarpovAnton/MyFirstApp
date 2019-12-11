@@ -35,6 +35,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.socializer.vacuum.R;
+import com.socializer.vacuum.VacuumApplication;
 import com.socializer.vacuum.commons.AuthenticationDialog;
 import com.socializer.vacuum.network.data.FailTypes;
 import com.socializer.vacuum.network.data.dto.ProfilePreviewDto;
@@ -42,6 +43,7 @@ import com.socializer.vacuum.network.data.dto.ProfilePreviewDto.ProfileImageDto;
 import com.socializer.vacuum.network.data.prefs.AuthSession;
 import com.socializer.vacuum.services.BleManager;
 import com.socializer.vacuum.utils.DialogUtils;
+import com.socializer.vacuum.utils.MessageManager;
 import com.socializer.vacuum.utils.StringPreference;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -63,6 +65,7 @@ import timber.log.Timber;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_DEVICE_NAME;
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
+import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_UNREAD_MSG;
 import static com.socializer.vacuum.utils.Consts.BASE_DEVICE_NAME_PART;
 
 public class AccountActivity extends DaggerAppCompatActivity implements AccountContract.View, AuthenticationDialog.AuthInstListener {
@@ -79,6 +82,10 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @Inject
     @Named(NAMED_PREF_SOCIAL)
     StringPreference socialSP;
+
+    @Inject
+    @Named(NAMED_PREF_UNREAD_MSG)
+    StringPreference unreadMsgSP;
 
     @Inject
     AccountPresenter presenter;
@@ -110,6 +117,9 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     @BindView(R.id.barLayout)
     RelativeLayout barLayout;
 
+    @BindView(R.id.newMsgImage)
+    ImageView newMsgImage;
+
     @BindView(R.id.cardView)
     CardView cardView;
 
@@ -130,12 +140,14 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
     boolean isInstBind;
     private boolean isDialogShow;
     private String oldAccName;
+    MessageManager messageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         ButterKnife.bind(this);
+        initMessageManager();
 
         //show keyboard when push edit btn
         nameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -172,7 +184,7 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
         aboutText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "https://www.vacuum.live/ru/privacy_policy.htm";
+                String url = "https://www.vacuum.live/privacy-policy.html";
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(url));
                 startActivity(intent);
@@ -186,9 +198,25 @@ public class AccountActivity extends DaggerAppCompatActivity implements AccountC
         fbCallbackRegistration();
     }
 
+    private void initMessageManager() {
+        messageManager = VacuumApplication.getInstance().getMessageManager();
+        messageManager.subscribe(new MessageManager.NewMsgListener() {
+            @Override
+            public void update(boolean hasNewMsg) {
+                Timber.d("zxc update " + hasNewMsg);
+                messageManager.changeIconVisibility(hasNewMsg, newMsgImage);
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        if (unreadMsgSP != null && unreadMsgSP.get().equals("true")) {
+            newMsgImage.setVisibility(View.VISIBLE);
+        } else {
+            newMsgImage.setVisibility(View.GONE);
+        }
         presenter.takeView(this);
         presenter.loadAccount(profileId);
     }

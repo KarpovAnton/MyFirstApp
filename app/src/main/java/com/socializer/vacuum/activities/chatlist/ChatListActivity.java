@@ -45,6 +45,7 @@ import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_SOCIAL;
+import static com.socializer.vacuum.network.data.prefs.PrefsModule.NAMED_PREF_UNREAD_MSG;
 
 public class ChatListActivity extends DaggerAppCompatActivity implements ChatListContract.View, SwipeRefreshLayout.OnRefreshListener, DateFormatter.Formatter {
 
@@ -57,6 +58,10 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
     @Inject
     @Named(NAMED_PREF_SOCIAL)
     StringPreference socialSP;
+
+    @Inject
+    @Named(NAMED_PREF_UNREAD_MSG)
+    StringPreference unreadMsgSP;
 
     @BindView(R.id.dialogsList)
     DialogsList dialogsList;
@@ -89,6 +94,7 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
         ButterKnife.bind(this);
+        unreadMsgSP.set("false");
         mActivity = this;
 
         initViews();
@@ -135,6 +141,10 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
                     String username = dto.getUsername();
                     String lastMsg = dto.getMessage();
                     String preview = dto.getPreview();
+                    boolean hasNew = dto.isHasnew();
+                    int unreadCount = 0;
+                    if (hasNew)
+                        unreadCount = 1;
                     long ts = dto.getTs();
                     Date date = new Date(ts * 1000L);
 
@@ -146,7 +156,7 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
                             preview,
                             msgAutors,
                             new Message("0", new MessageAuthor(chatId, "", null, true), lastMsg, date),
-                            0);
+                            unreadCount);
 
                     dialogs.add(dialog);
                 }

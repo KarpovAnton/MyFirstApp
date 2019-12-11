@@ -23,4 +23,5 @@ public class StartFirebaseAtBoot extends BroadcastReceiver {
             e.printStackTrace();
         }
     }
-}*/
+}
+*/
