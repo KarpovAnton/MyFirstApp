@@ -8,6 +8,9 @@
     <string name="registration_dialog_title">Регистрация</string>
     <string name="waiting_dialog_msg">Пожалуйста, подождите</string>
 
+    <string name="login_terms_1">Мы ничего не публикуем от вашего имени.</string>
+    <string name="login_terms_2">Продолжая, вы принимаете <u>условия использования</u> и <u>политику конфиденциальности</u></string>
+
     <string name="facebook_app_id">306525116896526</string>
     <string name="fb_login_protocol_scheme">fb306525116896526</string>
 
