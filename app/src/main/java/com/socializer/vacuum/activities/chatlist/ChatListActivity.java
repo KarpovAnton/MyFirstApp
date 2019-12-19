@@ -195,7 +195,8 @@ public class ChatListActivity extends DaggerAppCompatActivity implements ChatLis
 
     @Override
     public void onRefresh() {
-        dialogsListAdapter.clear();
+        dialogsListAdapter = null;
+        initViews();
         loadChatList();
     }
 

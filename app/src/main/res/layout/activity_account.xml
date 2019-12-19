@@ -145,41 +145,56 @@
             android:layout_marginTop="12dp"
             android:layout_gravity="center_horizontal">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
-                    app:cardCornerRadius="5dp"
-                    app:cardElevation="0dp">
-
-                    <androidx.viewpager.widget.ViewPager
-                        android:id="@+id/viewPager"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bg_rounded"/>
-                </androidx.cardview.widget.CardView>
-            </FrameLayout>
-
             <RelativeLayout
-                android:id="@+id/vpPlaceholder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="68dp"
-                android:layout_marginRight="68dp"
-                android:background="@drawable/ph_bg"
-                android:visibility="gone">
+                android:layout_marginBottom="12dp">
 
-                <ImageView
-                    android:layout_width="58dp"
-                    android:layout_height="58dp"
-                    android:src="@drawable/ic_ph_photo"
-                    android:layout_centerInParent="true"/>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="0dp">
+
+                        <androidx.viewpager.widget.ViewPager
+                            android:id="@+id/viewPager"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_rounded"/>
+                    </androidx.cardview.widget.CardView>
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:id="@+id/vpPlaceholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="68dp"
+                    android:layout_marginRight="68dp"
+                    android:background="@drawable/ph_bg"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="58dp"
+                        android:layout_height="58dp"
+                        android:src="@drawable/ic_ph_photo"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/viewPagerCounter"
+                android:layout_width="78dp"
+                android:layout_height="24dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/bg_white"
+                android:text="Мои фото" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -191,7 +206,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="18dp"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal">
 
