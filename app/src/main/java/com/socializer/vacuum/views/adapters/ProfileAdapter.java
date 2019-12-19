@@ -60,23 +60,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void onAddList(List<ProfilePreviewDto> dtoList) {
-        int initPosition = 0;
-
-        // Remove loading indicator if exists
-        /*if (items.size()>0) {
-            initPosition = items.size() - 1;
-            items.remove(initPosition);
-            notifyItemRemoved(initPosition);
-            Timber.d("notifyItemRemoved %d", initPosition);
-        }*/
-
-        items.addAll(dtoList);
-        int updateCount = dtoList.size();
-/*        if (hasNext) {
-            items.add(loadingItem);
-            updateCount++;
-        }*/
-        notifyItemRangeInserted(initPosition, updateCount);
+        this.items.addAll(dtoList);
+        notifyDataSetChanged();
     }
 
     public void onAddToList(List<ProfilePreviewDto> dtoList) {
@@ -86,6 +71,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onAdd(List<ProfilePreviewDto> dtoList) {
         int position = getItemCount();
         this.items.add(dtoList.get(0));
+
+        notifyItemInserted(position);
+    }
+
+    public void onAdd(ProfilePreviewDto dto) {
+        int position = getItemCount();
+        this.items.add(dto);
 
         notifyItemInserted(position);
     }
@@ -105,4 +97,3 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyDataSetChanged();
     }
 }
-

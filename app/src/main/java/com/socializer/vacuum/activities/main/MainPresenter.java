@@ -171,13 +171,12 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
         adapter.onAdd(list2);*/
 
         new Handler(getMainLooper()).post(new Runnable() {
-                                              @Override
-                                              public void run() {
-                                                  bleManager.scan(scanCallback);
-                                                  Timber.d("moe start scan");
-                                              }
-                                          }
-        );
+            @Override
+            public void run() {
+              bleManager.scan(scanCallback);
+              Timber.d("moe start scan");
+            }
+        });
         /*bleManager.scan(scanCallback);
         Timber.d("moe start scan");*/
     }
@@ -199,7 +198,14 @@ public class MainPresenter implements MainContract.Presenter, RecyclerItemClickL
         profilesManager.getUserProfiles(test, new DtoListCallback<ResponseDto>() {
             @Override
             public void onSuccessful(@NonNull List<ProfilePreviewDto> response) {
-                adapter.onAddList(response);
+                for (ProfilePreviewDto dto : response) {
+                    String userId = dto.getUserId();
+                    if (!addedUsersId.contains(userId)) {
+                        addedUsersId.add(userId);
+                        adapter.onAdd(dto);
+                    }
+                }
+
                 if (view != null)
                     view.refreshed();
             }

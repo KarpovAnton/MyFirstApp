@@ -195,7 +195,8 @@ public class MainActivity extends DaggerAppCompatActivity implements
         }
 
         presenter.refresh();
-        presenter.loadTestUser();
+        //presenter.loadTestUser();
+        presenter.loadTestProfiles();
         attemptStartScan();
     }
 
@@ -353,7 +354,8 @@ public class MainActivity extends DaggerAppCompatActivity implements
     @Override
     public void onRefresh() {
         presenter.refresh();
-        presenter.loadTestUser();
+        //presenter.loadTestUser();
+        presenter.loadTestProfiles();
         presenter.isBlueEnable(this);
     }
 
